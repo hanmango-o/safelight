@@ -20,8 +20,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 
 </details>
 
-----------------
-
 <details><summary>flutter_blue</summary>
 
 ### Link
@@ -32,8 +30,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 
 </details>
 
-----------------
-
 <details><summary>http</summary>
 
 ### Link
@@ -42,8 +38,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 * tpp 통신(get / post)
 
 </details>
-
-----------------
 
 <details><summary>sqflite</summary>
 
@@ -55,8 +49,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 
 </details>
 
-----------------
-
 <details><summary>shared_preferences</summary>
 
 ### Link
@@ -67,8 +59,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 
 </details>
 
-----------------
-
 <details><summary>flutter_local_notifications</summary>
 
 ### Link
@@ -78,8 +68,6 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 * SAFELIGHT_SafeLightScan usecase에서 사용
 
 </details>
-
-----------------
 
 <details><summary>flutter_tts</summary>
 
