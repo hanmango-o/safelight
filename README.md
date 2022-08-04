@@ -10,33 +10,82 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 * [2022 배리어프리 공모전](https://www.autoeverapp.kr/) 예선 심사 중(~2022.08.19)
 
 # 의존 라이브러리
-<details><summary>Get</summary>
+<details><summary>get</summary>
 
 ### Link
-[get 4.6.5](https://pub.dev/packages/get/install)
+[get: ^4.6.5](https://pub.dev/packages/get)
 ### Usage
 * Flutter App 내 State 관리
 * App Navigator (route 관리)
 
 </details>
 
-* [get](https://pub.dev/packages/get/install)
-* [flutter_blue](https://pub.dev/packages/flutter_blue)
-* [http](https://pub.dev/packages/http)
-* [sqflite](https://pub.dev/packages/sqflite)
-* [shared_preferences](https://pub.dev/packages/shared_preferences)
-* [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
-* [flutter_tts](https://pub.dev/packages/flutter_tts)
+----------------
 
-# Getting Started
+<details><summary>flutter_blue</summary>
 
-This project is a starting point for a Flutter application.
+### Link
+[flutter_blue: ^0.8.0](https://pub.dev/packages/flutter_blue)
+### Usage
+* App Bluetooth 통신
+* SafeLight 페어링
 
-A few resources to get you started if this is your first Flutter project:
+</details>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+----------------
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<details><summary>http</summary>
+
+### Link
+[http: ^0.13.5](https://pub.dev/packages/http)
+### Usage
+* tpp 통신(get / post)
+
+</details>
+
+----------------
+
+<details><summary>sqflite</summary>
+
+### Link
+[sqflite: ^2.0.3](https://pub.dev/packages/sqflite)
+### Usage
+* SafeLight와 신호등 압버튼의 관계 저장
+* 신호등 압버튼 정보 저장
+
+</details>
+
+----------------
+
+<details><summary>shared_preferences</summary>
+
+### Link
+[shared_preferences: ^2.0.15](https://pub.dev/packages/shared_preferences)
+### Usage
+* 사용자 상태(교통 약자 타입) 관리
+* App 최신 버전 관리
+
+</details>
+
+----------------
+
+<details><summary>flutter_local_notifications</summary>
+
+### Link
+[flutter_local_notifications: ^9.7.0](https://pub.dev/packages/flutter_local_notifications)
+### Usage
+* 자동 스캔 시, SafeLight Search 알림
+* SAFELIGHT_SafeLightScan usecase에서 사용
+
+</details>
+
+----------------
+
+<details><summary>flutter_tts</summary>
+
+### Link
+[flutter_tts: ^3.5.0](https://pub.dev/packages/flutter_tts)
+### Usage
+* 시각 장애 사용자를 위한 tts 서비스
+
+</details>
