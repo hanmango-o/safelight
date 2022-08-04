@@ -9,13 +9,13 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 * [2022 배리어프리 공모전](https://www.autoeverapp.kr/) 예선 심사 중(~2022.08.19)
 
 ## 의존 라이브러리
-[get](https://pub.dev/packages/get/install)
-[flutter_blue](https://pub.dev/packages/flutter_blue)
-[http](https://pub.dev/packages/http)
-[sqflite](https://pub.dev/packages/sqflite)
-[shared_preferences](https://pub.dev/packages/shared_preferences)
-[flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
-[flutter_tts](https://pub.dev/packages/flutter_tts)
+* [get](https://pub.dev/packages/get/install)
+* [flutter_blue](https://pub.dev/packages/flutter_blue)
+* [http](https://pub.dev/packages/http)
+* [sqflite](https://pub.dev/packages/sqflite)
+* [shared_preferences](https://pub.dev/packages/shared_preferences)
+* [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
+* [flutter_tts](https://pub.dev/packages/flutter_tts)
 
 ## Getting Started
 
