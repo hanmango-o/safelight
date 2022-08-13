@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:safelight/home.dart';
+import 'package:get/route_manager.dart';
+import 'package:safelight/ui/view/blue_off_view.dart';
+import 'package:safelight/ui/view/home_view.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const SafeLight());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class SafeLight extends StatelessWidget {
+  const SafeLight({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Home(),
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.light(
+          primary: Color(0xff2A2C41),
+        ),
+      ),
+      home: StreamBuilder<BluetoothState>(
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          final state = snapshot.data;
+          if (state == BluetoothState.on) {
+            return HomeView();
+          }
+          return BlueOffView(state: state!);
+        },
+      ),
     );
   }
 }
