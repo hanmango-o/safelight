@@ -18,6 +18,7 @@ class SafeLight extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.light(
           primary: Color(0xff2A2C41),
+          primaryContainer: Color(0xffF4F4F8),
         ),
       ),
       home: StreamBuilder<BluetoothState>(
@@ -28,6 +29,8 @@ class SafeLight extends StatelessWidget {
           if (state == BluetoothState.on) {
             return HomeView();
           }
+          return HomeView();
+
           return BlueOffView(state: state!);
         },
       ),

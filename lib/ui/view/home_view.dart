@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get/get.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
+import 'package:safelight/ui/widget/flat_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -47,8 +48,14 @@ class _HomeViewState extends State<HomeView> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Container(
+              child: FlatCard(
+                title: '홍대입구 1번 출구 방향',
+              ),
+            ),
             StreamBuilder<List<ScanResult>>(
               stream: FlutterBlue.instance.scanResults,
+              // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
               initialData: [],
               builder: (c, snapshot) {
                 if (!snapshot.hasData) {
