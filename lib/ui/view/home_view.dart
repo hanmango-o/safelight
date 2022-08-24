@@ -30,17 +30,15 @@ class _HomeViewState extends State<HomeView> {
         initialData: false,
         builder: (c, snapshot) {
           if (snapshot.data!) {
-            return FloatingActionButton(
-              child: Icon(Icons.stop),
+            return FloatingActionButton.large(
+              child: Icon(Icons.stop, semanticLabel: '스캔 종료'),
               onPressed: () => FlutterBlue.instance.stopScan(),
               backgroundColor: Colors.red,
             );
           } else {
-            return FloatingActionButton(
-              child: Icon(Icons.search),
-              onPressed: () => FlutterBlue.instance.startScan(
-                timeout: Duration(seconds: 4),
-              ),
+            return FloatingActionButton.large(
+              child: Icon(Icons.search, semanticLabel: '스탠 시작'),
+              onPressed: () => FlutterBlue.instance.startScan(),
             );
           }
         },
@@ -48,11 +46,11 @@ class _HomeViewState extends State<HomeView> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              child: FlatCard(
-                title: '홍대입구 1번 출구 방향',
-              ),
-            ),
+            // Container(
+            //   child: FlatCard(
+            //     title: ,
+            //   ),
+            // ),
             StreamBuilder<List<ScanResult>>(
               stream: FlutterBlue.instance.scanResults,
               // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
@@ -71,7 +69,7 @@ class _HomeViewState extends State<HomeView> {
                           height: 60,
                           child: ElevatedButton(
                             child: Text(
-                              '홍대입구 1번 출구 방향',
+                              '역곡역 1번출구 방향 압버튼',
                               overflow: TextOverflow.ellipsis,
                             ),
                             onPressed: (r.advertisementData.connectable)

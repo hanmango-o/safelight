@@ -29,7 +29,6 @@ class SafeLight extends StatelessWidget {
           if (state == BluetoothState.on) {
             return HomeView();
           }
-          return HomeView();
 
           return BlueOffView(state: state!);
         },
