@@ -21,58 +21,46 @@ SafeLight는 교통 약자 및 일반인들의 위험 지역 횡단을 돕는 �
 
 <details><summary>flutter_blue</summary>
 
-### Link
-[flutter_blue: ^0.8.0](https://pub.dev/packages/flutter_blue)
-### Usage
-* App Bluetooth 통신
-* SafeLight 페어링
+### [flutter_blue: ^0.8.0](https://pub.dev/packages/flutter_blue)
+- App Bluetooth 통신
+- SafeLight 페어링
 
 </details>
 
 <details><summary>http</summary>
 
-### Link
-[http: ^0.13.5](https://pub.dev/packages/http)
-### Usage
-* tpp 통신(get / post)
+### [http: ^0.13.5](https://pub.dev/packages/http)
+- http 통신(get / post)
 
 </details>
 
 <details><summary>sqflite</summary>
 
-### Link
-[sqflite: ^2.0.3](https://pub.dev/packages/sqflite)
-### Usage
-* SafeLight와 신호등 압버튼의 관계 저장
-* 신호등 압버튼 정보 저장
+### [sqflite: ^2.0.3](https://pub.dev/packages/sqflite)
+- SafeLight와 신호등 압버튼의 관계 저장
+- 신호등 압버튼 정보 저장
 
 </details>
 
 <details><summary>shared_preferences</summary>
 
-### Link
-[shared_preferences: ^2.0.15](https://pub.dev/packages/shared_preferences)
-### Usage
-* 사용자 상태(교통 약자 타입) 관리
-* App 최신 버전 관리
+### [shared_preferences: ^2.0.15](https://pub.dev/packages/shared_preferences)
+- 사용자 상태(교통 약자 타입) 관리
+- App 최신 버전 관리
 
 </details>
 
 <details><summary>flutter_local_notifications</summary>
 
-### Link
-[flutter_local_notifications: ^9.7.0](https://pub.dev/packages/flutter_local_notifications)
-### Usage
-* 자동 스캔 시, SafeLight Search 알림
-* SAFELIGHT_SafeLightScan usecase에서 사용
+### [flutter_local_notifications: ^9.7.0](https://pub.dev/packages/flutter_local_notifications)
+- 자동 스캔 시, SafeLight Search 알림
+- SAFELIGHT_SafeLightScan usecase에서 사용
 
 </details>
 
 <details><summary>flutter_tts</summary>
 
-### Link
-[flutter_tts: ^3.5.0](https://pub.dev/packages/flutter_tts)
-### Usage
-* 시각 장애 사용자를 위한 tts 서비스
+### [flutter_tts: ^3.5.0](https://pub.dev/packages/flutter_tts)
+- 시각 장애 사용자를 위한 tts 서비스
 
 </details>
