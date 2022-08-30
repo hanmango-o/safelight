@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get/get.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
-import 'package:safelight/ui/widget/flat_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
