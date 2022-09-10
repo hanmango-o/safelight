@@ -5,6 +5,7 @@ import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:safelight/ui/view/main_view.dart';
 
 void main() {
   runApp(const SafeLight());
@@ -58,6 +59,11 @@ class SafeLight extends StatelessWidget {
               ),
             ),
           ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            elevation: 0,
+            selectedIconTheme: IconThemeData(size: 32.sp),
+            unselectedIconTheme: IconThemeData(size: 32.sp),
+          ),
         ),
         home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
@@ -68,7 +74,7 @@ class SafeLight extends StatelessWidget {
               return HomeView();
             }
             // return BlueOffView(state: state!);
-            return HomeView();
+            return MainView();
           },
         ),
       ),

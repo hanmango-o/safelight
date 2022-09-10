@@ -16,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    FlutterBlue.instance.startScan();
+    // FlutterBlue.instance.startScan();
   }
 
   @override
