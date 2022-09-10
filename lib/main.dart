@@ -43,6 +43,21 @@ class SafeLight extends StatelessWidget {
               color: ColorTheme.onSecondary,
             ),
           ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(double.infinity, 52.h),
+              padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 16.h),
+              textStyle: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(14.r),
+                ),
+              ),
+            ),
+          ),
         ),
         home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,

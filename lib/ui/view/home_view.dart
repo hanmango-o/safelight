@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
 
@@ -36,17 +37,18 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // Container(
-            //   child: FlatCard(
-            //     title: ,
-            //   ),
-            // ),
-            ElevatedButton(onPressed: () => null, child: Text('ddd')),
-
-            Text(
-              'dddd',
-              style: Theme.of(context).textTheme.bodySmall,
+            Container(
+              color: Theme.of(context).colorScheme.secondary,
+              height: 126.h,
+              child: Align(
+                child: ElevatedButton.icon(
+                  onPressed: () => null,
+                  icon: Icon(Icons.search),
+                  label: Text('횡단보도 압버튼 찾기'),
+                ),
+              ),
             ),
             StreamBuilder<List<ScanResult>>(
               stream: FlutterBlue.instance.scanResults,
