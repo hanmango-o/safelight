@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,16 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [
+          IconButton(
+            onPressed: () => null,
+            icon: Icon(Icons.flashlight_on_outlined),
+          ),
+          IconButton(
+            onPressed: () => null,
+            icon: Icon(Icons.camera_alt_outlined),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

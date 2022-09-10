@@ -31,6 +31,11 @@ class SafeLight extends StatelessWidget {
           scaffoldBackgroundColor: ColorTheme.background,
           appBarTheme: AppBarTheme(
             backgroundColor: ColorTheme.secondary,
+            actionsIconTheme: IconThemeData(
+              color: ColorTheme.onSecondary,
+              size: 36.sp,
+            ),
+            elevation: 0,
             centerTitle: false,
             titleTextStyle: TextStyle(
               fontSize: 24.sp,

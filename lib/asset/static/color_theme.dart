@@ -11,7 +11,7 @@ class ColorTheme {
   static const Color secondary = Color(0xFFFFFFFF);
   static const Color onSecondary = Color(0xff2A2C41);
   static const Color background = Color(0xffF1F2F6);
-  static const Color onBackground = Color(0xff2A2C41);
+  static const Color onBackground = Color(0xff939AA3);
   static const Color highlight1 = Color(0xffFFBC42);
   static const Color highlight2 = Color(0xff619B8A);
   static const Color highlight3 = Color(0xff0496FF);
