@@ -21,26 +21,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SafeLight Demo'),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: StreamBuilder<bool>(
-        stream: FlutterBlue.instance.isScanning,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton.large(
-              child: Icon(Icons.stop, semanticLabel: '스캔 종료'),
-              onPressed: () => FlutterBlue.instance.stopScan(),
-              backgroundColor: Colors.red,
-            );
-          } else {
-            return FloatingActionButton.large(
-              child: Icon(Icons.search, semanticLabel: '스탠 시작'),
-              onPressed: () => FlutterBlue.instance.startScan(),
-            );
-          }
-        },
+        title: Text('Home'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,6 +31,12 @@ class _HomeViewState extends State<HomeView> {
             //     title: ,
             //   ),
             // ),
+            ElevatedButton(onPressed: () => null, child: Text('ddd')),
+
+            Text(
+              'dddd',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             StreamBuilder<List<ScanResult>>(
               stream: FlutterBlue.instance.scanResults,
               // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),

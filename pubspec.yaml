@@ -41,6 +41,7 @@ dependencies:
   flutter_blue: ^0.8.0
   sqflite: ^2.0.3
   shared_preferences: ^2.0.15
+  flutter_screenutil: ^5.5.4
 
 dev_dependencies:
   flutter_test:

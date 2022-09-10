@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -13,25 +15,42 @@ class SafeLight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.light(
-          primary: Color(0xff2A2C41),
-          primaryContainer: Color(0xffF4F4F8),
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      builder: (context, child) => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.light(
+            primary: ColorTheme.primary,
+            onPrimary: ColorTheme.onPrimary,
+            secondary: ColorTheme.secondary,
+            onSecondary: ColorTheme.onSecondary,
+            background: ColorTheme.background,
+            onBackground: ColorTheme.onBackground,
+          ),
+          scaffoldBackgroundColor: ColorTheme.background,
+          appBarTheme: AppBarTheme(
+            backgroundColor: ColorTheme.secondary,
+            centerTitle: false,
+            titleTextStyle: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorTheme.onSecondary,
+            ),
+          ),
         ),
-      ),
-      home: StreamBuilder<BluetoothState>(
-        stream: FlutterBlue.instance.state,
-        initialData: BluetoothState.unknown,
-        builder: (c, snapshot) {
-          final state = snapshot.data;
-          if (state == BluetoothState.on) {
+        home: StreamBuilder<BluetoothState>(
+          stream: FlutterBlue.instance.state,
+          initialData: BluetoothState.unknown,
+          builder: (c, snapshot) {
+            final state = snapshot.data;
+            if (state == BluetoothState.on) {
+              return HomeView();
+            }
+            // return BlueOffView(state: state!);
             return HomeView();
-          }
-
-          return BlueOffView(state: state!);
-        },
+          },
+        ),
       ),
     );
   }
