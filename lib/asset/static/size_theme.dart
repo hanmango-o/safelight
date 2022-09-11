@@ -9,7 +9,7 @@ class SizeTheme {
   static final h_md = 16.h;
   static final h_lg = 22.h;
 
-  static final r_sm = 16.r;
+  static final r_sm = 14.r;
   static final r_md = 26.r;
   static final r_lg = 36.r;
 }

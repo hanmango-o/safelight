@@ -8,6 +8,7 @@ import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
 import 'package:safelight/ui/widget/rounded_button.dart';
+import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -156,15 +157,58 @@ class _HomeViewState extends State<HomeView> {
                           onTap: () => null,
                           title: '바라보는 방향\n기준 압버튼 찾기',
                           actions: [
-                            IconButton(
-                              onPressed: () => null,
-                              icon: Icon(Icons.abc),
+                            SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.play_circle_outline_rounded,
+                                size: 32.sp,
+                                color: ColorTheme.highlight1,
+                              ),
                             ),
-                            Container(
-                              width: 42,
-                              height: 42,
-                              color: Colors.amber,
-                            )
+                          ],
+                        ),
+                        RoundedButton(
+                          onTap: () => null,
+                          title: '압버튼 스캔 후\n모두 누르기',
+                          actions: [
+                            SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.radio_button_checked_rounded,
+                                size: 32.sp,
+                                color: ColorTheme.highlight2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: SizeTheme.h_md),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RoundedButton(
+                          onTap: () => null,
+                          title: '나와 가까운\n압버튼 찾기',
+                          actions: [
+                            SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.looks,
+                                size: 32.sp,
+                                color: ColorTheme.highlight3,
+                              ),
+                            ),
+                          ],
+                        ),
+                        RoundedButton(
+                          onTap: () => null,
+                          title: '가장 가까운\n압버튼만 스캔 후\n누르기',
+                          actions: [
+                            SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.panorama_horizontal_select_sharp,
+                                size: 32.sp,
+                                color: ColorTheme.highlight4,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -173,6 +217,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
             ),
+            SizedBox(height: 126.h),
 
             // BoardFrame(
             //   title: '제공 서비스',
