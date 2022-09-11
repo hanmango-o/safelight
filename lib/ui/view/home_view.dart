@@ -4,6 +4,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/static/color_theme.dart';
+import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
 
@@ -29,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
       bottomSheet: AnimatedContainer(
         duration: Duration(milliseconds: 1600),
         curve: Curves.fastLinearToSlowEaseIn,
-        height: value ? 620 : 96.h,
+        height: value ? 620.h : 96.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(26.r),
@@ -78,17 +79,13 @@ class _HomeViewState extends State<HomeView> {
               toolbarHeight: 96.h,
               title: Text(
                 '내 주변 횡단보도',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorTheme.onSecondary,
-                ),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               actions: [
                 Center(
                   child: Text(
                     '스캔 중',
-                    style: TextStyle(color: Colors.black),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                 )
               ],
@@ -96,7 +93,7 @@ class _HomeViewState extends State<HomeView> {
             Expanded(
               child: Container(
                 color: Colors.white,
-                height: 20,
+                height: SizeTheme.h_lg,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -144,13 +141,30 @@ class _HomeViewState extends State<HomeView> {
             ),
             BoardFrame(
               title: '제공 서비스',
-              backgroundColor: Colors.amber,
-              body: Column(
-                children: [
-                  Row(
-                    children: [Container()],
-                  )
-                ],
+              // backgroundColor: Colors.amber,
+              body: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: SizeTheme.w_md,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          color: Colors.white,
+                        ),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          color: Colors.white,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
 

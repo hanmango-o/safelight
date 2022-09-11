@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:safelight/asset/static/size_theme.dart';
 
 class BoardFrame extends StatelessWidget {
   final String title;
   final Widget body;
   final Color? backgroundColor;
   final EdgeInsets? padding;
+  final EdgeInsets? headerPadding;
 
   const BoardFrame({
     Key? key,
@@ -14,6 +16,7 @@ class BoardFrame extends StatelessWidget {
     required this.body,
     this.backgroundColor,
     this.padding,
+    this.headerPadding,
   }) : super(key: key);
 
   @override
@@ -26,7 +29,17 @@ class BoardFrame extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title),
+            Padding(
+              padding: headerPadding ??
+                  EdgeInsets.symmetric(
+                    vertical: SizeTheme.h_sm,
+                    horizontal: SizeTheme.w_md,
+                  ),
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
             body,
           ],
         ),

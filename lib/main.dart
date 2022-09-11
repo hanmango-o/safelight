@@ -65,7 +65,48 @@ class SafeLight extends StatelessWidget {
             selectedIconTheme: IconThemeData(size: 32.sp),
             unselectedIconTheme: IconThemeData(size: 32.sp),
           ),
-          textTheme: TextTheme(),
+          textTheme: TextTheme(
+            headlineLarge: TextStyle(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorTheme.onSecondary,
+            ),
+            titleLarge: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorTheme.onSecondary,
+            ),
+            titleMedium: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.normal,
+              color: ColorTheme.onSecondary,
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorTheme.onSecondary,
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: ColorTheme.onSecondary,
+            ),
+            bodySmall: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.normal,
+              color: ColorTheme.onSecondary,
+            ),
+            labelLarge: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
+              color: ColorTheme.onBackground,
+            ),
+            labelMedium: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.normal,
+              color: ColorTheme.onSecondary,
+            ),
+          ),
         ),
         home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
