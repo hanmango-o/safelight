@@ -7,6 +7,7 @@ import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/pressed_btn_view.dart';
+import 'package:safelight/ui/widget/rounded_button.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -33,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
         height: value ? 620.h : 96.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(26.r),
+            top: Radius.circular(SizeTheme.r_md),
           ),
           boxShadow: [
             BoxShadow(
@@ -151,15 +152,20 @@ class _HomeViewState extends State<HomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          color: Colors.white,
-                        ),
-                        Container(
-                          width: 100,
-                          height: 100,
-                          color: Colors.white,
+                        RoundedButton(
+                          onTap: () => null,
+                          title: '바라보는 방향\n기준 압버튼 찾기',
+                          actions: [
+                            IconButton(
+                              onPressed: () => null,
+                              icon: Icon(Icons.abc),
+                            ),
+                            Container(
+                              width: 42,
+                              height: 42,
+                              color: Colors.amber,
+                            )
+                          ],
                         ),
                       ],
                     )
