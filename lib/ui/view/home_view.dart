@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -20,6 +22,20 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   bool value = false;
+  List testElement = [
+    {
+      'type': 0,
+      'leading': 'A교차로',
+      'direction': 'xx방면 yy방향',
+      'name': 'B 횡단보도',
+    },
+    {
+      'type': 1,
+      'leading': null,
+      'direction': 'aa방면 bb방향',
+      'name': 'C 횡단보도',
+    },
+  ];
 
   @override
   void initState() {
@@ -114,71 +130,100 @@ class _HomeViewState extends State<HomeView> {
               child: Container(
                 color: Colors.white,
                 height: SizeTheme.h_lg,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // Row(
-                      //   children: [
-                      //     SingleChildRoundedCard(
-                      //       child: Icon(
-                      //         Icons.ac_unit,
-                      //         size: 68,
-                      //       ),
-                      //     ),
-                      //     Text('dd'),
-                      //   ],
-                      // )
-                      Container(
-                        // color: Colors.blueGrey,
-                        child: Row(
-                          children: [
-                            SingleChildRoundedCard(
-                              padding: EdgeInsets.all(SizeTheme.w_sm),
-                              radius: SizeTheme.r_md,
-                              child: Image(
-                                width: 68.w,
-                                height: 68.w,
-                                image: AssetImage(
-                                  ImageResource.IMG_TrafficCross,
+                child: ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: SizeTheme.w_md),
+                  itemCount: testElement.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == testElement.length) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: SizeTheme.h_lg * 3,
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                '찾으시는 횡단보도가 없나요?',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              SizedBox(height: SizeTheme.h_md),
+                              ElevatedButton.icon(
+                                onPressed: () => null,
+                                icon: Icon(Icons.search),
+                                label: Text(
+                                  '다시 스캔하기',
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary:
+                                      Theme.of(context).colorScheme.background,
+                                  onPrimary:
+                                      Theme.of(context).colorScheme.onSecondary,
                                 ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
+                      );
+                    }
+                    return InkWell(
+                      onTap: () => null,
+                      child: Row(
+                        children: [
+                          SingleChildRoundedCard(
+                            padding: EdgeInsets.all(SizeTheme.w_sm),
+                            radius: SizeTheme.r_md,
+                            child: Image(
+                              width: 51.w,
+                              height: 51.w,
+                              image: AssetImage(
+                                testElement[index]['type'] == 0
+                                    ? ImageResource.IMG_TrafficCross
+                                    : ImageResource.IMG_TrafficYellow,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: SizeTheme.w_lg),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: testElement[index]['type'] == 0
+                                      ? testElement[index]['leading']
+                                      : '황색 점멸등 구간',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .apply(
+                                        color: testElement[index]['type'] == 0
+                                            ? ColorTheme.highlight3
+                                            : ColorTheme.highlight1,
+                                      ),
+                                  children: [
+                                    TextSpan(text: ' '),
+                                    TextSpan(
+                                      text: testElement[index]['direction'],
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: SizeTheme.w_sm / 2),
+                              Text(
+                                testElement[index]['name'],
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      // Container(
-                      //   color: Colors.blue,
-                      //   child: ListTile(
-                      //     minLeadingWidth: 208,
-                      //     leading: Container(
-                      //       width: 100,
-                      //       height: 200,
-                      //       color: Colors.black,
-                      //     ),
-                      //     // leading: SingleChildRoundedCard(
-                      //     //   width: 68,
-                      //     //   height: 68,
-                      //     //   child: Icon(
-                      //     //     Icons.ac_unit,
-                      //     //     size: 68,
-                      //     //   ),
-                      //     // ),
-                      //     title: Container(
-                      //       color: Colors.amber,
-                      //       child: Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           Text(
-                      //             'A교차로 xx방면 yy방향',
-                      //             style: TextStyle(fontSize: 100),
-                      //           ),
-                      //           Text('B 횡단보도'),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: SizeTheme.w_sm),
+                    child: Divider(),
                   ),
                 ),
               ),

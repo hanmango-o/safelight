@@ -47,6 +47,7 @@ class SafeLight extends StatelessWidget {
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
+              elevation: 0,
               fixedSize: Size(double.infinity, 52.h),
               padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 16.h),
               textStyle: TextStyle(
@@ -64,6 +65,10 @@ class SafeLight extends StatelessWidget {
             elevation: 0,
             selectedIconTheme: IconThemeData(size: 32.sp),
             unselectedIconTheme: IconThemeData(size: 32.sp),
+          ),
+          dividerTheme: DividerThemeData(
+            color: ColorTheme.background,
+            thickness: 1.5,
           ),
           textTheme: TextTheme(
             headlineLarge: TextStyle(
