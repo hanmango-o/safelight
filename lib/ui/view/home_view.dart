@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
@@ -84,10 +85,27 @@ class _HomeViewState extends State<HomeView> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               actions: [
-                Center(
-                  child: Text(
-                    '스캔 중',
-                    style: Theme.of(context).textTheme.labelMedium,
+                Padding(
+                  padding: EdgeInsets.only(right: SizeTheme.w_md),
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 15.w,
+                          height: 15.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                          ),
+                        ),
+                        SizedBox(width: SizeTheme.w_sm),
+                        Text(
+                          '스캔 중',
+                          style: Theme.of(context).textTheme.labelLarge!.apply(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -99,8 +117,67 @@ class _HomeViewState extends State<HomeView> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text('d'),
-                      Container(),
+                      // Row(
+                      //   children: [
+                      //     SingleChildRoundedCard(
+                      //       child: Icon(
+                      //         Icons.ac_unit,
+                      //         size: 68,
+                      //       ),
+                      //     ),
+                      //     Text('dd'),
+                      //   ],
+                      // )
+                      Container(
+                        // color: Colors.blueGrey,
+                        child: Row(
+                          children: [
+                            SingleChildRoundedCard(
+                              padding: EdgeInsets.all(SizeTheme.w_sm),
+                              radius: SizeTheme.r_md,
+                              child: Image(
+                                width: 68.w,
+                                height: 68.w,
+                                image: AssetImage(
+                                  ImageResource.IMG_TrafficCross,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      // Container(
+                      //   color: Colors.blue,
+                      //   child: ListTile(
+                      //     minLeadingWidth: 208,
+                      //     leading: Container(
+                      //       width: 100,
+                      //       height: 200,
+                      //       color: Colors.black,
+                      //     ),
+                      //     // leading: SingleChildRoundedCard(
+                      //     //   width: 68,
+                      //     //   height: 68,
+                      //     //   child: Icon(
+                      //     //     Icons.ac_unit,
+                      //     //     size: 68,
+                      //     //   ),
+                      //     // ),
+                      //     title: Container(
+                      //       color: Colors.amber,
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Text(
+                      //             'A교차로 xx방면 yy방향',
+                      //             style: TextStyle(fontSize: 100),
+                      //           ),
+                      //           Text('B 횡단보도'),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
