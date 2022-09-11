@@ -28,6 +28,7 @@ class SafeLight extends StatelessWidget {
             onSecondary: ColorTheme.onSecondary,
             background: ColorTheme.background,
             onBackground: ColorTheme.onBackground,
+            surface: ColorTheme.surface,
           ),
           scaffoldBackgroundColor: ColorTheme.background,
           appBarTheme: AppBarTheme(
@@ -64,6 +65,7 @@ class SafeLight extends StatelessWidget {
             selectedIconTheme: IconThemeData(size: 32.sp),
             unselectedIconTheme: IconThemeData(size: 32.sp),
           ),
+          textTheme: TextTheme(),
         ),
         home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,

@@ -41,7 +41,7 @@ class _MainViewState extends State<MainView> {
           ),
         ),
         child: BottomNavigationBar(
-          unselectedItemColor: Theme.of(context).colorScheme.onBackground,
+          unselectedItemColor: Theme.of(context).colorScheme.surface,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
