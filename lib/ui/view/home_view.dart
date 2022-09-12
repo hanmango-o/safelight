@@ -43,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
       bottomSheet: AnimatedContainer(
         duration: Duration(milliseconds: 1600),
         curve: Curves.fastLinearToSlowEaseIn,
-        height: value ? 620.h : 96.h,
+        height: value ? ScreenUtil.defaultSize.height.h : 96.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(SizeTheme.r_md),
@@ -99,7 +99,7 @@ class _HomeViewState extends State<HomeView> {
                   padding: EdgeInsets.only(right: SizeTheme.w_md),
                   child: Center(
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
                           width: 15.w,
@@ -243,8 +243,18 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              color: Theme.of(context).colorScheme.secondary,
-              height: 126.h,
+              padding: EdgeInsets.symmetric(
+                vertical: SizeTheme.w_md,
+                horizontal: SizeTheme.h_md,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(
+                    SizeTheme.r_md,
+                  ),
+                ),
+              ),
               child: Align(
                 child: ElevatedButton.icon(
                   onPressed: () {
@@ -267,62 +277,64 @@ class _HomeViewState extends State<HomeView> {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(SizeTheme.w_sm),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(
                           Radius.circular(SizeTheme.r_md),
                         ),
                       ),
-                      child: Column(children: [
-                        ListTile(
-                          title: Text('바라보는 방향 기준'),
-                          subtitle: Text('압버튼 찾기'),
-                          leading: SingleChildRoundedCard(
-                            child: Icon(
-                              Icons.play_circle_outline_rounded,
-                              size: 32.sp,
-                              color: ColorTheme.highlight1,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text('바라보는 방향 기준'),
+                            subtitle: Text('압버튼 찾기'),
+                            leading: SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.play_circle_outline_rounded,
+                                size: 32.sp,
+                                color: ColorTheme.highlight1,
+                              ),
                             ),
                           ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          title: Text('압버튼 스캔 후'),
-                          subtitle: Text('모두 누르기'),
-                          leading: SingleChildRoundedCard(
-                            child: Icon(
-                              Icons.radio_button_checked_rounded,
-                              size: 32.sp,
-                              color: ColorTheme.highlight2,
+                          Divider(),
+                          ListTile(
+                            title: Text('압버튼 스캔 후'),
+                            subtitle: Text('모두 누르기'),
+                            leading: SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.radio_button_checked_rounded,
+                                size: 32.sp,
+                                color: ColorTheme.highlight2,
+                              ),
                             ),
                           ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          title: Text('나와 가까운'),
-                          subtitle: Text('압버튼 찾기'),
-                          leading: SingleChildRoundedCard(
-                            child: Icon(
-                              Icons.looks,
-                              size: 32.sp,
-                              color: ColorTheme.highlight3,
+                          Divider(),
+                          ListTile(
+                            title: Text('나와 가까운'),
+                            subtitle: Text('압버튼 찾기'),
+                            leading: SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.looks,
+                                size: 32.sp,
+                                color: ColorTheme.highlight3,
+                              ),
                             ),
                           ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          title: Text('가장 가까운'),
-                          subtitle: Text(' 압버튼만 스캔 후 누르기'),
-                          leading: SingleChildRoundedCard(
-                            child: Icon(
-                              Icons.panorama_horizontal_select_sharp,
-                              size: 32.sp,
-                              color: ColorTheme.highlight4,
+                          Divider(),
+                          ListTile(
+                            title: Text('가장 가까운'),
+                            subtitle: Text(' 압버튼만 스캔 후 누르기'),
+                            leading: SingleChildRoundedCard(
+                              child: Icon(
+                                Icons.panorama_horizontal_select_sharp,
+                                size: 32.sp,
+                                color: ColorTheme.highlight4,
+                              ),
                             ),
                           ),
-                        ),
-                      ]),
+                        ],
+                      ),
                     ),
                   ],
                 ),
