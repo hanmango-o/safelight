@@ -26,56 +26,30 @@ class _SettingViewState extends State<SettingView> {
         child: Column(
           children: [
             Container(
-              // height: 186.h,
+              color: Colors.white,
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).padding.top + SizeTheme.h_lg,
                 bottom: SizeTheme.h_lg,
                 left: SizeTheme.w_md,
                 right: SizeTheme.w_md,
               ),
-              width: double.infinity,
-              color: Colors.white,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  // height: 106.h,
-                  padding: EdgeInsets.all(SizeTheme.w_lg),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.background,
-                      width: 2.5,
-                    ),
-                    borderRadius: BorderRadius.circular(SizeTheme.r_sm),
-                  ),
-                  child: Row(
-                    children: [
-                      SingleChildRoundedCard(
-                        padding: EdgeInsets.all(SizeTheme.w_sm),
-                        child: Icon(
-                          Icons.person,
-                          size: 42.w,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      SizedBox(width: SizeTheme.w_md),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '익명',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Text(
-                            '회원가입을 해주세요',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios_rounded)
-                    ],
+              child: ListTile(
+                leading: SingleChildRoundedCard(
+                  child: Icon(
+                    Icons.person,
+                    size: 42.w,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
+                title: Text(
+                  '익명',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                subtitle: Text(
+                  '회원가입을 해주세요',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                trailing: Icon(Icons.arrow_forward_ios_rounded),
               ),
             ),
             BoardFrame(
@@ -179,13 +153,6 @@ class _SettingViewState extends State<SettingView> {
                       '자동',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    // trailing: Text(
-                    //   '자동',
-                    //   style: Theme.of(context)
-                    //       .textTheme
-                    //       .bodySmall!
-                    //       .apply(color: Theme.of(context).colorScheme.primary),
-                    // ),
                     trailing: Icon(Icons.arrow_forward_ios_rounded),
                   ),
                   ListTile(
