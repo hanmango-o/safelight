@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
@@ -159,66 +161,51 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       );
                     }
-                    return InkWell(
-                      onTap: () => null,
-                      child: Row(
-                        children: [
-                          SingleChildRoundedCard(
-                            padding: EdgeInsets.all(SizeTheme.w_sm),
-                            radius: SizeTheme.r_md,
-                            child: Image(
-                              width: 51.w,
-                              height: 51.w,
-                              image: AssetImage(
-                                testElement[index]['type'] == 0
-                                    ? ImageResource.IMG_TrafficCross
-                                    : ImageResource.IMG_TrafficYellow,
+                    return ListTile(
+                      shape: Border(),
+                      leading: SingleChildRoundedCard(
+                        // padding: EdgeInsets.all(SizeTheme.w_sm),
+                        child: Image(
+                          width: 42.w,
+                          height: 42.w,
+                          image: AssetImage(
+                            testElement[index]['type'] == 0
+                                ? ImageResource.IMG_TrafficCross
+                                : ImageResource.IMG_TrafficYellow,
+                          ),
+                        ),
+                      ),
+                      title: RichText(
+                        text: TextSpan(
+                          text: testElement[index]['type'] == 0
+                              ? testElement[index]['leading']
+                              : '황색 점멸등 구간',
+                          style: Theme.of(context).textTheme.bodyMedium!.apply(
+                                color: testElement[index]['type'] == 0
+                                    ? ColorTheme.highlight3
+                                    : ColorTheme.highlight1,
                               ),
+                          children: [
+                            TextSpan(text: ' '),
+                            TextSpan(
+                              text: testElement[index]['direction'],
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
-                          ),
-                          SizedBox(width: SizeTheme.w_lg),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: testElement[index]['type'] == 0
-                                      ? testElement[index]['leading']
-                                      : '황색 점멸등 구간',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .apply(
-                                        color: testElement[index]['type'] == 0
-                                            ? ColorTheme.highlight3
-                                            : ColorTheme.highlight1,
-                                      ),
-                                  children: [
-                                    TextSpan(text: ' '),
-                                    TextSpan(
-                                      text: testElement[index]['direction'],
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: SizeTheme.w_sm / 2),
-                              Text(
-                                testElement[index]['name'],
-                                style:
-                                    Theme.of(context).textTheme.headlineLarge,
-                              ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                      subtitle: Text(
+                        testElement[index]['name'],
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: SizeTheme.w_sm),
-                    child: Divider(),
-                  ),
+                  separatorBuilder: (context, index) {
+                    if (index < testElement.length - 1) {
+                      return Divider();
+                    }
+                    return SizedBox();
+                  },
                 ),
               ),
             ),
