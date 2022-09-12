@@ -175,23 +175,26 @@ class _SettingViewState extends State<SettingView> {
                 children: [
                   ListTile(
                     title: Text('주변 압버튼 스캔'),
-                    trailing: Text(
+                    subtitle: Text(
                       '자동',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .apply(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    // trailing: Text(
+                    //   '자동',
+                    //   style: Theme.of(context)
+                    //       .textTheme
+                    //       .bodySmall!
+                    //       .apply(color: Theme.of(context).colorScheme.primary),
+                    // ),
+                    trailing: Icon(Icons.arrow_forward_ios_rounded),
                   ),
                   ListTile(
                     title: Text('보행 안전 경광등'),
-                    trailing: Text(
+                    subtitle: Text(
                       '항상 켜짐',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .apply(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    trailing: Icon(Icons.arrow_forward_ios_rounded),
                   ),
                 ],
               ),

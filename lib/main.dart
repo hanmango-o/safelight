@@ -48,7 +48,8 @@ class SafeLight extends StatelessWidget {
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              fixedSize: Size(double.infinity, 52.h),
+              // fixedSize: Size(double.infinity, 52.h),
+              minimumSize: Size(double.minPositive, 52.h),
               padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 16.h),
               textStyle: TextStyle(
                 fontSize: 16.sp,
@@ -72,6 +73,9 @@ class SafeLight extends StatelessWidget {
           ),
           listTileTheme: ListTileThemeData(
             tileColor: ColorTheme.secondary,
+            shape: Border.symmetric(
+              horizontal: BorderSide(color: ColorTheme.background, width: 1),
+            ),
           ),
           textTheme: TextTheme(
             headlineLarge: TextStyle(

@@ -1,15 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
-import 'package:safelight/ui/view/pressed_btn_view.dart';
 import 'package:safelight/ui/widget/rounded_button.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 
@@ -272,69 +266,64 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RoundedButton(
-                          onTap: () => null,
-                          title: '바라보는 방향\n기준 압버튼 찾기',
-                          actions: [
-                            SingleChildRoundedCard(
-                              child: Icon(
-                                Icons.play_circle_outline_rounded,
-                                size: 32.sp,
-                                color: ColorTheme.highlight1,
-                              ),
-                            ),
-                          ],
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(SizeTheme.r_md),
                         ),
-                        RoundedButton(
-                          onTap: () => null,
-                          title: '압버튼 스캔 후\n모두 누르기',
-                          actions: [
-                            SingleChildRoundedCard(
-                              child: Icon(
-                                Icons.radio_button_checked_rounded,
-                                size: 32.sp,
-                                color: ColorTheme.highlight2,
-                              ),
+                      ),
+                      child: Column(children: [
+                        ListTile(
+                          title: Text('바라보는 방향 기준'),
+                          subtitle: Text('압버튼 찾기'),
+                          leading: SingleChildRoundedCard(
+                            child: Icon(
+                              Icons.play_circle_outline_rounded,
+                              size: 32.sp,
+                              color: ColorTheme.highlight1,
                             ),
-                          ],
+                          ),
                         ),
-                      ],
+                        Divider(),
+                        ListTile(
+                          title: Text('압버튼 스캔 후'),
+                          subtitle: Text('모두 누르기'),
+                          leading: SingleChildRoundedCard(
+                            child: Icon(
+                              Icons.radio_button_checked_rounded,
+                              size: 32.sp,
+                              color: ColorTheme.highlight2,
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        ListTile(
+                          title: Text('나와 가까운'),
+                          subtitle: Text('압버튼 찾기'),
+                          leading: SingleChildRoundedCard(
+                            child: Icon(
+                              Icons.looks,
+                              size: 32.sp,
+                              color: ColorTheme.highlight3,
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        ListTile(
+                          title: Text('가장 가까운'),
+                          subtitle: Text(' 압버튼만 스캔 후 누르기'),
+                          leading: SingleChildRoundedCard(
+                            child: Icon(
+                              Icons.panorama_horizontal_select_sharp,
+                              size: 32.sp,
+                              color: ColorTheme.highlight4,
+                            ),
+                          ),
+                        ),
+                      ]),
                     ),
-                    SizedBox(height: SizeTheme.h_md),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RoundedButton(
-                          onTap: () => null,
-                          title: '나와 가까운\n압버튼 찾기',
-                          actions: [
-                            SingleChildRoundedCard(
-                              child: Icon(
-                                Icons.looks,
-                                size: 32.sp,
-                                color: ColorTheme.highlight3,
-                              ),
-                            ),
-                          ],
-                        ),
-                        RoundedButton(
-                          onTap: () => null,
-                          title: '가장 가까운\n압버튼만 스캔 후\n누르기',
-                          actions: [
-                            SingleChildRoundedCard(
-                              child: Icon(
-                                Icons.panorama_horizontal_select_sharp,
-                                size: 32.sp,
-                                color: ColorTheme.highlight4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),
