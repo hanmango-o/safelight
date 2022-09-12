@@ -70,6 +70,9 @@ class SafeLight extends StatelessWidget {
             color: ColorTheme.background,
             thickness: 1.5,
           ),
+          listTileTheme: ListTileThemeData(
+            tileColor: ColorTheme.secondary,
+          ),
           textTheme: TextTheme(
             headlineLarge: TextStyle(
               fontSize: 22.sp,
