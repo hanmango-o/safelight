@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:safelight/asset/static/color_theme.dart';
-import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safelight/ui/view/main_view.dart';
@@ -48,7 +47,6 @@ class SafeLight extends StatelessWidget {
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              // fixedSize: Size(double.infinity, 52.h),
               minimumSize: Size(double.minPositive, 52.h),
               padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 16.h),
               textStyle: TextStyle(
@@ -120,6 +118,9 @@ class SafeLight extends StatelessWidget {
             ),
           ),
         ),
+        getPages: [
+          GetPage(name: '/main', page: () => MainView()),
+        ],
         home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           initialData: BluetoothState.unknown,
