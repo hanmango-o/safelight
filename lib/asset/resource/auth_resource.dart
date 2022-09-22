@@ -1,0 +1,4 @@
+enum AuthResource {
+  FAIL,
+  SUCCESS,
+}

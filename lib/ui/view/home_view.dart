@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/widget/rounded_button.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
+import 'package:safelight/view_model/controller/auth_controller.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -286,6 +289,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Divider(),
                           ListTile(
+                            onTap: () {},
                             title: Text('압버튼 스캔 후'),
                             subtitle: Text('모두 누르기'),
                             leading: SingleChildRoundedCard(
@@ -298,6 +302,11 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Divider(),
                           ListTile(
+                            onTap: () async {
+                              await FirebaseAuth.instance.currentUser!.delete();
+                              // await FirebaseAuth.instance.signOut();
+                              // await FirebaseAuth.instance.currentUser!.delete();
+                            },
                             title: Text('나와 가까운'),
                             subtitle: Text('압버튼 찾기'),
                             leading: SingleChildRoundedCard(
@@ -310,6 +319,15 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Divider(),
                           ListTile(
+                            onTap: () {
+                              Get.bottomSheet(WillPopScope(
+                                onWillPop: () async {
+                                  Get.back(closeOverlays: true);
+                                  return false;
+                                },
+                                child: const Text('dd'),
+                              ));
+                            },
                             title: Text('가장 가까운'),
                             subtitle: Text(' 압버튼만 스캔 후 누르기'),
                             leading: SingleChildRoundedCard(

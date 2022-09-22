@@ -1,17 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:safelight/asset/static/color_theme.dart';
+import 'package:safelight/firebase_options.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safelight/ui/view/main_view.dart';
+import 'package:safelight/ui/view/sign_in_view.dart';
+import 'package:safelight/view_model/controller/auth_controller.dart';
+import 'package:safelight/view_model/controller/sign_controller.dart';
+import 'package:safelight/view_model/controller/user_controller.dart';
 
-void main() {
-  runApp(const SafeLight());
+// v0.2.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  Get.put(UserController());
+
+  runApp(SafeLight());
 }
 
 class SafeLight extends StatelessWidget {
-  const SafeLight({Key? key}) : super(key: key);
+  final UserController _userController = Get.find<UserController>();
+
+  SafeLight({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,19 +139,30 @@ class SafeLight extends StatelessWidget {
         ),
         getPages: [
           GetPage(name: '/main', page: () => MainView()),
+          GetPage(name: '/sign/in', page: () => SignInView()),
         ],
-        home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return HomeView();
+        home: StreamBuilder(
+          stream: _userController.auth.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return SignInView();
+            } else {
+              return MainView();
             }
-            // return BlueOffView(state: state!);
-            return MainView();
           },
         ),
+        // home: StreamBuilder<BluetoothState>(
+        //   stream: FlutterBlue.instance.state,
+        //   initialData: BluetoothState.unknown,
+        //   builder: (c, snapshot) {
+        //     final state = snapshot.data;
+        //     if (state == BluetoothState.on) {
+        //       return HomeView();
+        //     }
+        //     // return BlueOffView(state: state!);
+        //     return MainView();
+        //   },
+        // ),
       ),
     );
   }
