@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safelight/ui/view/main_view.dart';
 import 'package:safelight/ui/view/sign_in_view.dart';
 import 'package:safelight/view_model/controller/auth_controller.dart';
+import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/sign_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
@@ -23,6 +26,7 @@ Future<void> main() async {
   );
 
   Get.put(UserController());
+  Get.put(BlueController());
 
   runApp(SafeLight());
 }
@@ -147,6 +151,7 @@ class SafeLight extends StatelessWidget {
             if (snapshot.data == null) {
               return SignInView();
             } else {
+              log('dddd');
               return MainView();
             }
           },
