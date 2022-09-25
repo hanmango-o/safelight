@@ -12,7 +12,6 @@ import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/blue_bottom_sheet_view.dart';
 import 'package:safelight/ui/widget/rounded_button.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
-import 'package:safelight/view_model/controller/auth_controller.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 
 class HomeView extends StatefulWidget {

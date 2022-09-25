@@ -1,22 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
-import 'package:safelight/view_model/controller/auth_controller.dart';
-import 'package:safelight/view_model/controller/sign_controller.dart';
 import 'package:safelight/view_model/implement/anonymously_sign_impl.dart';
 
 class UserController extends GetxController {
   late _SignController _signController;
-  late AuthController _authController;
+  late _AuthController _authController;
 
   UserController() {
     _signController = _SignController();
-    _authController = AuthController();
+    _authController = _AuthController();
   }
 
   _SignController get sign => _signController;
-  AuthController get auth => _authController;
+  _AuthController get auth => _authController;
+}
+
+class _AuthController {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FirebaseAuth get getAuth => _auth;
+
+  Stream<User?> authStateChanges() => _auth.authStateChanges();
 }
 
 class _SignController with AnonymouslySignImpl {
