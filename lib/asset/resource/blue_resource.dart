@@ -3,3 +3,9 @@ enum AreaType {
   INTERSECTION, // 교차로 지역
   FLASH_CROSSING, // 점멸 신호등 지역
 }
+
+enum StatusType {
+  IS_SCANNING,
+  STAND_BY,
+  COMPLETE,
+}

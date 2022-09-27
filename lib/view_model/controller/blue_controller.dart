@@ -14,98 +14,33 @@ import 'package:safelight/ui/view/connected_view.dart';
 class BlueController extends GetxController {
   late _BlueSearchController _blueSearchController;
   late _BlueConnectController _blueConnectController;
-  Stream<List<CrosswalkVO>>? results;
   bool isOpened = false;
+  Rx<StatusType> status = StatusType.STAND_BY.obs;
 
   BlueController() {
     _blueSearchController = _BlueSearchController();
     _blueConnectController = _BlueConnectController();
   }
 
-  StreamController streamController = StreamController<List<CrosswalkVO>>()
+  StreamController resultStream = StreamController<List<CrosswalkVO>>()
     ..add([]);
 
-  Stream<List<CrosswalkVO>>? get test =>
-      streamController.stream as Stream<List<CrosswalkVO>>;
-  search() {
-    try {
-      FlutterBlue.instance.startScan(
-        timeout: Duration(seconds: 1),
-      );
-      log('ddd');
-    } catch (e) {
-      log(e.toString());
-    } finally {
-      List<CrosswalkVO> results = [];
-      FlutterBlue.instance.scanResults.listen((posts) {
-        results = posts.map((post) {
-          // Map<String, dynamic> map = {
-          //   'post': post.device,
-          //   'name': post.device.name.isEmpty ? '횡단보도' : post.device.name,
-          //   'direction': 'xx방향 yy방면',
-          //   'areaType': post.device.name.isEmpty
-          //       ? AreaType.INTERSECTION
-          //       : AreaType.SINGLE_ROAD,
-          // };
-          return CrosswalkVO(
-            post: post.device,
-            name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
-            direction: 'xx방향 yy방면',
-            areaType: post.device.name.isEmpty
-                ? AreaType.INTERSECTION
-                : AreaType.SINGLE_ROAD,
-          );
+  Stream<List<CrosswalkVO>>? get results =>
+      resultStream.stream as Stream<List<CrosswalkVO>>;
 
-          // // if(post.device.name)
-          // return CrosswalkVO(
-          //   post: post.device,
-          //   name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
-          //   direction: 'xx방향 yy방면',
-          //   connect: (post.advertisementData.connectable)
-          //       ? () async {
-          //           await post.device.connect(autoConnect: true);
-          //           await post.device.discoverServices().then(
-          //             (services) async {
-          //               await services.first.characteristics.first.write(
-          //                 utf8.encode('1'),
-          //                 withoutResponse: true,
-          //               );
-          //             },
-          //           );
-          //           Get.toNamed('/main/connect');
-          //         }
-          //       : null,
-          //   areaType: post.device.name.isEmpty
-          //       ? AreaType.INTERSECTION
-          //       : AreaType.SINGLE_ROAD,
-          // );
-          // FutureBuilder(
-          //     future: widget.device.discoverServices().then(
-          //       (services) async {
-          //         if (services.length > 0) {
-          //           await services.first.characteristics.first.write(
-          //             utf8.encode('1'),
-          //             withoutResponse: true,
-          //           );
-          //         }
-          //       },
-          //     ),
-          //             onPressed: (r.advertisementData.connectable)
-          //                 ? () async {
-          //                     await r.device.connect(autoConnect: true);
-          //                     Get.to(() =>
-          //                         PressedBtnView(device: r.device));
-          //                   }
-          //                 : null,
-        }).toList();
+  search() async {
+    status.value = StatusType.IS_SCANNING;
+    await _blueSearchController.search(resultStream);
+    status.value = StatusType.COMPLETE;
+  }
 
-        streamController.add(results);
-      });
-    }
+  reset() {
+    resultStream.add(<CrosswalkVO>[]);
+    status.value = StatusType.STAND_BY;
   }
 
   Future connect(CrosswalkVO crosswalk) =>
-      _blueConnectController.connect(crosswalk);
+      _blueConnectController.connect(crosswalk).then((value) => reset());
 
   Future services(ServiceType type) async {
     switch (type) {
@@ -126,29 +61,30 @@ class BlueController extends GetxController {
 }
 
 class _BlueSearchController {
-  Future search(
-    BlueController controller, {
-    Duration timeout = const Duration(seconds: 1),
-  }) async {
+  Future search(StreamController streamController) async {
     try {
       await FlutterBlue.instance.startScan(
-        timeout: timeout,
+        timeout: Duration(seconds: 1),
       );
-      log('ddd');
     } catch (e) {
       log(e.toString());
     } finally {
-      _convert(controller);
-    }
-  }
+      List<CrosswalkVO> results = [];
+      FlutterBlue.instance.scanResults.listen((posts) {
+        results = posts.map((post) {
+          return CrosswalkVO(
+            post: post.device,
+            name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
+            direction: 'xx방향 yy방면',
+            areaType: post.device.name.isEmpty
+                ? AreaType.INTERSECTION
+                : AreaType.SINGLE_ROAD,
+          );
+        }).toList();
 
-  _convert(BlueController controller) {
-    List<CrosswalkVO> result = [];
-    FlutterBlue.instance.scanResults.listen((event) {
-      result = event.map((e) => CrosswalkVO(post: e.device)).toList();
-      // log(result.toString());
-      controller.results = Stream.value(result);
-    });
+        streamController.add(results);
+      });
+    }
   }
 }
 

@@ -65,6 +65,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                       color: Colors.black,
                     ),
                     onPressed: () {
+                      _blueController.reset();
                       setState(() {
                         _blueController.isOpened = !_blueController.isOpened;
                       });
@@ -88,18 +89,72 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: 15.w,
-                        height: 15.w,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3,
-                        ),
+                      Obx(
+                        () {
+                          switch (_blueController.status.value) {
+                            case StatusType.IS_SCANNING:
+                              return SizedBox(
+                                width: SizeTheme.h_lg,
+                                height: SizeTheme.h_lg,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                ),
+                              );
+                            case StatusType.COMPLETE:
+                              return Icon(
+                                Icons.check,
+                                color: ColorTheme.highlight2,
+                                size: SizeTheme.h_lg,
+                              );
+
+                            case StatusType.STAND_BY:
+                            default:
+                              return Icon(
+                                Icons.stop_circle_outlined,
+                                color: ColorTheme.highlight1,
+                                size: SizeTheme.h_lg,
+                              );
+                          }
+                        },
                       ),
-                      SizedBox(width: SizeTheme.w_sm),
-                      Text(
-                        '스캔 중',
-                        style: Theme.of(context).textTheme.labelLarge!.apply(
-                            color: Theme.of(context).colorScheme.primary),
+                      Padding(
+                        padding: EdgeInsets.only(left: SizeTheme.w_sm),
+                        child: Obx(
+                          () {
+                            switch (_blueController.status.value) {
+                              case StatusType.IS_SCANNING:
+                                return Text(
+                                  '스캔 중',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .apply(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                );
+                              case StatusType.COMPLETE:
+                                return Text(
+                                  '스캔 완료',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .apply(color: ColorTheme.highlight2),
+                                );
+
+                              case StatusType.STAND_BY:
+                              default:
+                                return Text(
+                                  '스캔 대기',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .apply(color: ColorTheme.highlight1),
+                                );
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -115,7 +170,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                 child: Column(
                   children: [
                     StreamBuilder<List<CrosswalkVO>>(
-                      stream: _blueController.test,
+                      stream: _blueController.results,
                       // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
                       builder: (c, snapshot) {
                         return ListView.separated(
@@ -163,6 +218,10 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                             }
                             return ListTile(
                               onTap: () {
+                                setState(() {
+                                  _blueController.isOpened =
+                                      !_blueController.isOpened;
+                                });
                                 _blueController.connect(snapshot.data![index]);
                               },
                               leading: SingleChildRoundedCard(

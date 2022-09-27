@@ -151,7 +151,6 @@ class SafeLight extends StatelessWidget {
             if (snapshot.data == null) {
               return SignInView();
             } else {
-              log('dddd');
               return MainView();
             }
           },

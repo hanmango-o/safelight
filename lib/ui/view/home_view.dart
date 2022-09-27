@@ -25,28 +25,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final BlueController _blueController = Get.find<BlueController>();
 
-  bool value = false;
-  List testElement = [
-    {
-      'type': 0,
-      'leading': 'A교차로',
-      'direction': 'xx방면 yy방향',
-      'name': 'B 횡단보도',
-    },
-    {
-      'type': 1,
-      'leading': null,
-      'direction': 'aa방면 bb방향',
-      'name': 'C 횡단보도',
-    },
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    // FlutterBlue.instance.startScan();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +77,6 @@ class _HomeViewState extends State<HomeView> {
             ),
             BoardFrame(
               title: '제공 서비스',
-              // backgroundColor: Colors.amber,
               body: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: SizeTheme.w_md,
