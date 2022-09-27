@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/firebase_options.dart';
+import 'package:safelight/ui/view/connected_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safelight/ui/view/main_view.dart';
@@ -142,6 +143,7 @@ class SafeLight extends StatelessWidget {
         getPages: [
           GetPage(name: '/main', page: () => MainView()),
           GetPage(name: '/sign/in', page: () => SignInView()),
+          // GetPage(name: '/main/connect', page: () => ConnectedView()),
         ],
         home: StreamBuilder(
           stream: _userController.auth.authStateChanges(),

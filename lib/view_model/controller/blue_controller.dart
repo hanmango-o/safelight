@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/asset/resource/service_resource.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
+import 'package:safelight/ui/view/connected_view.dart';
 
 class BlueController extends GetxController {
   late _BlueSearchController _blueSearchController;
@@ -25,7 +27,6 @@ class BlueController extends GetxController {
 
   Stream<List<CrosswalkVO>>? get test =>
       streamController.stream as Stream<List<CrosswalkVO>>;
-  // Future search() => _blueSearchController.search(this);
   search() {
     try {
       FlutterBlue.instance.startScan(
@@ -38,7 +39,14 @@ class BlueController extends GetxController {
       List<CrosswalkVO> results = [];
       FlutterBlue.instance.scanResults.listen((posts) {
         results = posts.map((post) {
-          // if(post.device.name)
+          // Map<String, dynamic> map = {
+          //   'post': post.device,
+          //   'name': post.device.name.isEmpty ? '횡단보도' : post.device.name,
+          //   'direction': 'xx방향 yy방면',
+          //   'areaType': post.device.name.isEmpty
+          //       ? AreaType.INTERSECTION
+          //       : AreaType.SINGLE_ROAD,
+          // };
           return CrosswalkVO(
             post: post.device,
             name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
@@ -47,6 +55,48 @@ class BlueController extends GetxController {
                 ? AreaType.INTERSECTION
                 : AreaType.SINGLE_ROAD,
           );
+
+          // // if(post.device.name)
+          // return CrosswalkVO(
+          //   post: post.device,
+          //   name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
+          //   direction: 'xx방향 yy방면',
+          //   connect: (post.advertisementData.connectable)
+          //       ? () async {
+          //           await post.device.connect(autoConnect: true);
+          //           await post.device.discoverServices().then(
+          //             (services) async {
+          //               await services.first.characteristics.first.write(
+          //                 utf8.encode('1'),
+          //                 withoutResponse: true,
+          //               );
+          //             },
+          //           );
+          //           Get.toNamed('/main/connect');
+          //         }
+          //       : null,
+          //   areaType: post.device.name.isEmpty
+          //       ? AreaType.INTERSECTION
+          //       : AreaType.SINGLE_ROAD,
+          // );
+          // FutureBuilder(
+          //     future: widget.device.discoverServices().then(
+          //       (services) async {
+          //         if (services.length > 0) {
+          //           await services.first.characteristics.first.write(
+          //             utf8.encode('1'),
+          //             withoutResponse: true,
+          //           );
+          //         }
+          //       },
+          //     ),
+          //             onPressed: (r.advertisementData.connectable)
+          //                 ? () async {
+          //                     await r.device.connect(autoConnect: true);
+          //                     Get.to(() =>
+          //                         PressedBtnView(device: r.device));
+          //                   }
+          //                 : null,
         }).toList();
 
         streamController.add(results);
@@ -103,5 +153,16 @@ class _BlueSearchController {
 }
 
 class _BlueConnectController {
-  connect(CrosswalkVO crosswalk) {}
+  Future connect(CrosswalkVO crosswalk) async {
+    await crosswalk.post.connect(autoConnect: true);
+    await crosswalk.post.discoverServices().then(
+      (services) async {
+        await services.first.characteristics.first.write(
+          utf8.encode('1'),
+          withoutResponse: true,
+        );
+      },
+    );
+    Get.to(() => ConnectedView(crosswalk: crosswalk));
+  }
 }

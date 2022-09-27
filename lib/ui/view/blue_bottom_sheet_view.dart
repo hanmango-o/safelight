@@ -25,23 +25,6 @@ class BlueBottomSheetView extends StatefulWidget {
 class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
   final BlueController _blueController = Get.find<BlueController>();
 
-  List testElement = [
-    {
-      'type': 0,
-      'leading': 'A교차로',
-      'direction': 'xx방면 yy방향',
-      'name': 'B 횡단보도',
-    },
-    {
-      'type': 1,
-      'leading': null,
-      'direction': 'aa방면 bb방향',
-      'name': 'C 횡단보도',
-    },
-  ];
-
-  // var a = ScanResult{'device': BluetoothDevice{'id': '5FCB86D0-3318-B901-42F0-1A7E7EAE9BB6', 'name': 'HMSoft', 'type': BluetoothDeviceType.le, 'isDiscoveringServices': false, '_services': [], 'advertisementData': AdvertisementData{'localName': 'HMSoft', 'txPowerLevel': null, 'connectable': true, 'manufacturerData': {19784: [176, 16, 160, 116, 247, 29]}, 'serviceData': {'B000': [0, 0, 0, 0]}, 'serviceUuids': ['FFE3']}, 'rssi': -50};
-
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -128,14 +111,119 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
             child: Container(
               color: Theme.of(context).colorScheme.secondary,
               height: SizeTheme.h_lg,
-              child: StreamBuilder<List<CrosswalkVO>>(
-                stream: _blueController.test,
-                // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
-                builder: (c, snapshot) {
-                  print(snapshot.data?.isEmpty);
-                  print(snapshot.data);
-                  if (snapshot.data?.isEmpty == true) {
-                    return SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    StreamBuilder<List<CrosswalkVO>>(
+                      stream: _blueController.test,
+                      // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
+                      builder: (c, snapshot) {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: SizeTheme.w_md),
+                          itemCount: snapshot.data?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            // log(index.toString());
+                            if (index == snapshot.data?.length) {
+                              return Padding(
+                                padding:
+                                    EdgeInsets.only(top: SizeTheme.h_lg * 3),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '찾으시는 횡단보도가 없나요?',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                      SizedBox(height: SizeTheme.h_md),
+                                      ElevatedButton.icon(
+                                        onPressed: () => null,
+                                        icon: Icon(Icons.search),
+                                        label: Text(
+                                          '다시 스캔하기',
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                          onPrimary: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListTile(
+                              onTap: () {
+                                _blueController.connect(snapshot.data![index]);
+                              },
+                              leading: SingleChildRoundedCard(
+                                child: Image(
+                                  width: 42.w,
+                                  height: 42.w,
+                                  image: AssetImage(
+                                    snapshot.data?[index].areaType ==
+                                            AreaType.SINGLE_ROAD
+                                        ? ImageResource.IMG_TrafficYellow
+                                        : ImageResource.IMG_TrafficCross,
+                                  ),
+                                ),
+                              ),
+                              title: RichText(
+                                text: TextSpan(
+                                  text: snapshot.data?[index].areaType ==
+                                          AreaType.SINGLE_ROAD
+                                      ? '황색 점멸등 구간'
+                                      : '교차로',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .apply(
+                                        color: snapshot.data?[index].areaType ==
+                                                AreaType.SINGLE_ROAD
+                                            ? ColorTheme.highlight3
+                                            : ColorTheme.highlight1,
+                                      ),
+                                  children: [
+                                    TextSpan(text: ' '),
+                                    TextSpan(
+                                      text:
+                                          snapshot.data?[index].direction ?? '',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              subtitle: Text(
+                                snapshot.data?[index].name ?? '',
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            if (index < snapshot.data!.length - 1) {
+                              return Divider();
+                            }
+                            return SizedBox();
+                          },
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: SizeTheme.h_lg * 3,
+                        bottom: SizeTheme.h_lg * 3,
+                      ),
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -161,235 +249,9 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                           ],
                         ),
                       ),
-                    );
-                  } else {
-                    return ListView.separated(
-                      padding: EdgeInsets.symmetric(horizontal: SizeTheme.w_md),
-                      itemCount: snapshot.data?.length ?? -1 + 1,
-                      itemBuilder: (context, index) {
-                        if (index == snapshot.data?.length) {
-                          return Padding(
-                            padding: EdgeInsets.only(top: SizeTheme.h_lg * 3),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '찾으시는 횡단보도가 없나요?',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: SizeTheme.h_md),
-                                  ElevatedButton.icon(
-                                    onPressed: () => null,
-                                    icon: Icon(Icons.search),
-                                    label: Text(
-                                      '다시 스캔하기',
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                      onPrimary: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                        return ListTile(
-                          leading: SingleChildRoundedCard(
-                            // padding: EdgeInsets.all(SizeTheme.w_sm),
-                            child: Image(
-                              width: 42.w,
-                              height: 42.w,
-                              // image: AssetImage(ImageResource.IMG_TrafficCross),
-                              image: AssetImage(
-                                snapshot.data?[index].areaType ==
-                                        AreaType.SINGLE_ROAD
-                                    ? ImageResource.IMG_TrafficYellow
-                                    : ImageResource.IMG_TrafficCross,
-                              ),
-                            ),
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              // text: '황색 점멸등 구간',
-                              text: snapshot.data?[index].areaType ==
-                                      AreaType.SINGLE_ROAD
-                                  ? '황색 점멸등 구간'
-                                  : '교차로',
-                              style:
-                                  Theme.of(context).textTheme.bodyMedium!.apply(
-                                        color: snapshot.data?[index].areaType ==
-                                                AreaType.SINGLE_ROAD
-                                            ? ColorTheme.highlight3
-                                            : ColorTheme.highlight1,
-                                      ),
-                              children: [
-                                TextSpan(text: ' '),
-                                TextSpan(
-                                  text: snapshot.data?[index].direction ?? '',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: Text(
-                            snapshot.data?[index].name ?? '',
-                            style: Theme.of(context).textTheme.headlineLarge,
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        if (index < snapshot.data!.length - 1) {
-                          return Divider();
-                        }
-                        return SizedBox();
-                      },
-                    );
-                  }
-
-                  // return Column(
-                  //   children: snapshot.data!.map((r) {
-                  //     if (r.device.name == 'HMSoft') {
-                  //       return Padding(
-                  //         padding: const EdgeInsets.all(20.0),
-                  //         child: SizedBox(
-                  //           width: double.infinity,
-                  //           height: 60,
-                  //           child: ElevatedButton(
-                  //             child: Text(
-                  //               '역곡역 1번출구 방향 압버튼',
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //             onPressed: (r.advertisementData.connectable)
-                  //                 ? () async {
-                  //                     await r.device.connect(autoConnect: true);
-                  //                     Get.to(() =>
-                  //                         PressedBtnView(device: r.device));
-                  //                   }
-                  //                 : null,
-                  //           ),
-                  //         ),
-                  //       );
-                  //     }
-                  //     return SizedBox();
-                  //   }).toList(),
-                  // );
-                  // if (snapshot.data!.isEmpty) {
-                  //   return SingleChildScrollView(
-                  //     child: Center(
-                  //       child: Column(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Text(
-                  //             '찾으시는 횡단보도가 없나요?',
-                  //             style: Theme.of(context).textTheme.bodySmall,
-                  //           ),
-                  //           SizedBox(height: SizeTheme.h_md),
-                  //           ElevatedButton.icon(
-                  //             onPressed: () => null,
-                  //             icon: Icon(Icons.search),
-                  //             label: Text(
-                  //               '다시 스캔하기',
-                  //             ),
-                  //             style: ElevatedButton.styleFrom(
-                  //               primary:
-                  //                   Theme.of(context).colorScheme.background,
-                  //               onPrimary:
-                  //                   Theme.of(context).colorScheme.onSecondary,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
-                  // return SizedBox();
-                  // return ListView.separated(
-                  //   padding: EdgeInsets.symmetric(horizontal: SizeTheme.w_md),
-                  //   itemCount: testElement.length + 1,
-                  //   itemBuilder: (context, index) {
-                  //     if (index == testElement.length) {}
-                  //     return ListTile(
-                  //       shape: Border(),
-                  //       leading: SingleChildRoundedCard(
-                  //         // padding: EdgeInsets.all(SizeTheme.w_sm),
-                  //         child: Image(
-                  //           width: 42.w,
-                  //           height: 42.w,
-                  //           image: AssetImage(
-                  //             testElement[index]['type'] == 0
-                  //                 ? ImageResource.IMG_TrafficCross
-                  //                 : ImageResource.IMG_TrafficYellow,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       title: RichText(
-                  //         text: TextSpan(
-                  //           text: testElement[index]['type'] == 0
-                  //               ? testElement[index]['leading']
-                  //               : '황색 점멸등 구간',
-                  //           style:
-                  //               Theme.of(context).textTheme.bodyMedium!.apply(
-                  //                     color: testElement[index]['type'] == 0
-                  //                         ? ColorTheme.highlight3
-                  //                         : ColorTheme.highlight1,
-                  //                   ),
-                  //           children: [
-                  //             TextSpan(text: ' '),
-                  //             TextSpan(
-                  //               text: testElement[index]['direction'],
-                  //               style: Theme.of(context).textTheme.bodySmall,
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       subtitle: Text(
-                  //         testElement[index]['name'],
-                  //         style: Theme.of(context).textTheme.headlineLarge,
-                  //       ),
-                  //     );
-                  //   },
-                  //   separatorBuilder: (context, index) {
-                  //     if (index < testElement.length - 1) {
-                  //       return Divider();
-                  //     }
-                  //     return SizedBox();
-                  //   },
-                  // );
-                  // return Column(
-                  //   children: snapshot.data!.map((r) {
-                  //     if (r.device.name == 'HMSoft') {
-                  //       return Padding(
-                  //         padding: const EdgeInsets.all(20.0),
-                  //         child: SizedBox(
-                  //           width: double.infinity,
-                  //           height: 60,
-                  //           child: ElevatedButton(
-                  //             child: Text(
-                  //               '역곡역 1번출구 방향 압버튼',
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //             onPressed: (r.advertisementData.connectable)
-                  //                 ? () async {
-                  //                     await r.device.connect(autoConnect: true);
-                  //                     Get.to(() =>
-                  //                         PressedBtnView(device: r.device));
-                  //                   }
-                  //                 : null,
-                  //           ),
-                  //         ),
-                  //       );
-                  //     }
-                  //     return SizedBox();
-                  //   }).toList(),
-                  // );
-                },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

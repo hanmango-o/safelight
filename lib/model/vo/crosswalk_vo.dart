@@ -20,7 +20,7 @@ class CrosswalkVO {
 
   CrosswalkVO.fromMap(Map<String, dynamic> map)
       : name = map['name'],
-        post = map['device'],
+        post = map['post'],
         areaType = map['areaType'],
         direction = map['direction'],
         position = map['position'];
@@ -28,7 +28,7 @@ class CrosswalkVO {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'device': post,
+      'post': post,
       'areaType': areaType,
       'direction': direction,
       'position': position,
