@@ -4,7 +4,7 @@ import 'package:safelight/model/vo/position_vo.dart';
 
 class CrosswalkVO {
   late String name; // ~횡단보도
-  late BluetoothDevice device; // 실제 포스트 정보
+  late BluetoothDevice post; // 실제 포스트 정보
   late AreaType areaType; // 단일 신호등 지역 or 교차로
   late String? direction;
   late Position? position; // 위도 경도
@@ -12,7 +12,7 @@ class CrosswalkVO {
 
   CrosswalkVO({
     this.name = '횡단보도',
-    required this.device,
+    required this.post,
     this.areaType = AreaType.SINGLE_ROAD,
     this.direction,
     this.position,
@@ -20,7 +20,7 @@ class CrosswalkVO {
 
   CrosswalkVO.fromMap(Map<String, dynamic> map)
       : name = map['name'],
-        device = map['device'],
+        post = map['device'],
         areaType = map['areaType'],
         direction = map['direction'],
         position = map['position'];
@@ -28,7 +28,7 @@ class CrosswalkVO {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'device': device,
+      'device': post,
       'areaType': areaType,
       'direction': direction,
       'position': position,
@@ -37,6 +37,6 @@ class CrosswalkVO {
 
   @override
   String toString() {
-    return '{name : $name, device : $device, areaType : $areaType, direction : $direction, position : $position}';
+    return '{name : $name, post : $post, areaType : $areaType, direction : $direction, position : $position}';
   }
 }

@@ -7,9 +7,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
+import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 
@@ -126,10 +128,12 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
             child: Container(
               color: Theme.of(context).colorScheme.secondary,
               height: SizeTheme.h_lg,
-              child: StreamBuilder<List<ScanResult>>(
-                stream: FlutterBlue.instance.scanResults,
+              child: StreamBuilder<List<CrosswalkVO>>(
+                stream: _blueController.test,
                 // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
                 builder: (c, snapshot) {
+                  print(snapshot.data?.isEmpty);
+                  print(snapshot.data);
                   if (snapshot.data?.isEmpty == true) {
                     return SingleChildScrollView(
                       child: Center(
@@ -159,14 +163,11 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                       ),
                     );
                   } else {
-                    // log(snapshot.data.toString());
-                    log(snapshot.data.toString());
-                    print(snapshot.data?.length ?? -1 + 1);
                     return ListView.separated(
                       padding: EdgeInsets.symmetric(horizontal: SizeTheme.w_md),
                       itemCount: snapshot.data?.length ?? -1 + 1,
                       itemBuilder: (context, index) {
-                        if (index == testElement.length) {
+                        if (index == snapshot.data?.length) {
                           return Padding(
                             padding: EdgeInsets.only(top: SizeTheme.h_lg * 3),
                             child: Center(
@@ -205,63 +206,52 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                             child: Image(
                               width: 42.w,
                               height: 42.w,
-                              image: AssetImage(ImageResource.IMG_TrafficCross),
-                              // image: AssetImage(
-                              //   testElement[index]['type'] == 0
-                              //       ? ImageResource.IMG_TrafficCross
-                              //       : ImageResource.IMG_TrafficYellow,
-                              // ),
+                              // image: AssetImage(ImageResource.IMG_TrafficCross),
+                              image: AssetImage(
+                                snapshot.data?[index].areaType ==
+                                        AreaType.SINGLE_ROAD
+                                    ? ImageResource.IMG_TrafficYellow
+                                    : ImageResource.IMG_TrafficCross,
+                              ),
                             ),
                           ),
                           title: RichText(
                             text: TextSpan(
-                              text: '황색 점멸등 구간',
-                              // text: testElement[index]['type'] == 0
-                              //     ? testElement[index]['leading']
-                              //     : '황색 점멸등 구간',
+                              // text: '황색 점멸등 구간',
+                              text: snapshot.data?[index].areaType ==
+                                      AreaType.SINGLE_ROAD
+                                  ? '황색 점멸등 구간'
+                                  : '교차로',
                               style:
                                   Theme.of(context).textTheme.bodyMedium!.apply(
-                                      // color: testElement[index]['type'] == 0
-                                      //     ? ColorTheme.highlight3
-                                      //     : ColorTheme.highlight1,
+                                        color: snapshot.data?[index].areaType ==
+                                                AreaType.SINGLE_ROAD
+                                            ? ColorTheme.highlight3
+                                            : ColorTheme.highlight1,
                                       ),
                               children: [
                                 TextSpan(text: ' '),
                                 TextSpan(
-                                  // text: testElement[index]['direction'],
-                                  text: 'xxx방면',
+                                  text: snapshot.data?[index].direction ?? '',
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
                             ),
                           ),
                           subtitle: Text(
-                            // testElement[index]['name'],
-                            'ㅇㅇㅇ',
+                            snapshot.data?[index].name ?? '',
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        if (index < testElement.length - 1) {
+                        if (index < snapshot.data!.length - 1) {
                           return Divider();
                         }
                         return SizedBox();
                       },
                     );
                   }
-
-                  // return ListView.separated(
-                  //   itemCount: 2,
-                  //   itemBuilder: (context, index) {
-                  //     return ListTile();
-                  //   },
-                  //   separatorBuilder: (context, index) {
-                  //     return Divider();
-                  //   },
-                  // );
-
-                  // 해당 부분 BLE와 테스트 해보아야 함
 
                   // return Column(
                   //   children: snapshot.data!.map((r) {

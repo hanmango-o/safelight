@@ -6,6 +6,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
+import 'package:safelight/asset/resource/service_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
@@ -80,17 +81,13 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
+              /*
+              ScanResult{device: BluetoothDevice{id: 5FCB86D0-3318-B901-42F0-1A7E7EAE9BB6, name: HMSoft, type: BluetoothDeviceType.le, isDiscoveringServices: false, _services: [], advertisementData: AdvertisementData{localName: HMSoft, txPowerLevel: null, connectable: true, manufacturerData: {19784: [176, 16, 160, 116, 247, 29]}, serviceData: {B000: [0, 0, 0, 0]}, serviceUuids: [FFE3]}, rssi: -37}
+              */
               child: Align(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // setState(() {
-                    //   value = !value;
-                    // });
-
-                    print('Start Scan');
-                    FlutterBlue.instance.startScan(
-                      timeout: Duration(seconds: 1),
-                    );
+                  onPressed: () async {
+                    _blueController.search();
                     setState(() {
                       _blueController.isOpened = !_blueController.isOpened;
                     });
@@ -120,6 +117,11 @@ class _HomeViewState extends State<HomeView> {
                       child: Column(
                         children: [
                           ListTile(
+                            onTap: () async {
+                              await _blueController.services(
+                                ServiceType.SEARCH_BY_DIRECTION_OF_VIEW,
+                              );
+                            },
                             title: Text('바라보는 방향 기준'),
                             subtitle: Text('압버튼 찾기'),
                             leading: SingleChildRoundedCard(
@@ -132,7 +134,12 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Divider(),
                           ListTile(
-                            onTap: () {},
+                            onTap: () async {
+                              await _blueController.services(
+                                ServiceType
+                                    .CONNECT_ALL_IMMEDIATELY_AFTER_SEARCH,
+                              );
+                            },
                             title: Text('압버튼 스캔 후'),
                             subtitle: Text('모두 누르기'),
                             leading: SingleChildRoundedCard(
@@ -146,7 +153,9 @@ class _HomeViewState extends State<HomeView> {
                           Divider(),
                           ListTile(
                             onTap: () async {
-                              await FirebaseAuth.instance.currentUser!.delete();
+                              await _blueController.services(
+                                ServiceType.SEARCH_FOR_NEARBY,
+                              );
                             },
                             title: Text('나와 가까운'),
                             subtitle: Text('압버튼 찾기'),
@@ -160,14 +169,11 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Divider(),
                           ListTile(
-                            onTap: () {
-                              Get.bottomSheet(WillPopScope(
-                                onWillPop: () async {
-                                  Get.back(closeOverlays: true);
-                                  return false;
-                                },
-                                child: const Text('dd'),
-                              ));
+                            onTap: () async {
+                              await _blueController.services(
+                                ServiceType
+                                    .CONNECT_IMMEDIATELY_AFTER_SEARCH_FOR_NEARBY,
+                              );
                             },
                             title: Text('가장 가까운'),
                             subtitle: Text(' 압버튼만 스캔 후 누르기'),

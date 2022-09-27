@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
+import 'package:safelight/view_model/controller/user_controller.dart';
 
 class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class SettingView extends StatefulWidget {
 }
 
 class _SettingViewState extends State<SettingView> {
+  final UserController _userController = Get.find<UserController>();
   bool bluetooth = true;
   bool noti = true;
   bool gps = true;
@@ -34,6 +37,9 @@ class _SettingViewState extends State<SettingView> {
                 right: SizeTheme.w_md,
               ),
               child: ListTile(
+                onTap: () async {
+                  await _userController.sign.signOutAnonymously();
+                },
                 leading: SingleChildRoundedCard(
                   child: Icon(
                     Icons.person,

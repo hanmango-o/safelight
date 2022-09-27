@@ -15,7 +15,7 @@ import 'package:safelight/ui/view/sign_in_view.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
-// v0.2.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
+// v0.3.1 | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
