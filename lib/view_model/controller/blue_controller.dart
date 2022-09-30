@@ -22,8 +22,8 @@ class BlueController extends GetxController {
     _blueConnectController = _BlueConnectController();
   }
 
-  StreamController resultStream = StreamController<List<CrosswalkVO>>()
-    ..add([]);
+  StreamController resultStream =
+      StreamController<List<CrosswalkVO>>.broadcast()..add([]);
 
   Stream<List<CrosswalkVO>>? get results =>
       resultStream.stream as Stream<List<CrosswalkVO>>;
