@@ -293,15 +293,19 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                             ),
                             SizedBox(height: SizeTheme.h_md),
                             ElevatedButton.icon(
-                              onPressed: () => null,
+                              onPressed: () {
+                                _blueController
+                                  ..reset()
+                                  ..search();
+                              },
                               icon: Icon(Icons.search),
                               label: Text(
                                 '다시 스캔하기',
                               ),
                               style: ElevatedButton.styleFrom(
-                                primary:
+                                backgroundColor:
                                     Theme.of(context).colorScheme.background,
-                                onPrimary:
+                                foregroundColor:
                                     Theme.of(context).colorScheme.onSecondary,
                               ),
                             ),

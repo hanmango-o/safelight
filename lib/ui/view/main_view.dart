@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:get/get.dart';
 import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:safelight/ui/view/setting_view.dart';
+import 'package:safelight/view_model/controller/blue_controller.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
+  final BlueController _blueController = Get.find<BlueController>();
   static const List<Widget> _widgetOptions = <Widget>[
     HomeView(),
     SettingView(),
@@ -24,6 +27,10 @@ class _MainViewState extends State<MainView> {
 
   void _onItemTapped(int index) {
     setState(() {
+      if (index == 1) {
+        _blueController.reset();
+        _blueController.isOpened = !_blueController.isOpened;
+      }
       _selectedIndex = index;
     });
   }
