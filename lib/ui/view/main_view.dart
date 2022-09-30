@@ -29,7 +29,7 @@ class _MainViewState extends State<MainView> {
     setState(() {
       if (index == 1) {
         _blueController.reset();
-        _blueController.isOpened = !_blueController.isOpened;
+        _blueController.isOpened = false;
       }
       _selectedIndex = index;
     });
@@ -39,7 +39,7 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
       stream: FlutterBlue.instance.state,
-      initialData: BluetoothState.unknown,
+      initialData: BluetoothState.on,
       builder: (context, snapshot) {
         if (snapshot.data == BluetoothState.on) {
           return Scaffold(

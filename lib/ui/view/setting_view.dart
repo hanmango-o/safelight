@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
@@ -25,39 +26,42 @@ class _SettingViewState extends State<SettingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          color: Colors.white,
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + SizeTheme.h_lg,
+            bottom: SizeTheme.h_lg,
+            left: SizeTheme.w_md,
+            right: SizeTheme.w_md,
+          ),
+          child: ListTile(
+            onTap: () async {
+              await _userController.sign.signOut(SignType.anonymously);
+            },
+            leading: SingleChildRoundedCard(
+              child: Icon(
+                Icons.person,
+                size: 42.w,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            title: Text(
+              '익명',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            subtitle: Text(
+              '회원가입을 해주세요',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            trailing: Icon(Icons.arrow_forward_ios_rounded),
+          ),
+        ),
+        toolbarHeight: 120.h,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + SizeTheme.h_lg,
-                bottom: SizeTheme.h_lg,
-                left: SizeTheme.w_md,
-                right: SizeTheme.w_md,
-              ),
-              child: ListTile(
-                onTap: () async {
-                  await _userController.sign.signOutAnonymously();
-                },
-                leading: SingleChildRoundedCard(
-                  child: Icon(
-                    Icons.person,
-                    size: 42.w,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                title: Text(
-                  '익명',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                subtitle: Text(
-                  '회원가입을 해주세요',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                trailing: Icon(Icons.arrow_forward_ios_rounded),
-              ),
-            ),
             BoardFrame(
               title: '앱 내 권한',
               body: Column(
