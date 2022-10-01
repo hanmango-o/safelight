@@ -66,9 +66,9 @@ class _HomeViewState extends State<HomeView> {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     _blueController.search();
-                    setState(() {
-                      _blueController.isOpened = !_blueController.isOpened;
-                    });
+                    // setState(() {
+                    //   _blueController.isOpened = !_blueController.isOpened;
+                    // });
                   },
                   icon: Icon(Icons.search),
                   label: Text('횡단보도 압버튼 찾기'),

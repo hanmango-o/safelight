@@ -38,6 +38,7 @@ class BlueOffView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              Text('${this.state}'),
               Column(
                 children: [
                   Image(

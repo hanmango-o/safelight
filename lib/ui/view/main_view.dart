@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -29,7 +31,6 @@ class _MainViewState extends State<MainView> {
     setState(() {
       if (index == 1) {
         _blueController.reset();
-        _blueController.isOpened = false;
       }
       _selectedIndex = index;
     });
@@ -41,7 +42,7 @@ class _MainViewState extends State<MainView> {
       stream: FlutterBlue.instance.state,
       initialData: BluetoothState.on,
       builder: (context, snapshot) {
-        if (snapshot.data == BluetoothState.on) {
+        if (snapshot.data != BluetoothState.off) {
           return Scaffold(
             body: _widgetOptions[_selectedIndex],
             bottomNavigationBar: Container(

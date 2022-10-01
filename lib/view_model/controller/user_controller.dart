@@ -2,8 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/view_model/implement/anonymously_sign_impl.dart';
+import 'package:safelight/view_model/implement/bluetooth_permission_authorized_imp.dart';
 
 class UserController extends GetxController {
   late _SignController _signController;
@@ -18,12 +21,21 @@ class UserController extends GetxController {
   _AuthController get auth => _authController;
 }
 
-class _AuthController {
+class _AuthController with BluetoothPermissionAuthorizedImpl {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   FirebaseAuth get getAuth => _auth;
 
+  Stream<bool> get getBlueStream => super.checkBluePermission();
+
   Stream<User?> authStateChanges() => _auth.authStateChanges();
+
+  Future<void> permissionAuthorized(PermissionType type) async {
+    switch (type) {
+      case PermissionType.bluetooth:
+        await super.blueAuthorized();
+        break;
+    }
+  }
 }
 
 class _SignController with AnonymouslySignImpl {
