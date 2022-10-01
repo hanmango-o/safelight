@@ -5,4 +5,5 @@ enum AuthResource {
 
 enum PermissionType {
   bluetooth,
+  location,
 }

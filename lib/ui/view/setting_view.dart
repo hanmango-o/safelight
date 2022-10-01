@@ -66,10 +66,6 @@ class _SettingViewState extends State<SettingView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async {},
-              child: Text('test'),
-            ),
             BoardFrame(
               title: '앱 내 권한',
               body: Column(
@@ -81,24 +77,25 @@ class _SettingViewState extends State<SettingView> {
                     ),
                     title: Text('블루투스 허용'),
                     trailing: StreamBuilder<bool>(
-                        stream: _userController.auth.getBlueStream,
-                        initialData: false,
-                        builder: (context, snapshot) {
-                          return CupertinoSwitch(
-                            value: snapshot.data!,
-                            thumbColor: Theme.of(context).colorScheme.secondary,
-                            trackColor: Theme.of(context)
-                                .colorScheme
-                                .onBackground
-                                .withOpacity(0.28),
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            onChanged: (bool? value) {
-                              _userController.auth.permissionAuthorized(
-                                PermissionType.bluetooth,
-                              );
-                            },
-                          );
-                        }),
+                      stream: _userController.auth.getBlueStream,
+                      initialData: false,
+                      builder: (context, snapshot) {
+                        return CupertinoSwitch(
+                          value: snapshot.data!,
+                          thumbColor: Theme.of(context).colorScheme.secondary,
+                          trackColor: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withOpacity(0.28),
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          onChanged: (bool? value) {
+                            _userController.auth.permissionAuthorized(
+                              PermissionType.bluetooth,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                   // ListTile(
                   //   leading: Icon(
@@ -127,42 +124,46 @@ class _SettingViewState extends State<SettingView> {
                       color: ColorTheme.highlight4,
                     ),
                     title: Text('사용자 위치 정보 허용'),
-                    trailing: CupertinoSwitch(
-                      value: gps,
-                      thumbColor: Theme.of(context).colorScheme.secondary,
-                      trackColor: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.28),
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          gps = value!;
-                        });
-                      },
-                    ),
+                    trailing: StreamBuilder<bool>(
+                        stream: _userController.auth.getLocationStream,
+                        initialData: false,
+                        builder: (context, snapshot) {
+                          return CupertinoSwitch(
+                            value: snapshot.data!,
+                            thumbColor: Theme.of(context).colorScheme.secondary,
+                            trackColor: Theme.of(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.28),
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            onChanged: (bool? value) async {
+                              await _userController.auth.locationAuthorized();
+                              setState(() {});
+                            },
+                          );
+                        }),
                   ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.camera_alt_outlined,
-                      color: ColorTheme.highlight2,
-                    ),
-                    title: Text('카메라 접근 허용'),
-                    trailing: CupertinoSwitch(
-                      value: camera,
-                      thumbColor: Theme.of(context).colorScheme.secondary,
-                      trackColor: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.28),
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          camera = value!;
-                        });
-                      },
-                    ),
-                  ),
+                  // ListTile(
+                  //   leading: Icon(
+                  //     Icons.camera_alt_outlined,
+                  //     color: ColorTheme.highlight2,
+                  //   ),
+                  //   title: Text('카메라 접근 허용'),
+                  //   trailing: CupertinoSwitch(
+                  //     value: camera,
+                  //     thumbColor: Theme.of(context).colorScheme.secondary,
+                  //     trackColor: Theme.of(context)
+                  //         .colorScheme
+                  //         .onBackground
+                  //         .withOpacity(0.28),
+                  //     activeColor: Theme.of(context).colorScheme.primary,
+                  //     onChanged: (bool? value) {
+                  //       setState(() {
+                  //         camera = value!;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

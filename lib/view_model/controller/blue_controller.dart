@@ -108,6 +108,7 @@ class _BlueSearchController {
       );
     } catch (e) {
       log(e.toString());
+      Get.snackbar('에러가 발생했습니다.', e.toString());
     } finally {
       List<CrosswalkVO> results = [];
       FlutterBlue.instance.scanResults.listen((posts) {

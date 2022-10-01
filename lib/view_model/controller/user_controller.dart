@@ -7,6 +7,7 @@ import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/view_model/implement/anonymously_sign_impl.dart';
 import 'package:safelight/view_model/implement/bluetooth_permission_authorized_imp.dart';
+import 'package:safelight/view_model/implement/location_permission_authorized_impl.dart';
 
 class UserController extends GetxController {
   late _SignController _signController;
@@ -21,11 +22,13 @@ class UserController extends GetxController {
   _AuthController get auth => _authController;
 }
 
-class _AuthController with BluetoothPermissionAuthorizedImpl {
+class _AuthController
+    with BluetoothPermissionAuthorizedImpl, LocationPermissionAuthorizedImpl {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseAuth get getAuth => _auth;
 
   Stream<bool> get getBlueStream => super.checkBluePermission();
+  Stream<bool> get getLocationStream => super.checkLocationPermission();
 
   Stream<User?> authStateChanges() => _auth.authStateChanges();
 
@@ -33,6 +36,9 @@ class _AuthController with BluetoothPermissionAuthorizedImpl {
     switch (type) {
       case PermissionType.bluetooth:
         await super.blueAuthorized();
+        break;
+      case PermissionType.location:
+        await super.locationAuthorized();
         break;
     }
   }
