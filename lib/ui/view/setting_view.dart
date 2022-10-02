@@ -10,6 +10,7 @@ import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
+import 'package:safelight/ui/view/external_licenses_view.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
@@ -244,7 +245,9 @@ class _SettingViewState extends State<SettingView> {
                   //   title: Text('이용 약관'),
                   // ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => ExternalLicensesView());
+                    },
                     title: Text('외부 라이센스'),
                   ),
                 ],

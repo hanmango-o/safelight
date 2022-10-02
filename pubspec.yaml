@@ -10,7 +10,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   http: ^0.13.5
-  flutter_tts: ^3.5.0
+  flutter_tts: ^3.5.3
   flutter_local_notifications: ^9.7.0
   flutter_blue: ^0.8.0
   sqflite: ^2.0.3
