@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -78,30 +80,21 @@ class _ConnectedViewState extends State<ConnectedView> {
                   children: [
                     ListTile(
                       onTap: () async {
-                        // await _blueController.services(
-                        //   ServiceType.SEARCH_BY_DIRECTION_OF_VIEW,
-                        // );
+                        List a = await FlutterBlue.instance.connectedDevices;
                       },
-                      title: Text('바라보는 방향 기준'),
-                      subtitle: Text('압버튼 찾기'),
+                      title: Text('보행 보조 카메라'),
                       leading: SingleChildRoundedCard(
                         child: Icon(
-                          Icons.play_circle_outline_rounded,
+                          Icons.camera_alt_outlined,
                           size: 32.sp,
-                          color: ColorTheme.highlight1,
+                          color: ColorTheme.primary,
                         ),
                       ),
                     ),
                     Divider(),
                     ListTile(
-                      onTap: () async {
-                        // await _blueController.services(
-                        //   ServiceType
-                        //       .CONNECT_ALL_IMMEDIATELY_AFTER_SEARCH,
-                        // );
-                      },
-                      title: Text('압버튼 스캔 후'),
-                      subtitle: Text('모두 누르기'),
+                      onTap: () async {},
+                      title: Text('보행 안전 경광등'),
                       leading: SingleChildRoundedCard(
                         child: Icon(
                           Icons.radio_button_checked_rounded,

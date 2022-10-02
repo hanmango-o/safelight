@@ -15,7 +15,7 @@ import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/view/connected_view.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
-import 'package:safelight/view_model/implement/bluetooth_permission_authorized_imp.dart';
+import 'package:safelight/view_model/implement/bluetooth_permission_authorized_impl.dart';
 
 class BlueController extends GetxController {
   late _BlueSearchController _blueSearchController;
@@ -131,7 +131,9 @@ class _BlueSearchController {
 
 class _BlueConnectController {
   Future connect(CrosswalkVO crosswalk) async {
-    await crosswalk.post.connect(autoConnect: true);
+    await crosswalk.post
+        .connect(timeout: Duration(seconds: 5), autoConnect: true);
+    log('dd');
     await crosswalk.post.discoverServices().then(
       (services) async {
         await services.first.characteristics.first.write(
@@ -140,6 +142,7 @@ class _BlueConnectController {
         );
       },
     );
+    await crosswalk.post.disconnect();
     Get.to(() => ConnectedView(crosswalk: crosswalk));
   }
 }

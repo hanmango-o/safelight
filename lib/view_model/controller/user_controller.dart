@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/view_model/implement/anonymously_sign_impl.dart';
-import 'package:safelight/view_model/implement/bluetooth_permission_authorized_imp.dart';
+import 'package:safelight/view_model/implement/bluetooth_permission_authorized_impl.dart';
 import 'package:safelight/view_model/implement/location_permission_authorized_impl.dart';
 
 class UserController extends GetxController {
