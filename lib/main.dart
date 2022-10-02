@@ -1,22 +1,16 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/firebase_options.dart';
-import 'package:safelight/ui/view/connected_view.dart';
-import 'package:safelight/ui/view/home_view.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safelight/ui/view/main_view.dart';
 import 'package:safelight/ui/view/sign_in_view.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
-// v0.4.1 | 한영찬(hanmango-o) | hanmango.o@gmail.com
+// v0.5.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +21,7 @@ Future<void> main() async {
   Get.put(UserController());
   Get.put(BlueController());
 
+  FlutterNativeSplash.remove();
   runApp(SafeLight());
 }
 
