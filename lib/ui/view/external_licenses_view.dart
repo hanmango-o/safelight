@@ -10,7 +10,7 @@ class ExternalLicensesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('외부 라이센스'),
+        title: const Text('외부 라이센스'),
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
       ),
       body: SingleChildScrollView(
@@ -26,6 +26,7 @@ class ExternalLicensesView extends StatelessWidget {
                   child: SingleChildRoundedCard(
                     padding: EdgeInsets.all(SizeTheme.w_sm),
                     width: double.infinity,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -42,7 +43,6 @@ class ExternalLicensesView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               )
@@ -52,27 +52,3 @@ class ExternalLicensesView extends StatelessWidget {
     );
   }
 }
-
-/*
-SingleChildRoundedCard(
-              padding: EdgeInsets.all(SizeTheme.w_sm),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: SizeTheme.h_lg),
-                    child: Text(
-                      '',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  Text(
-                    '',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                ],
-              ),
-              backgroundColor: Theme.of(context).colorScheme.onPrimary,
-            ),
-*/

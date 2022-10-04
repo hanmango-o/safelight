@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/view_model/interface/bluetooth_permission_authorized_interface.dart';
 

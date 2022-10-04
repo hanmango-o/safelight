@@ -150,18 +150,6 @@ class SafeLight extends StatelessWidget {
             }
           },
         ),
-        // home: StreamBuilder<BluetoothState>(
-        //   stream: FlutterBlue.instance.state,
-        //   initialData: BluetoothState.unknown,
-        //   builder: (c, snapshot) {
-        //     final state = snapshot.data;
-        //     if (state == BluetoothState.on) {
-        //       return HomeView();
-        //     }
-        //     // return BlueOffView(state: state!);
-        //     return MainView();
-        //   },
-        // ),
       ),
     );
   }

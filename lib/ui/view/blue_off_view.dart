@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_returning_null_for_void
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
-import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 
 class BlueOffView extends StatelessWidget {
   final BluetoothState state;
@@ -14,7 +15,7 @@ class BlueOffView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -29,7 +30,7 @@ class BlueOffView extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '블루투스 상태 : ${this.state != BluetoothState.on ? '꺼짐' : ''}',
+            '블루투스 상태 : ${state != BluetoothState.on ? '꺼짐' : ''}',
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
           backgroundColor: Colors.transparent,
@@ -38,7 +39,7 @@ class BlueOffView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Text('${this.state}'),
+              Text('$state'),
               Column(
                 children: [
                   Image(
@@ -48,7 +49,7 @@ class BlueOffView extends StatelessWidget {
                   SizedBox(height: SizeTheme.h_lg),
                   Container(
                     width: double.infinity,
-                    color: Color.fromARGB(29, 0, 0, 0),
+                    color: const Color.fromARGB(29, 0, 0, 0),
                     padding: EdgeInsets.symmetric(vertical: SizeTheme.h_lg),
                     child: Center(
                       child: Text(
@@ -64,8 +65,8 @@ class BlueOffView extends StatelessWidget {
               ),
               ElevatedButton.icon(
                 onPressed: () => null,
-                label: Text('블루투스를 켜주세요'),
-                icon: Icon(Icons.bluetooth_disabled_rounded),
+                label: const Text('블루투스를 켜주세요'),
+                icon: const Icon(Icons.bluetooth_disabled_rounded),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.background,
                   foregroundColor: Theme.of(context).colorScheme.onSecondary,

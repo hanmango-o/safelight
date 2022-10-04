@@ -1,11 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
@@ -48,7 +42,7 @@ class _ConnectedViewState extends State<ConnectedView> {
                           : ColorTheme.highlight1,
                     ),
                 children: [
-                  TextSpan(text: ' '),
+                  const TextSpan(text: ' '),
                   TextSpan(
                     text: widget.crosswalk.direction ?? '',
                     style: Theme.of(context).textTheme.bodySmall,
@@ -79,10 +73,8 @@ class _ConnectedViewState extends State<ConnectedView> {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: () async {
-                        List a = await FlutterBlue.instance.connectedDevices;
-                      },
-                      title: Text('보행 보조 카메라'),
+                      onTap: () async {},
+                      title: const Text('보행 보조 카메라'),
                       leading: SingleChildRoundedCard(
                         child: Icon(
                           Icons.camera_alt_outlined,
@@ -91,10 +83,10 @@ class _ConnectedViewState extends State<ConnectedView> {
                         ),
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListTile(
                       onTap: () async {},
-                      title: Text('보행 안전 경광등'),
+                      title: const Text('보행 안전 경광등'),
                       leading: SingleChildRoundedCard(
                         child: Icon(
                           Icons.radio_button_checked_rounded,

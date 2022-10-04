@@ -1,17 +1,11 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/resource/service_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/blue_bottom_sheet_view.dart';
-import 'package:safelight/ui/widget/rounded_button.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 
@@ -28,17 +22,17 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: BlueBottomSheetView(),
+      bottomSheet: const BlueBottomSheetView(),
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         actions: [
           IconButton(
             onPressed: () => null,
-            icon: Icon(Icons.flashlight_on_outlined),
+            icon: const Icon(Icons.flashlight_on_outlined),
           ),
           IconButton(
             onPressed: () => null,
-            icon: Icon(Icons.camera_alt_outlined),
+            icon: const Icon(Icons.camera_alt_outlined),
           )
         ],
       ),
@@ -66,12 +60,9 @@ class _HomeViewState extends State<HomeView> {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     _blueController.search();
-                    // setState(() {
-                    //   _blueController.isOpened = !_blueController.isOpened;
-                    // });
                   },
-                  icon: Icon(Icons.search),
-                  label: Text('횡단보도 압버튼 찾기'),
+                  icon: const Icon(Icons.search),
+                  label: const Text('횡단보도 압버튼 찾기'),
                 ),
               ),
             ),
@@ -99,8 +90,8 @@ class _HomeViewState extends State<HomeView> {
                                 ServiceType.SEARCH_BY_DIRECTION_OF_VIEW,
                               );
                             },
-                            title: Text('바라보는 방향 기준'),
-                            subtitle: Text('압버튼 찾기'),
+                            title: const Text('바라보는 방향 기준'),
+                            subtitle: const Text('압버튼 찾기'),
                             leading: SingleChildRoundedCard(
                               child: Icon(
                                 Icons.play_circle_outline_rounded,
@@ -109,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             onTap: () async {
                               await _blueController.services(
@@ -117,8 +108,8 @@ class _HomeViewState extends State<HomeView> {
                                     .CONNECT_ALL_IMMEDIATELY_AFTER_SEARCH,
                               );
                             },
-                            title: Text('압버튼 스캔 후'),
-                            subtitle: Text('모두 누르기'),
+                            title: const Text('압버튼 스캔 후'),
+                            subtitle: const Text('모두 누르기'),
                             leading: SingleChildRoundedCard(
                               child: Icon(
                                 Icons.radio_button_checked_rounded,
@@ -127,15 +118,15 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             onTap: () async {
                               await _blueController.services(
                                 ServiceType.SEARCH_FOR_NEARBY,
                               );
                             },
-                            title: Text('나와 가까운'),
-                            subtitle: Text('압버튼 찾기'),
+                            title: const Text('나와 가까운'),
+                            subtitle: const Text('압버튼 찾기'),
                             leading: SingleChildRoundedCard(
                               child: Icon(
                                 Icons.looks,
@@ -144,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             onTap: () async {
                               await _blueController.services(
@@ -152,8 +143,8 @@ class _HomeViewState extends State<HomeView> {
                                     .CONNECT_IMMEDIATELY_AFTER_SEARCH_FOR_NEARBY,
                               );
                             },
-                            title: Text('가장 가까운'),
-                            subtitle: Text(' 압버튼만 스캔 후 누르기'),
+                            title: const Text('가장 가까운'),
+                            subtitle: const Text(' 압버튼만 스캔 후 누르기'),
                             leading: SingleChildRoundedCard(
                               child: Icon(
                                 Icons.panorama_horizontal_select_sharp,

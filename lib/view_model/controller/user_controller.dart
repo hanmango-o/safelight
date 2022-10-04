@@ -1,8 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/view_model/implement/anonymously_sign_impl.dart';
@@ -50,7 +50,7 @@ class _SignController with AnonymouslySignImpl {
       case SignType.anonymously:
         Get.showOverlay(
           asyncFunction: () => super.signInAnonymously(),
-          loadingWidget: Center(child: CircularProgressIndicator()),
+          loadingWidget: const Center(child: CircularProgressIndicator()),
         );
         break;
     }
@@ -61,7 +61,7 @@ class _SignController with AnonymouslySignImpl {
       case SignType.anonymously:
         Get.showOverlay(
           asyncFunction: () => super.signOutAnonymously(),
-          loadingWidget: Center(child: CircularProgressIndicator()),
+          loadingWidget: const Center(child: CircularProgressIndicator()),
         );
         break;
     }

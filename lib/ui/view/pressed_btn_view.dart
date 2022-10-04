@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_is_empty
+
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -30,7 +31,7 @@ class _PressedBtnViewState extends State<PressedBtnView> {
     tts.setLanguage('ko');
     tts.setSpeechRate(0.5);
     tts.speak('잠시만 기다려주세요.');
-    Future.delayed(Duration(seconds: 5)).then((value) {
+    Future.delayed(const Duration(seconds: 5)).then((value) {
       setState(() {
         isChange = true;
       });
@@ -42,7 +43,7 @@ class _PressedBtnViewState extends State<PressedBtnView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('신호 대기 중'),
+        title: const Text('신호 대기 중'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -63,7 +64,7 @@ class _PressedBtnViewState extends State<PressedBtnView> {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
                   case ConnectionState.active:
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   case ConnectionState.done:
                     // widget.device.disconnect();
                     return Center(
@@ -71,14 +72,14 @@ class _PressedBtnViewState extends State<PressedBtnView> {
                         padding: const EdgeInsets.only(top: 300),
                         child: Column(
                           children: [
-                            Text(
+                            const Text(
                               '황색불 지역',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               isChange ? '신호가 변경되었습니다.' : '잠시만 기다려주세요.',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ],

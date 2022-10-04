@@ -45,10 +45,10 @@ class FlatCard extends StatelessWidget {
                     padding: headerPadding ?? EdgeInsets.zero,
                     child: header ??
                         ConstrainedBox(
-                          constraints: BoxConstraints(),
+                          constraints: const BoxConstraints(),
                           child: Text(
                             title,
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 20),
                           ),
                         ),
                   ),

@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get/get.dart';
 import 'package:safelight/ui/view/blue_off_view.dart';

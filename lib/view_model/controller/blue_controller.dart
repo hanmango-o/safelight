@@ -1,21 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/asset/resource/service_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/view/connected_view.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
-import 'package:safelight/view_model/implement/bluetooth_permission_authorized_impl.dart';
 
 class BlueController extends GetxController {
   late _BlueSearchController _blueSearchController;
@@ -85,16 +80,23 @@ class BlueController extends GetxController {
   Future<void> services(ServiceType type) async {
     switch (type) {
       case ServiceType.SEARCH_BY_DIRECTION_OF_VIEW:
-        log('바라보는 방향 기준 압버튼 찾기');
+        await search();
+        // log('바라보는 방향 기준 압버튼 찾기');
         break;
       case ServiceType.CONNECT_ALL_IMMEDIATELY_AFTER_SEARCH:
-        log('압버튼 스캔 후 모두 누르기');
+        // log('압버튼 스캔 후 모두 누르기');
+        await search();
+
         break;
       case ServiceType.SEARCH_FOR_NEARBY:
-        log('나와 가까운 압버튼 찾기');
+        // log('나와 가까운 압버튼 찾기');
+        await search();
+
         break;
       case ServiceType.CONNECT_IMMEDIATELY_AFTER_SEARCH_FOR_NEARBY:
-        log('가장 가까운 압버튼만 스캔 후 누르기');
+        // log('가장 가까운 압버튼만 스캔 후 누르기');
+        await search();
+
         break;
     }
   }
@@ -104,10 +106,9 @@ class _BlueSearchController {
   Future search(StreamController streamController) async {
     try {
       await FlutterBlue.instance.startScan(
-        timeout: Duration(seconds: 1),
+        timeout: const Duration(seconds: 1),
       );
     } catch (e) {
-      log(e.toString());
       Get.snackbar('에러가 발생했습니다.', e.toString());
     } finally {
       List<CrosswalkVO> results = [];
@@ -132,8 +133,7 @@ class _BlueSearchController {
 class _BlueConnectController {
   Future connect(CrosswalkVO crosswalk) async {
     await crosswalk.post
-        .connect(timeout: Duration(seconds: 5), autoConnect: true);
-    log('dd');
+        .connect(timeout: const Duration(seconds: 5), autoConnect: true);
     await crosswalk.post.discoverServices().then(
       (services) async {
         await services.first.characteristics.first.write(

@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
@@ -59,7 +56,7 @@ class _SettingViewState extends State<SettingView> {
               '회원가입을 해주세요',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
         ),
         toolbarHeight: 120.h,
@@ -72,11 +69,11 @@ class _SettingViewState extends State<SettingView> {
               body: Column(
                 children: [
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.bluetooth,
                       color: ColorTheme.highlight3,
                     ),
-                    title: Text('블루투스 허용'),
+                    title: const Text('블루투스 허용'),
                     trailing: StreamBuilder<bool>(
                       stream: _userController.auth.getBlueStream,
                       initialData: false,
@@ -120,11 +117,11 @@ class _SettingViewState extends State<SettingView> {
                   //   ),
                   // ),
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.gps_fixed_rounded,
                       color: ColorTheme.highlight4,
                     ),
-                    title: Text('사용자 위치 정보 허용'),
+                    title: const Text('사용자 위치 정보 허용'),
                     trailing: StreamBuilder<bool>(
                         stream: _userController.auth.getLocationStream,
                         initialData: false,
@@ -177,24 +174,24 @@ class _SettingViewState extends State<SettingView> {
                       context: context,
                       builder: (context) {
                         return CupertinoActionSheet(
-                          title: Text('주변 압버튼 스캔'),
+                          title: const Text('주변 압버튼 스캔'),
                           message: ElevatedButton(
                             onPressed: () {},
-                            child: Text('각 스캔 모드 설명보기'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   Theme.of(context).colorScheme.secondary,
                               foregroundColor:
                                   Theme.of(context).colorScheme.onSecondary,
                             ),
+                            child: const Text('각 스캔 모드 설명보기'),
                           ),
                           actions: [
                             CupertinoActionSheetAction(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text('수동 모드'),
                               isDefaultAction: true,
+                              child: const Text('수동 모드'),
                             ),
                             CupertinoActionSheetAction(
                               onPressed: () {
@@ -204,24 +201,24 @@ class _SettingViewState extends State<SettingView> {
                                   '현재 버전에서는 사용할 수 없습니다.',
                                 );
                               },
-                              child: Text('자동 모드'),
                               isDefaultAction: true,
+                              child: const Text('자동 모드'),
                             ),
                           ],
                           cancelButton: CupertinoActionSheetAction(
                             isDestructiveAction: true,
                             onPressed: () => Navigator.pop(context),
-                            child: Text('취소'),
+                            child: const Text('취소'),
                           ),
                         );
                       },
                     ),
-                    title: Text('주변 압버튼 스캔'),
+                    title: const Text('주변 압버튼 스캔'),
                     subtitle: Text(
                       '수동',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios_rounded),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   ),
                   // ListTile(
                   //   title: Text('보행 안전 경광등'),
@@ -246,9 +243,9 @@ class _SettingViewState extends State<SettingView> {
                   // ),
                   ListTile(
                     onTap: () {
-                      Get.to(() => ExternalLicensesView());
+                      Get.to(() => const ExternalLicensesView());
                     },
-                    title: Text('외부 라이센스'),
+                    title: const Text('외부 라이센스'),
                   ),
                 ],
               ),

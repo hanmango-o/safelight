@@ -1,10 +1,4 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
@@ -29,7 +23,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
   Widget build(BuildContext context) {
     return Obx(
       () => AnimatedContainer(
-        duration: Duration(milliseconds: 1600),
+        duration: const Duration(milliseconds: 1600),
         curve: Curves.fastLinearToSlowEaseIn,
         height: _blueController.isOpened.value
             ? ScreenUtil.defaultSize.height.h
@@ -40,7 +34,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
           ),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, -10),
+              offset: const Offset(0, -10),
               blurRadius: 10,
               spreadRadius: 2,
               color: Theme.of(context).colorScheme.background,
@@ -63,7 +57,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
               ),
               leading: _blueController.isOpened.value
                   ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.black,
                       ),
@@ -96,7 +90,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                 return SizedBox(
                                   width: SizeTheme.h_lg,
                                   height: SizeTheme.h_lg,
-                                  child: CircularProgressIndicator(
+                                  child: const CircularProgressIndicator(
                                     strokeWidth: 3,
                                   ),
                                 );
@@ -175,7 +169,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                         builder: (c, snapshot) {
                           return ListView.separated(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             padding: EdgeInsets.symmetric(
                                 horizontal: SizeTheme.w_md),
                             itemCount: snapshot.data?.length ?? 0,
@@ -203,8 +197,8 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                               ..reset()
                                               ..search();
                                           },
-                                          icon: Icon(Icons.search),
-                                          label: Text(
+                                          icon: const Icon(Icons.search),
+                                          label: const Text(
                                             '다시 스캔하기',
                                           ),
                                           style: ElevatedButton.styleFrom(
@@ -256,7 +250,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                                   : ColorTheme.highlight1,
                                         ),
                                     children: [
-                                      TextSpan(text: ' '),
+                                      const TextSpan(text: ' '),
                                       TextSpan(
                                         text: snapshot.data?[index].direction ??
                                             '',
@@ -276,9 +270,9 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                             },
                             separatorBuilder: (context, index) {
                               if (index < snapshot.data!.length - 1) {
-                                return Divider();
+                                return const Divider();
                               }
-                              return SizedBox();
+                              return const SizedBox();
                             },
                           );
                         },
@@ -303,8 +297,8 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                     ..reset()
                                     ..search();
                                 },
-                                icon: Icon(Icons.search),
-                                label: Text(
+                                icon: const Icon(Icons.search),
+                                label: const Text(
                                   '다시 스캔하기',
                                 ),
                                 style: ElevatedButton.styleFrom(
