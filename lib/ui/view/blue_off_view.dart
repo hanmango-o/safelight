@@ -71,25 +71,7 @@ class BlueOffView extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.background,
                   foregroundColor: Theme.of(context).colorScheme.onSecondary,
                 ),
-              )
-              // Spacer(),
-              // SizedBox(height: ,)
-
-              // SingleChildRoundedCard(
-              //   child: Icon(
-              //     Icons.bluetooth_disabled,
-              //     size: 200.0,
-              //     color: Theme.of(context).colorScheme.primary,
-              //   ),
-              // ),
-              // Container(
-              //   color: Colors.white,
-              //   child: Image(
-              //     // width: .w,
-              //     // height: 42.w,
-              //     image: AssetImage(ImageResource.IMG_StopSign),
-              //   ),
-              // ),
+              ),
             ],
           ),
         ),

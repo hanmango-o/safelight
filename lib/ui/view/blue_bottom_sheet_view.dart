@@ -174,7 +174,6 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                 horizontal: SizeTheme.w_md),
                             itemCount: snapshot.data?.length ?? 0,
                             itemBuilder: (context, index) {
-                              // log(index.toString());
                               if (index == snapshot.data?.length) {
                                 return Padding(
                                   padding:
