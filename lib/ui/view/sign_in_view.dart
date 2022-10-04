@@ -22,7 +22,7 @@ class _SignInViewState extends State<SignInView> {
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('로그인'),
+        title: const Text('로그인'),
       ),
       body: Center(
         child: Column(
@@ -38,7 +38,7 @@ class _SignInViewState extends State<SignInView> {
               onPressed: () async {
                 await _userController.sign.signIn(SignType.anonymously);
               },
-              child: Text('로그인 없이 이용하기'),
+              child: const Text('로그인 없이 이용하기'),
             ),
           ],
         ),

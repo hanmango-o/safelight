@@ -37,7 +37,7 @@ class SafeLight extends StatelessWidget {
       builder: (context, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: ColorTheme.primary,
             onPrimary: ColorTheme.onPrimary,
             secondary: ColorTheme.secondary,
@@ -82,11 +82,11 @@ class SafeLight extends StatelessWidget {
             selectedIconTheme: IconThemeData(size: 32.sp),
             unselectedIconTheme: IconThemeData(size: 32.sp),
           ),
-          dividerTheme: DividerThemeData(
+          dividerTheme: const DividerThemeData(
             color: ColorTheme.background,
             thickness: 1.5,
           ),
-          listTileTheme: ListTileThemeData(
+          listTileTheme: const ListTileThemeData(
             tileColor: ColorTheme.secondary,
             shape: Border.symmetric(
               horizontal: BorderSide(color: ColorTheme.background, width: 1),
@@ -136,17 +136,17 @@ class SafeLight extends StatelessWidget {
           ),
         ),
         getPages: [
-          GetPage(name: '/main', page: () => MainView()),
-          GetPage(name: '/sign/in', page: () => SignInView()),
+          GetPage(name: '/main', page: () => const MainView()),
+          GetPage(name: '/sign/in', page: () => const SignInView()),
           // GetPage(name: '/main/connect', page: () => ConnectedView()),
         ],
         home: StreamBuilder(
           stream: _userController.auth.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.data == null) {
-              return SignInView();
+              return const SignInView();
             } else {
-              return MainView();
+              return const MainView();
             }
           },
         ),

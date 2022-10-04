@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 enum AreaType {
   SINGLE_ROAD, // 단일 신호등 지역
   INTERSECTION, // 교차로 지역
