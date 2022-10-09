@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +11,8 @@ import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
+import 'package:safelight/view_model/implement/acoustic_signal_impl.dart';
+import 'package:safelight/view_model/implement/voice_inductor_impl.dart';
 
 class BlueBottomSheetView extends StatefulWidget {
   const BlueBottomSheetView({Key? key}) : super(key: key);
@@ -25,7 +30,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
       () => AnimatedContainer(
         duration: const Duration(milliseconds: 1600),
         curve: Curves.fastLinearToSlowEaseIn,
-        height: _blueController.isOpened.value
+        height: BlueController.isDone.value
             ? ScreenUtil.defaultSize.height.h
             : 96.h,
         decoration: BoxDecoration(
@@ -55,14 +60,14 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                   ),
                 ),
               ),
-              leading: _blueController.isOpened.value
+              leading: BlueController.isDone.value
                   ? IconButton(
                       icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.black,
                       ),
                       onPressed: () {
-                        _blueController.reset();
+                        _blueController.blueHandler.reset();
                       },
                     )
                   : null,
@@ -85,7 +90,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                       children: [
                         Obx(
                           () {
-                            switch (_blueController.status.value) {
+                            switch (BlueController.status.value) {
                               case StatusType.IS_SCANNING:
                                 return SizedBox(
                                   width: SizeTheme.h_lg,
@@ -115,7 +120,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                           padding: EdgeInsets.only(left: SizeTheme.w_sm),
                           child: Obx(
                             () {
-                              switch (_blueController.status.value) {
+                              switch (BlueController.status.value) {
                                 case StatusType.IS_SCANNING:
                                   return Text(
                                     '스캔 중',
@@ -164,7 +169,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                   child: Column(
                     children: [
                       StreamBuilder<List<CrosswalkVO>>(
-                        stream: _blueController.results,
+                        stream: _blueController.blueHandler.results,
                         // stream: Stream.periodic(Duration(seconds: 4)).asyncMap((event) => null),
                         builder: (c, snapshot) {
                           return ListView.separated(
@@ -192,7 +197,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                         SizedBox(height: SizeTheme.h_md),
                                         ElevatedButton.icon(
                                           onPressed: () {
-                                            _blueController
+                                            _blueController.blueHandler
                                               ..reset()
                                               ..search();
                                           },
@@ -215,11 +220,98 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                 );
                               }
                               return ListTile(
-                                onTap: () {
-                                  _blueController.isOpened.value = false;
-                                  _blueController
-                                      .connect(snapshot.data![index]);
-                                },
+                                onTap: () => showCupertinoModalPopup(
+                                  context: context,
+                                  builder: (context) {
+                                    return CupertinoActionSheet(
+                                      title: const Text('모드 선택'),
+                                      actions: [
+                                        CupertinoActionSheetAction(
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+
+                                            BlueController.isDone.value = false;
+                                            _blueController.blueHandler
+                                                .sendCMD = VoiceInductor(
+                                              crosswalks: [
+                                                snapshot.data![index],
+                                              ],
+                                            );
+                                            await _blueController.blueHandler
+                                                .send();
+                                          },
+                                          isDefaultAction: true,
+                                          child: const Text('음성 유도'),
+                                        ),
+                                        CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            BlueController.isDone.value = false;
+                                            _blueController.blueHandler
+                                                .sendCMD = AcousticSignal(
+                                              crosswalks: [
+                                                snapshot.data![index],
+                                              ],
+                                            );
+                                            _blueController.blueHandler.send();
+                                            Navigator.pop(context);
+                                          },
+                                          isDefaultAction: true,
+                                          child: const Text('압버튼 누르기'),
+                                        ),
+                                      ],
+                                      cancelButton: CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('취소'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                // onTap: () {
+                                //   log('d');
+                                //   Get.defaultDialog();
+                                //   CupertinoActionSheet(
+                                //     title: const Text('주변 압버튼 스캔'),
+                                //     message: ElevatedButton(
+                                //       onPressed: () {},
+                                //       style: ElevatedButton.styleFrom(
+                                //         backgroundColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         foregroundColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .onSecondary,
+                                //       ),
+                                //       child: const Text('각 스캔 모드 설명보기'),
+                                //     ),
+                                //     actions: [
+                                //       CupertinoActionSheetAction(
+                                //         onPressed: () {
+                                //           Navigator.pop(context);
+                                //         },
+                                //         isDefaultAction: true,
+                                //         child: const Text('수동 모드'),
+                                //       ),
+                                //       CupertinoActionSheetAction(
+                                //         onPressed: () {
+                                //           Navigator.pop(context);
+                                //           Get.snackbar(
+                                //             '개발 중입니다.',
+                                //             '현재 버전에서는 사용할 수 없습니다.',
+                                //           );
+                                //         },
+                                //         isDefaultAction: true,
+                                //         child: const Text('자동 모드'),
+                                //       ),
+                                //     ],
+                                //     cancelButton: CupertinoActionSheetAction(
+                                //       isDestructiveAction: true,
+                                //       onPressed: () => Navigator.pop(context),
+                                //       child: const Text('취소'),
+                                //     ),
+                                //   );
+
+                                // },
                                 leading: SingleChildRoundedCard(
                                   child: Image(
                                     width: 42.w,
@@ -292,7 +384,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                               SizedBox(height: SizeTheme.h_md),
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  _blueController
+                                  _blueController.blueHandler
                                     ..reset()
                                     ..search();
                                 },

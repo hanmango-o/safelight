@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
@@ -26,7 +26,7 @@ class _MainViewState extends State<MainView> {
   void _onItemTapped(int index) {
     setState(() {
       if (index == 1) {
-        _blueController.reset();
+        _blueController.blueHandler.reset();
       }
       _selectedIndex = index;
     });
@@ -35,7 +35,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
-      stream: FlutterBlue.instance.state,
+      stream: FlutterBluePlus.instance.state,
       initialData: BluetoothState.on,
       builder: (context, snapshot) {
         if (snapshot.data != BluetoothState.off) {

@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_returning_null_for_void
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';

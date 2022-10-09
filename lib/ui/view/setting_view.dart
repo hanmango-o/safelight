@@ -90,6 +90,7 @@ class _SettingViewState extends State<SettingView> {
                             _userController.auth.permissionAuthorized(
                               PermissionType.bluetooth,
                             );
+                            setState(() {});
                           },
                         );
                       },

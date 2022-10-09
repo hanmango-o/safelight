@@ -1,4 +1,4 @@
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/model/vo/position_vo.dart';
 

@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io' show Platform;
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/view_model/interface/bluetooth_permission_authorized_interface.dart';
 
@@ -5,19 +8,44 @@ class BluetoothPermissionAuthorizedImpl
     implements IBluetoothPermissionAuthorized {
   @override
   Future blueAuthorized() async {
-    await openAppSettings();
+    checkBluePermission().listen((isOn) async {
+      if (isOn) {
+        await openAppSettings();
+      } else {
+        if (Platform.isAndroid) {
+          await Permission.bluetoothAdvertise.request();
+          await Permission.bluetoothConnect.request();
+          await Permission.bluetoothScan.request();
+        } else {
+          
+          await Permission.bluetooth.request();
+        }
+      }
+    });
   }
 
   @override
   Stream<bool> checkBluePermission() async* {
-    if (await Permission.bluetooth.isGranted) {
-      yield true;
-    } else if (await Permission.bluetoothAdvertise.isDenied &&
-        await Permission.bluetoothConnect.isGranted &&
-        await Permission.bluetoothScan.isGranted) {
-      yield true;
+    if (Platform.isIOS) {
+      if (await Permission.bluetooth.isGranted) {
+        yield true;
+      } else {
+        yield false;
+      }
     } else {
-      yield false;
+      var a = await Permission.bluetoothAdvertise.isGranted;
+      var b = await Permission.bluetoothConnect.isGranted;
+      var c = await Permission.bluetoothScan.isGranted;
+      log(a.toString());
+      log(b.toString());
+      log(c.toString());
+      if (await Permission.bluetoothAdvertise.isGranted &&
+          await Permission.bluetoothConnect.isGranted &&
+          await Permission.bluetoothScan.isGranted) {
+        yield true;
+      } else {
+        yield false;
+      }
     }
   }
 }

@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_returning_null_for_void
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:safelight/asset/resource/service_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
@@ -10,6 +13,9 @@ import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/blue_bottom_sheet_view.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
+import 'package:safelight/view_model/handler/blue_handler.dart';
+import 'package:safelight/view_model/implement/default_search_impl.dart';
+import 'package:safelight/view_model/strategy/service_strategy.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -61,7 +67,8 @@ class _HomeViewState extends State<HomeView> {
               child: Align(
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    _blueController.search();
+                    _blueController.blueHandler.searchCMD = DefaultSearch();
+                    await _blueController.blueHandler.search();
                   },
                   icon: const Icon(Icons.search),
                   label: const Text('횡단보도 압버튼 찾기'),
@@ -88,9 +95,7 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           ListTile(
                             onTap: () async {
-                              await _blueController.services(
-                                ServiceType.SEARCH_BY_DIRECTION_OF_VIEW,
-                              );
+                              await _blueController.doService();
                             },
                             title: const Text('바라보는 방향 기준'),
                             subtitle: const Text('압버튼 찾기'),
@@ -105,10 +110,7 @@ class _HomeViewState extends State<HomeView> {
                           const Divider(),
                           ListTile(
                             onTap: () async {
-                              await _blueController.services(
-                                ServiceType
-                                    .CONNECT_ALL_IMMEDIATELY_AFTER_SEARCH,
-                              );
+                              await _blueController.doService();
                             },
                             title: const Text('압버튼 스캔 후'),
                             subtitle: const Text('모두 누르기'),
@@ -123,9 +125,7 @@ class _HomeViewState extends State<HomeView> {
                           const Divider(),
                           ListTile(
                             onTap: () async {
-                              await _blueController.services(
-                                ServiceType.SEARCH_FOR_NEARBY,
-                              );
+                              await _blueController.doService();
                             },
                             title: const Text('나와 가까운'),
                             subtitle: const Text('압버튼 찾기'),
@@ -140,10 +140,7 @@ class _HomeViewState extends State<HomeView> {
                           const Divider(),
                           ListTile(
                             onTap: () async {
-                              await _blueController.services(
-                                ServiceType
-                                    .CONNECT_IMMEDIATELY_AFTER_SEARCH_FOR_NEARBY,
-                              );
+                              await _blueController.doService();
                             },
                             title: const Text('가장 가까운'),
                             subtitle: const Text(' 압버튼만 스캔 후 누르기'),
