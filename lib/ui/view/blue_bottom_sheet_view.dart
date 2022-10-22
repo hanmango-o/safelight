@@ -176,7 +176,8 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             padding: EdgeInsets.symmetric(
-                                horizontal: SizeTheme.w_md),
+                              horizontal: SizeTheme.w_md,
+                            ),
                             itemCount: snapshot.data?.length ?? 0,
                             itemBuilder: (context, index) {
                               if (index == snapshot.data?.length) {
@@ -230,22 +231,22 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                           onPressed: () async {
                                             Navigator.pop(context);
 
-                                            BlueController.isDone.value = false;
                                             _blueController.blueHandler
                                                 .sendCMD = VoiceInductor(
                                               crosswalks: [
                                                 snapshot.data![index],
                                               ],
                                             );
-                                            await _blueController.blueHandler
-                                                .send();
+                                            _blueController.blueHandler.send();
+                                            _blueController.blueHandler.reset();
                                           },
                                           isDefaultAction: true,
                                           child: const Text('음성 유도'),
                                         ),
                                         CupertinoActionSheetAction(
-                                          onPressed: () {
-                                            BlueController.isDone.value = false;
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+
                                             _blueController.blueHandler
                                                 .sendCMD = AcousticSignal(
                                               crosswalks: [
@@ -253,7 +254,7 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                               ],
                                             );
                                             _blueController.blueHandler.send();
-                                            Navigator.pop(context);
+                                            _blueController.blueHandler.reset();
                                           },
                                           isDefaultAction: true,
                                           child: const Text('압버튼 누르기'),

@@ -2,8 +2,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 
 abstract class SendCommandStrategy {
-  abstract List<int> _command;
-  List<CrosswalkVO> _crosswalks;
+  final List<CrosswalkVO> _crosswalks;
 
   SendCommandStrategy(this._crosswalks);
 
@@ -28,6 +27,7 @@ abstract class SendCommandStrategy {
             )
             .write(command, withoutResponse: true);
       } catch (e) {
+        throw Exception(e);
       } finally {
         await Future.delayed(Duration(seconds: 2));
         await _crosswalks[i].post.disconnect();

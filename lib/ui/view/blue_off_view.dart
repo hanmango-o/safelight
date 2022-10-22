@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_returning_null_for_void
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,7 +64,11 @@ class BlueOffView extends StatelessWidget {
                 ],
               ),
               ElevatedButton.icon(
-                onPressed: () => null,
+                onPressed: () async {
+                  if (Platform.isAndroid) {
+                    await FlutterBluePlus.instance.turnOn();
+                  }
+                },
                 label: const Text('블루투스를 켜주세요'),
                 icon: const Icon(Icons.bluetooth_disabled_rounded),
                 style: ElevatedButton.styleFrom(

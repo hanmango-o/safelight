@@ -10,25 +10,22 @@ import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
-import 'package:safelight/view_model/strategy/search_command_strategy.dart';
-import 'package:safelight/view_model/strategy/send_command_strategy.dart';
+import 'package:safelight/view_model/interface/search_command_strategy_interface.dart';
+import 'package:safelight/view_model/interface/send_command_strategy_interface.dart';
 
 class BlueHandler {
   StreamController _results = StreamController<List<CrosswalkVO>>.broadcast()
     ..add([]);
-
-  SendCommandStrategy? _sendCMD;
-  SearchCommandStrategy? _searchCMD;
+  ISendCommandStrategy? _sendCMD;
+  ISearchCommandStrategy? _searchCMD;
 
   Stream<List<CrosswalkVO>> get results =>
       _results.stream as Stream<List<CrosswalkVO>>;
+  ISendCommandStrategy get sendCMD => _sendCMD!;
+  ISearchCommandStrategy get searchCMD => _searchCMD!;
 
-  SendCommandStrategy get sendCMD => _sendCMD!;
-  SearchCommandStrategy get searchCMD => _searchCMD!;
-
-  set sendCMD(SendCommandStrategy command) => _sendCMD = command;
-
-  set searchCMD(SearchCommandStrategy command) => _searchCMD = command;
+  set sendCMD(ISendCommandStrategy command) => _sendCMD = command;
+  set searchCMD(ISearchCommandStrategy command) => _searchCMD = command;
 
   Future<void> search() async {
     UserController userController = Get.find<UserController>();

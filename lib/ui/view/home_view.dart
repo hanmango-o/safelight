@@ -15,7 +15,7 @@ import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/handler/blue_handler.dart';
 import 'package:safelight/view_model/implement/default_search_impl.dart';
-import 'package:safelight/view_model/strategy/service_strategy.dart';
+import 'package:safelight/view_model/interface/service_strategy.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
