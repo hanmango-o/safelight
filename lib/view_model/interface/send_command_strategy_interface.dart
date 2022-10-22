@@ -1,10 +1,10 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 
-abstract class SendCommandStrategy {
+abstract class ISendCommandStrategy {
   final List<CrosswalkVO> _crosswalks;
 
-  SendCommandStrategy(this._crosswalks);
+  ISendCommandStrategy(this._crosswalks);
 
   Future<void> send();
 
