@@ -12,6 +12,7 @@ import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/implement/acoustic_signal_impl.dart';
+import 'package:safelight/view_model/implement/test_signal_impl.dart';
 import 'package:safelight/view_model/implement/voice_inductor_impl.dart';
 
 class BlueBottomSheetView extends StatefulWidget {
@@ -227,30 +228,36 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                     return CupertinoActionSheet(
                                       title: const Text('모드 선택'),
                                       actions: [
+                                        // CupertinoActionSheetAction(
+                                        //   onPressed: () async {
+                                        //     Navigator.pop(context);
+
+                                        //     _blueController.blueHandler
+                                        //         .sendCMD = VoiceInductor(
+                                        //       crosswalks: [
+                                        //         snapshot.data![index],
+                                        //       ],
+                                        //     );
+                                        //     _blueController.blueHandler.send();
+                                        //     _blueController.blueHandler.reset();
+                                        //   },
+                                        //   isDefaultAction: true,
+                                        //   child: const Text('음성 유도'),
+                                        // ),
                                         CupertinoActionSheetAction(
                                           onPressed: () async {
                                             Navigator.pop(context);
 
+                                            // _blueController.blueHandler
+                                            //     .sendCMD = AcousticSignal(
+                                            //   crosswalks: [
+                                            //     snapshot.data![index],
+                                            //   ],
+                                            // );
                                             _blueController.blueHandler
-                                                .sendCMD = VoiceInductor(
+                                                .sendCMD = TestSignal(
                                               crosswalks: [
-                                                snapshot.data![index],
-                                              ],
-                                            );
-                                            _blueController.blueHandler.send();
-                                            _blueController.blueHandler.reset();
-                                          },
-                                          isDefaultAction: true,
-                                          child: const Text('음성 유도'),
-                                        ),
-                                        CupertinoActionSheetAction(
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-
-                                            _blueController.blueHandler
-                                                .sendCMD = AcousticSignal(
-                                              crosswalks: [
-                                                snapshot.data![index],
+                                                snapshot.data![index]
                                               ],
                                             );
                                             _blueController.blueHandler.send();
