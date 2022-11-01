@@ -12,14 +12,12 @@ class BluetoothPermissionAuthorizedImpl
       if (isOn) {
         await openAppSettings();
       } else {
-        if (Platform.isAndroid) {
-          await Permission.bluetoothAdvertise.request();
-          await Permission.bluetoothConnect.request();
-          await Permission.bluetoothScan.request();
-        } else {
-          
-          await Permission.bluetooth.request();
-        }
+        await [
+          Permission.bluetooth,
+          Permission.bluetoothAdvertise,
+          Permission.bluetoothConnect,
+          Permission.bluetoothScan
+        ].request();
       }
     });
   }

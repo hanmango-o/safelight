@@ -12,7 +12,6 @@ import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/implement/acoustic_signal_impl.dart';
-import 'package:safelight/view_model/implement/test_signal_impl.dart';
 import 'package:safelight/view_model/implement/voice_inductor_impl.dart';
 
 class BlueBottomSheetView extends StatefulWidget {
@@ -228,38 +227,33 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                     return CupertinoActionSheet(
                                       title: const Text('모드 선택'),
                                       actions: [
-                                        // CupertinoActionSheetAction(
-                                        //   onPressed: () async {
-                                        //     Navigator.pop(context);
-
-                                        //     _blueController.blueHandler
-                                        //         .sendCMD = VoiceInductor(
-                                        //       crosswalks: [
-                                        //         snapshot.data![index],
-                                        //       ],
-                                        //     );
-                                        //     _blueController.blueHandler.send();
-                                        //     _blueController.blueHandler.reset();
-                                        //   },
-                                        //   isDefaultAction: true,
-                                        //   child: const Text('음성 유도'),
-                                        // ),
                                         CupertinoActionSheetAction(
                                           onPressed: () async {
                                             Navigator.pop(context);
 
-                                            // _blueController.blueHandler
-                                            //     .sendCMD = AcousticSignal(
-                                            //   crosswalks: [
-                                            //     snapshot.data![index],
-                                            //   ],
-                                            // );
                                             _blueController.blueHandler
-                                                .sendCMD = TestSignal(
+                                                .sendCMD = VoiceInductor(
                                               crosswalks: [
-                                                snapshot.data![index]
+                                                snapshot.data![index],
                                               ],
                                             );
+                                            _blueController.blueHandler.send();
+                                            _blueController.blueHandler.reset();
+                                          },
+                                          isDefaultAction: true,
+                                          child: const Text('음성 유도'),
+                                        ),
+                                        CupertinoActionSheetAction(
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+
+                                            _blueController.blueHandler
+                                                .sendCMD = AcousticSignal(
+                                              crosswalks: [
+                                                snapshot.data![index],
+                                              ],
+                                            );
+
                                             _blueController.blueHandler.send();
                                             _blueController.blueHandler.reset();
                                           },
@@ -275,51 +269,6 @@ class _BlueBottomSheetViewState extends State<BlueBottomSheetView> {
                                     );
                                   },
                                 ),
-                                // onTap: () {
-                                //   log('d');
-                                //   Get.defaultDialog();
-                                //   CupertinoActionSheet(
-                                //     title: const Text('주변 압버튼 스캔'),
-                                //     message: ElevatedButton(
-                                //       onPressed: () {},
-                                //       style: ElevatedButton.styleFrom(
-                                //         backgroundColor: Theme.of(context)
-                                //             .colorScheme
-                                //             .secondary,
-                                //         foregroundColor: Theme.of(context)
-                                //             .colorScheme
-                                //             .onSecondary,
-                                //       ),
-                                //       child: const Text('각 스캔 모드 설명보기'),
-                                //     ),
-                                //     actions: [
-                                //       CupertinoActionSheetAction(
-                                //         onPressed: () {
-                                //           Navigator.pop(context);
-                                //         },
-                                //         isDefaultAction: true,
-                                //         child: const Text('수동 모드'),
-                                //       ),
-                                //       CupertinoActionSheetAction(
-                                //         onPressed: () {
-                                //           Navigator.pop(context);
-                                //           Get.snackbar(
-                                //             '개발 중입니다.',
-                                //             '현재 버전에서는 사용할 수 없습니다.',
-                                //           );
-                                //         },
-                                //         isDefaultAction: true,
-                                //         child: const Text('자동 모드'),
-                                //       ),
-                                //     ],
-                                //     cancelButton: CupertinoActionSheetAction(
-                                //       isDestructiveAction: true,
-                                //       onPressed: () => Navigator.pop(context),
-                                //       child: const Text('취소'),
-                                //     ),
-                                //   );
-
-                                // },
                                 leading: SingleChildRoundedCard(
                                   child: Image(
                                     width: 42.w,

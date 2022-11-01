@@ -22,6 +22,7 @@ class DefaultSearch implements ISearchCommandStrategy {
     try {
       await FlutterBluePlus.instance.startScan(
         timeout: duration,
+        withServices: [Guid('0000ffe0-0000-1000-8000-00805f9b34fb')],
       );
     } catch (e) {
       throw Exception(e);
@@ -30,33 +31,21 @@ class DefaultSearch implements ISearchCommandStrategy {
         (posts) {
           Iterator<ScanResult> post = posts.iterator;
           while (post.moveNext()) {
-            if (post.current.rssi > rssi &&
-                post.current.device.name.isNotEmpty &&
-                post.current.device.name == 'HMSoft') {
-              results.add(
-                CrosswalkVO(
-                  post: post.current.device,
-                  name: post.current.device.name.isEmpty
-                      ? '횡단보도'
-                      : post.current.device.name,
-                  direction: 'xx방향 yy방면',
-                  areaType: post.current.device.name.isEmpty
-                      ? AreaType.INTERSECTION
-                      : AreaType.SINGLE_ROAD,
-                ),
-              );
-            }
+            results.add(
+              CrosswalkVO(
+                post: post.current.device,
+                name: post.current.device.name.isNotEmpty
+                    ? post.current.device.name == 'HMSoft'
+                        ? '가톨릭대 앞 횡단보도'
+                        : '횡단보도'
+                    : '횡단보도',
+                direction: '역곡역 방향',
+                areaType: post.current.device.name.isEmpty
+                    ? AreaType.INTERSECTION
+                    : AreaType.SINGLE_ROAD,
+              ),
+            );
           }
-          // results = posts.map((post) {
-          //   return CrosswalkVO(
-          //     post: post.device,
-          //     name: post.device.name.isEmpty ? '횡단보도' : post.device.name,
-          //     direction: 'xx방향 yy방면',
-          //     areaType: post.device.name.isEmpty
-          //         ? AreaType.INTERSECTION
-          //         : AreaType.SINGLE_ROAD,
-          //   );
-          // }).toList();
           stream.add(results);
         },
       );
