@@ -17,7 +17,7 @@ class BlueController extends GetxController {
     _service = service;
   }
 
-  Future<void> doService() async {
-    await _service!.doService();
+  Future<void> execute() async {
+    await _service!.execute();
   }
 }

@@ -30,6 +30,7 @@ class BlueHandler {
   Future<void> search() async {
     UserController userController = Get.find<UserController>();
     Stream<bool> permisson = userController.auth.checkBluePermission();
+// _results.add([]);
     permisson.listen((isGranted) async {
       if (isGranted) {
         try {

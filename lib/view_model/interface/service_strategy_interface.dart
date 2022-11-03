@@ -1,3 +1,3 @@
 abstract class IServiceStrategy {
-  Future<void> doService();
+  Future<void> execute();
 }

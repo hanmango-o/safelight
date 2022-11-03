@@ -17,13 +17,13 @@ abstract class ISendCommandStrategy {
         await services
             .firstWhere(
               (service) =>
-                  service.uuid == Guid('0000ffe0-0000-1000-8000-00805f9b34fb'),
+                  service.uuid == Guid('0003cdd0-0000-1000-8000-00805f9b0131'),
             )
             .characteristics
             .firstWhere(
               (characteristic) =>
                   characteristic.uuid ==
-                  Guid('0000ffe1-0000-1000-8000-00805f9b34fb'),
+                  Guid('0003cdd2-0000-1000-8000-00805f9b0131'),
             )
             .write(command, withoutResponse: true);
       } catch (e) {
