@@ -29,8 +29,19 @@ class DefaultSearch implements ISearchCommandStrategy {
         (posts) {
           // log(posts.toString());
           Iterator<ScanResult> post = posts.iterator;
+
           while (post.moveNext()) {
-            if (post.current.device.name.startsWith('AHG001+')) {
+            // results.add(
+            //   CrosswalkVO(
+            //     post: post.current.device,
+            //     name: '가톨릭대 앞 횡단보도',
+            //     direction: '역곡역 방향',
+            //     areaType: post.current.device.name.isEmpty
+            //         ? AreaType.INTERSECTION
+            //         : AreaType.SINGLE_ROAD,
+            //   ),
+            // );
+            if (post.current.device.name.startsWith('AGH001+')) {
               results.add(
                 CrosswalkVO(
                   post: post.current.device,
