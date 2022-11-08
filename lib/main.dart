@@ -4,13 +4,15 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/static/color_theme.dart';
+import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/firebase_options.dart';
 import 'package:safelight/ui/view/main_view.dart';
 import 'package:safelight/ui/view/sign_in_view.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
+import 'package:safelight/view_model/controller/nav_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
-// v0.6.3 | 한영찬(hanmango-o) | hanmango.o@gmail.com
+// v0.8.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +22,7 @@ Future<void> main() async {
 
   Get.put(UserController());
   Get.put(BlueController());
+  Get.put(NavController());
 
   FlutterNativeSplash.remove();
   runApp(SafeLight());
@@ -60,6 +63,55 @@ class SafeLight extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: ColorTheme.onSecondary,
             ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            iconColor: ColorTheme.background,
+            hintStyle: TextStyle(
+              color: Colors.grey,
+              // fontSize: 14.sp,
+              // fontWeight: FontWeight.bold,
+            ),
+            prefixIconColor: Colors.grey,
+            labelStyle: TextStyle(
+              color: ColorTheme.onSecondary,
+              fontSize: 22.sp,
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: SizeTheme.h_sm,
+              horizontal: SizeTheme.w_md,
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorTheme.background,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorTheme.background,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorTheme.background,
+              ),
+            ),
+            fillColor: ColorTheme.background,
+            filled: true,
+            focusColor: ColorTheme.background,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorTheme.background,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorTheme.background,
+              ),
+            ),
+
+            // suffixStyle: TextStyle(
+            //   color: Colors.black,
+            // ),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

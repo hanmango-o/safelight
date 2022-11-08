@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_returning_null_for_void
 
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,16 +7,18 @@ import 'package:get/get.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
+import 'package:safelight/ui/view/navigator_view.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
-import 'package:safelight/view_model/implement/default_search_impl.dart';
+import 'package:safelight/view_model/controller/nav_controller.dart';
+import 'package:safelight/view_model/implement/bluetooth/default_search_impl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../asset/resource/blue_resource.dart';
 import '../../asset/resource/image_resource.dart';
 import '../../model/vo/crosswalk_vo.dart';
-import '../../view_model/implement/acoustic_signal_impl.dart';
-import '../../view_model/implement/voice_inductor_impl.dart';
+import '../../view_model/implement/bluetooth/acoustic_signal_impl.dart';
+import '../../view_model/implement/bluetooth/voice_inductor_impl.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -29,6 +29,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final BlueController _blueController = Get.find<BlueController>();
+  final NavController _navController = Get.find<NavController>();
 
   @override
   void initState() {
@@ -51,17 +52,17 @@ class _HomeViewState extends State<HomeView> {
           )
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(80),
+          preferredSize: Size.fromHeight(80.h),
           child: Container(
             color: Colors.white,
-            height: 70,
+            height: 70.h,
             child: Column(
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
-                    _blueController.blueHandler
-                      ..reset()
-                      ..search();
+                  onPressed: () async {
+                    Get.to(
+                      () => NavigatorView(),
+                    );
                   },
                   icon: const Icon(Icons.navigation_rounded),
                   label: const Text(
@@ -195,6 +196,38 @@ class _HomeViewState extends State<HomeView> {
                           );
 
                         case StatusType.COMPLETE:
+                          if (snapshot.data!.isEmpty) {
+                            return Container(
+                              // height: 100,
+                              padding: EdgeInsets.all(
+                                SizeTheme.h_lg,
+                              ),
+                              margin: EdgeInsets.symmetric(
+                                horizontal: SizeTheme.w_md,
+                              ),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                borderRadius: BorderRadius.circular(
+                                  SizeTheme.r_sm,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Image(
+                                    width: 130.w,
+                                    image: AssetImage(ImageResource.IMG_Error),
+                                  ),
+                                  SizedBox(height: 26.h),
+                                  Text(
+                                    '주변에 블루투스 압버튼이 없어요',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                           return ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

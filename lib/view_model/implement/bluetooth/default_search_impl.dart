@@ -28,6 +28,7 @@ class DefaultSearch implements ISearchCommandStrategy {
       FlutterBluePlus.instance.scanResults.listen(
         (posts) {
           // log(posts.toString());
+
           Iterator<ScanResult> post = posts.iterator;
 
           while (post.moveNext()) {
@@ -41,7 +42,7 @@ class DefaultSearch implements ISearchCommandStrategy {
             //         : AreaType.SINGLE_ROAD,
             //   ),
             // );
-            if (post.current.device.name.startsWith('AGH001+')) {
+            if (post.current.device.name.startsWith('AHG001+')) {
               results.add(
                 CrosswalkVO(
                   post: post.current.device,
