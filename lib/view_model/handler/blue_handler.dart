@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,8 +12,8 @@ import 'package:safelight/view_model/interface/search_command_strategy_interface
 import 'package:safelight/view_model/interface/send_command_strategy_interface.dart';
 
 class BlueHandler {
-  StreamController _results = StreamController<List<CrosswalkVO>>.broadcast()
-    ..add([]);
+  final StreamController _results =
+      StreamController<List<CrosswalkVO>>.broadcast()..add([]);
   ISendCommandStrategy? _sendCMD;
   ISearchCommandStrategy? _searchCMD;
 
@@ -38,6 +36,7 @@ class BlueHandler {
           BlueController.status.value = StatusType.IS_SCANNING;
           await _searchCMD!.search(_results);
         } catch (e) {
+          throw (Exception(e));
         } finally {
           BlueController.status.value = StatusType.COMPLETE;
         }

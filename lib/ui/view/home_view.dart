@@ -10,7 +10,6 @@ import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/navigator_view.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
-import 'package:safelight/view_model/controller/nav_controller.dart';
 import 'package:safelight/view_model/implement/bluetooth/default_search_impl.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -29,7 +28,6 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final BlueController _blueController = Get.find<BlueController>();
-  final NavController _navController = Get.find<NavController>();
 
   @override
   void initState() {
@@ -61,7 +59,7 @@ class _HomeViewState extends State<HomeView> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     Get.to(
-                      () => NavigatorView(),
+                      () => const NavigatorView(),
                     );
                   },
                   icon: const Icon(Icons.navigation_rounded),
@@ -82,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
         constraints: BoxConstraints(minHeight: 80.h),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             minimumSize: Size(double.maxFinite, 80.h),
           ),
           onPressed: () async {
@@ -95,12 +93,12 @@ class _HomeViewState extends State<HomeView> {
             () {
               switch (BlueController.status.value) {
                 case StatusType.IS_SCANNING:
-                  return Icon(Icons.stop_circle_outlined);
+                  return const Icon(Icons.stop_circle_outlined);
                 case StatusType.COMPLETE:
-                  return Icon(Icons.search);
+                  return const Icon(Icons.search);
                 case StatusType.STAND_BY:
                 default:
-                  return Icon(Icons.pause_circle_outline);
+                  return const Icon(Icons.pause_circle_outline);
               }
             },
           ),
@@ -126,7 +124,6 @@ class _HomeViewState extends State<HomeView> {
                     builder: (c, snapshot) {
                       switch (BlueController.status.value) {
                         case StatusType.IS_SCANNING:
-                        case StatusType.STAND_BY:
                           return Shimmer.fromColors(
                             baseColor: Colors.grey[350]!,
                             highlightColor: Colors.grey[400]!,
@@ -194,7 +191,8 @@ class _HomeViewState extends State<HomeView> {
                               itemCount: 3,
                             ),
                           );
-
+                        case StatusType.STAND_BY:
+                          return Container();
                         case StatusType.COMPLETE:
                           if (snapshot.data!.isEmpty) {
                             return Container(

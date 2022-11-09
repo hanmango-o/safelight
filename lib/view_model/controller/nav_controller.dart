@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:safelight/view_model/handler/nav_handler.dart';
 import 'package:safelight/view_model/implement/navigator/get_poi_search_impl.dart';
-import 'package:safelight/view_model/interface/fetch_strategy_interface.dart';
 
 import '../implement/navigator/get_location_impl.dart';
 import '../implement/navigator/get_reverse_geocoding_impl.dart';

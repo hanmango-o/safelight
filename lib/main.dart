@@ -66,7 +66,7 @@ class SafeLight extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
             iconColor: ColorTheme.background,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: Colors.grey,
               // fontSize: 14.sp,
               // fontWeight: FontWeight.bold,
@@ -80,17 +80,17 @@ class SafeLight extends StatelessWidget {
               vertical: SizeTheme.h_sm,
               horizontal: SizeTheme.w_md,
             ),
-            focusedErrorBorder: OutlineInputBorder(
+            focusedErrorBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorTheme.background,
               ),
             ),
-            disabledBorder: OutlineInputBorder(
+            disabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorTheme.background,
               ),
             ),
-            errorBorder: OutlineInputBorder(
+            errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorTheme.background,
               ),
@@ -98,12 +98,12 @@ class SafeLight extends StatelessWidget {
             fillColor: ColorTheme.background,
             filled: true,
             focusColor: ColorTheme.background,
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorTheme.background,
               ),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorTheme.background,
               ),

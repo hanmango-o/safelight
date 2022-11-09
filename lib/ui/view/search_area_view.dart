@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -32,7 +30,7 @@ class _SearchAreaViewState extends State<SearchAreaView> {
           child: Material(
             child: TextField(
               controller: _controller,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '위치 검색',
                 prefixIcon: Icon(Icons.search),
                 // prefixIconColor: Theme.of(context).backgroundColor,
@@ -49,7 +47,7 @@ class _SearchAreaViewState extends State<SearchAreaView> {
         constraints: BoxConstraints(minHeight: 80.h),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(),
             minimumSize: Size(double.maxFinite, 105.h),
             alignment: Alignment.topCenter,
             padding: EdgeInsets.only(top: SizeTheme.h_lg),
@@ -60,7 +58,7 @@ class _SearchAreaViewState extends State<SearchAreaView> {
               setState(() {});
             }
           },
-          icon: Icon(Icons.navigation_rounded),
+          icon: const Icon(Icons.navigation_rounded),
           label: Text(
             '보행자 길찾기',
             style: Theme.of(context)

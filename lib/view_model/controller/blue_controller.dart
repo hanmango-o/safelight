@@ -7,7 +7,7 @@ class BlueController extends GetxController {
   static Rx<StatusType> status = StatusType.STAND_BY.obs;
   static Rx<bool> isDone = false.obs;
 
-  BlueHandler _blueHandler = BlueHandler();
+  final BlueHandler _blueHandler = BlueHandler();
   IServiceStrategy? _service;
 
   BlueHandler get blueHandler => _blueHandler;

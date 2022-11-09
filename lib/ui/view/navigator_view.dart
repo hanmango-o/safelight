@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,8 +6,6 @@ import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/search_area_view.dart';
 import 'package:safelight/view_model/controller/nav_controller.dart';
-import 'package:safelight/view_model/implement/navigator/get_location_impl.dart';
-import 'package:safelight/view_model/implement/navigator/get_reverse_geocoding_impl.dart';
 
 class NavigatorView extends StatefulWidget {
   const NavigatorView({super.key});
@@ -61,7 +56,7 @@ class _NavigatorViewState extends State<NavigatorView> {
       // ),
       appBar: AppBar(
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
-        title: Text('보행자 길찾기'),
+        title: const Text('보행자 길찾기'),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(160.h),
           child: Padding(
@@ -70,7 +65,7 @@ class _NavigatorViewState extends State<NavigatorView> {
               future: _navController.getLocation(),
               builder: (context, snapshot) {
                 if (snapshot.data == null) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
                 return Column(
                   children: [
@@ -80,7 +75,7 @@ class _NavigatorViewState extends State<NavigatorView> {
                           '출발',
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Expanded(
                           child: TextFormField(
                             readOnly: true,
@@ -89,25 +84,25 @@ class _NavigatorViewState extends State<NavigatorView> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Text(
                           '도착',
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Expanded(
                           child: Hero(
                             tag: AnimationTheme.TextFormTag,
                             child: Material(
                               child: TextFormField(
                                 readOnly: true,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: '도착 장소를 입력하세요.',
                                 ),
                                 onTap: () {
-                                  Get.to(() => SearchAreaView());
+                                  Get.to(() => const SearchAreaView());
                                 },
                               ),
                             ),
@@ -131,18 +126,18 @@ class _NavigatorViewState extends State<NavigatorView> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   if (index % 5 == 1) {
-                    return ListTile(
+                    return const ListTile(
                       trailing: Icon(Icons.directions_walk_rounded),
                       title: Text('횡단보도 건너기'),
                     );
                   } else if (index % 5 == 2) {
-                    return ListTile(
+                    return const ListTile(
                       trailing: Icon(Icons.turn_left_rounded),
                       title: Text('왼쪽방향'),
                     );
                   }
 
-                  return ListTile(
+                  return const ListTile(
                     trailing: Icon(Icons.turn_right_rounded),
                     title: Text('xx방면'),
                     subtitle: Text('오른쪽 방향으로 이동'),
