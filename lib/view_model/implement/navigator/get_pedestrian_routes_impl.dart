@@ -4,7 +4,6 @@ import 'package:safelight/view_model/interface/fetch_strategy_interface.dart';
 class GetPedestrianRoutesImpl implements IFetchStrategy {
   @override
   Future fetch() {
-    // TODO: implement fetch
     throw UnimplementedError();
   }
 }

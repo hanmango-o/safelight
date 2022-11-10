@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 
@@ -30,9 +29,9 @@ class GetLocationImpl implements IFetchStrategy {
       if (permission == LocationPermission.denied) {
         final permission = await geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
+          // print('Location permissions are denied');
         } else if (permission == LocationPermission.deniedForever) {
-          print("'Location permissions are permanently denied");
+          // print("'Location permissions are permanently denied");
         } else {
           hasPermission = true;
         }

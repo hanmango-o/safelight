@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/model/vo/location_vo.dart';

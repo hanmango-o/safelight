@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/resource/blue_resource.dart';
-import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
@@ -41,30 +38,7 @@ class BlueHandler {
           BlueController.status.value = StatusType.COMPLETE;
         }
       } else {
-        Get.defaultDialog(
-          title: '앱의 블루투스 접근 권한이\n허용되지 않았습니다.',
-          titleStyle: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
-            color: ColorTheme.onSecondary,
-          ),
-          middleTextStyle: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.normal,
-            color: ColorTheme.onSecondary,
-          ),
-          middleText:
-              'BLE 통신을 위해 앱 내 블루투스 기능의 허가가 필요합니다. 아래의 버튼을 눌러 블루투스 기능을 켜주세요.',
-          onConfirm: () async {
-            await userController.auth.blueAuthorized();
-            Get.back();
-          },
-          onCancel: () => Get.back(),
-          textCancel: '취소',
-          textConfirm: '확인',
-          confirmTextColor: Colors.blue,
-          cancelTextColor: Colors.red,
-        );
+        Get.snackbar('블루투스 권한을 확인하세요.', '스마트 압버튼 스캔을 위해 앱 내 블루투스 권한을 허가해야합니다.');
       }
     });
   }

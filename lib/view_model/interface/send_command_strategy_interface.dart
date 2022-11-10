@@ -29,7 +29,7 @@ abstract class ISendCommandStrategy {
       } catch (e) {
         throw Exception(e);
       } finally {
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
         await _crosswalks[i].post.disconnect();
       }
     }

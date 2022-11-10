@@ -10,7 +10,7 @@ class DefaultSearch implements ISearchCommandStrategy {
   int rssi = -100;
 
   @override
-  Duration duration = Duration(seconds: 1);
+  Duration duration = const Duration(seconds: 1);
 
   @override
   Future search(StreamController stream) async {

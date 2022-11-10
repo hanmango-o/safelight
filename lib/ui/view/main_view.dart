@@ -6,7 +6,6 @@ import 'package:safelight/ui/view/blue_off_view.dart';
 import 'package:safelight/ui/view/home_view.dart';
 import 'package:safelight/ui/view/setting_view.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
-import 'package:safelight/view_model/implement/bluetooth/default_search_impl.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);

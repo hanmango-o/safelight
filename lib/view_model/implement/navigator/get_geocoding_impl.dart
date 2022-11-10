@@ -4,7 +4,6 @@ import 'package:safelight/view_model/interface/fetch_strategy_interface.dart';
 class GetGeocoding implements IFetchStrategy {
   @override
   Future<dynamic> fetch() {
-    // TODO: implement fetch
     throw UnimplementedError();
   }
 }
