@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,11 +18,13 @@ class NavigatorView extends StatefulWidget {
 
 class _NavigatorViewState extends State<NavigatorView> {
   final NavController _navController = Get.find<NavController>();
+  String? initValue = '';
 
   @override
   void initState() {
     super.initState();
     _navController.getLocation();
+    _navController.location = null;
   }
 
   @override
@@ -62,11 +66,11 @@ class _NavigatorViewState extends State<NavigatorView> {
           child: Padding(
             padding: EdgeInsets.all(SizeTheme.w_lg),
             child: FutureBuilder(
-              future: _navController.getLocation(),
+              // future: _navController.getLocation(),
               builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return const CircularProgressIndicator();
-                }
+                // if (snapshot.data == null) {
+                //   return const CircularProgressIndicator();
+                // }
                 return Column(
                   children: [
                     Row(
@@ -79,7 +83,8 @@ class _NavigatorViewState extends State<NavigatorView> {
                         Expanded(
                           child: TextFormField(
                             readOnly: true,
-                            initialValue: snapshot.data.toString(),
+                            // initialValue: snapshot.data.toString(),
+                            initialValue: '',
                           ),
                         ),
                       ],
@@ -101,6 +106,7 @@ class _NavigatorViewState extends State<NavigatorView> {
                                 decoration: const InputDecoration(
                                   hintText: '도착 장소를 입력하세요.',
                                 ),
+                                initialValue: '',
                                 onTap: () {
                                   Get.to(() => const SearchAreaView());
                                 },
@@ -120,6 +126,20 @@ class _NavigatorViewState extends State<NavigatorView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            ElevatedButton(
+              onPressed: () async {
+                // print(await _navController.getLocation());
+                var a = await _navController.getPOISearch('당산동');
+                // log(a.toString());
+              },
+              child: Text('getPOISearch'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Get.to(() => const SearchAreaView());
+              },
+              child: Text('toSearchAreaView'),
+            ),
             BoardFrame(
               title: '검색결과',
               body: ListView.builder(

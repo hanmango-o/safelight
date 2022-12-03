@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:safelight/model/vo/location_vo.dart';
 import 'package:safelight/view_model/handler/nav_handler.dart';
 import 'package:safelight/view_model/implement/navigator/get_poi_search_impl.dart';
 
@@ -8,6 +9,7 @@ import '../implement/navigator/get_reverse_geocoding_impl.dart';
 class NavController extends GetxController {
   // static Rx<String> location = ''.obs;
   NavHandler navHandler = NavHandler();
+  LocationVO? location;
 
   Future getLocation() async {
     navHandler.strategy = GetLocationImpl();

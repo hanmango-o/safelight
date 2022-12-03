@@ -33,8 +33,13 @@ class _SearchAreaViewState extends State<SearchAreaView> {
               decoration: const InputDecoration(
                 hintText: '위치 검색',
                 prefixIcon: Icon(Icons.search),
-                // prefixIconColor: Theme.of(context).backgroundColor,
               ),
+              onEditingComplete: () async {
+                if (_controller.text.isNotEmpty) {
+                  lists = await _navController.getPOISearch(_controller.text);
+                  setState(() {});
+                }
+              },
             ),
           ),
         ),
@@ -43,31 +48,31 @@ class _SearchAreaViewState extends State<SearchAreaView> {
           child: Container(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
-      bottomSheet: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: 80.h),
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            shape: const RoundedRectangleBorder(),
-            minimumSize: Size(double.maxFinite, 105.h),
-            alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(top: SizeTheme.h_lg),
-          ),
-          onPressed: () async {
-            if (_controller.text.isNotEmpty) {
-              lists = await _navController.getPOISearch(_controller.text);
-              setState(() {});
-            }
-          },
-          icon: const Icon(Icons.navigation_rounded),
-          label: Text(
-            '보행자 길찾기',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .apply(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-        ),
-      ),
+      // bottomSheet: ConstrainedBox(
+      //   constraints: BoxConstraints(minHeight: 80.h),
+      //   child: ElevatedButton.icon(
+      //     style: ElevatedButton.styleFrom(
+      //       shape: const RoundedRectangleBorder(),
+      //       minimumSize: Size(double.maxFinite, 105.h),
+      //       alignment: Alignment.topCenter,
+      //       padding: EdgeInsets.only(top: SizeTheme.h_lg),
+      //     ),
+      //     onPressed: () async {
+      //       if (_controller.text.isNotEmpty) {
+      //         lists = await _navController.getPOISearch(_controller.text);
+      //         setState(() {});
+      //       }
+      //     },
+      //     icon: const Icon(Icons.navigation_rounded),
+      //     label: Text(
+      //       '보행자 길찾기',
+      //       style: Theme.of(context)
+      //           .textTheme
+      //           .titleLarge!
+      //           .apply(color: Theme.of(context).colorScheme.onPrimary),
+      //     ),
+      //   ),
+      // ),
       body: ListView.builder(
         shrinkWrap: true,
         itemCount: lists.length,
@@ -78,7 +83,9 @@ class _SearchAreaViewState extends State<SearchAreaView> {
           return ListTile(
             title: Text(lists[index].name),
             subtitle: Text(lists[index].address),
-            onTap: () {},
+            onTap: () {
+              _navController.location = lists[index];
+            },
           );
         },
       ),

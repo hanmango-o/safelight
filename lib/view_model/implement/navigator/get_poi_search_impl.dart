@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/model/vo/location_vo.dart';
 import 'package:safelight/view_model/interface/fetch_strategy_interface.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+
+import 'package:http/http.dart' as http;
 
 // 장소 통합 검색 > 검색어를 통한 장소 도출에 사용
 class GetPOISearchImpl implements IFetchStrategy {
@@ -22,7 +24,7 @@ class GetPOISearchImpl implements IFetchStrategy {
       final url = Uri.parse(uri);
       Response response = await http.get(url);
       var json = jsonDecode(response.body);
-      // log(json.toString());
+      log(json.toString());
       // log(json.toString());
       // log(json['searchPoiInfo'].toString());
       // log(json['searchPoiInfo']['pois']['poi'].toString());

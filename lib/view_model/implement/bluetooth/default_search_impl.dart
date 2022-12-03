@@ -14,7 +14,6 @@ class DefaultSearch implements ISearchCommandStrategy {
 
   @override
   Future search(StreamController stream) async {
-    // print('default search start!');
     List<CrosswalkVO> results = [];
 
     try {
@@ -26,21 +25,9 @@ class DefaultSearch implements ISearchCommandStrategy {
     } finally {
       FlutterBluePlus.instance.scanResults.listen(
         (posts) {
-          // log(posts.toString());
-
           Iterator<ScanResult> post = posts.iterator;
 
           while (post.moveNext()) {
-            // results.add(
-            //   CrosswalkVO(
-            //     post: post.current.device,
-            //     name: '가톨릭대 앞 횡단보도',
-            //     direction: '역곡역 방향',
-            //     areaType: post.current.device.name.isEmpty
-            //         ? AreaType.INTERSECTION
-            //         : AreaType.SINGLE_ROAD,
-            //   ),
-            // );
             if (post.current.device.name.startsWith('AHG001+')) {
               results.add(
                 CrosswalkVO(

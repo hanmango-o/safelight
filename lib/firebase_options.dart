@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '502374392525',
     projectId: 'safelight-4ca77',
     storageBucket: 'safelight-4ca77.appspot.com',
-    iosClientId: '502374392525-vfgjfklma43u0v06t2a63ioi94h6budk.apps.googleusercontent.com',
+    iosClientId:
+        '502374392525-vfgjfklma43u0v06t2a63ioi94h6budk.apps.googleusercontent.com',
     iosBundleId: 'com.wcl.safelight',
   );
 }
