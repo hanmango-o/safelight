@@ -505,3 +505,330 @@ v1.0 에서 블루투스 연결(Connect)는 아래의 시점(Trigger)에서 사�
         _blueController.blueHandler.reset();
     },
     ```
+    
+    # Android
+    기존 안드로이드에서 Bluetooth Core 로직입니다.
+
+    안드로이드 코드에 익숙한 사용자라면, 아래의 문서를 참고하여 위의 Flutter 버전을 확인하면 됩니다.
+    
+    [java android BLE 코드 참고]<https://developer.android.com/guide/topics/connectivity/bluetooth-le?hl=ko>
+    
+    ##### 1. start scan
+    
+    스캔 시작 전,
+    Central 장치에 블루투스 어탭터 설정이 되어 있는지, 해당 장치 블루투스가 Enable 되어 있는지,
+    이미 스캔중인지, Find_Location의 사용허가가 되어 있는지를 확인합니다.
+    
+    `ScanSettings`, `ScanFilter`, `scanResults`, `scanCallback`을 생성한 후 스캔을 시작합니다.
+    
+    ```java
+    
+    private void startScan(View v) {
+        Tv_status.setText(".....");
+        Tv_read.setText(".....");
+        //Btn_send.setEnabled(false);
+
+        // check if location permission
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+            Tv_status.setText("Scanning Failed: no fine location permission");
+            return;
+        }
+        // disconnect gatt server
+        disconnectGattServer();
+
+        Tv_status.setText(R.string.bt_scan);
+        //// set scan filters
+        // create scan filter list
+        List<ScanFilter> filters = new ArrayList<>();
+
+        // set low power scan mode
+        ScanSettings settings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                .setReportDelay(0)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .build();
+
+        // create a scan filter with device UUID
+        ScanFilter scan_filter = new ScanFilter.Builder()
+                .setServiceUuid(new ParcelUuid(UUID_TDCS_SERVICE))
+                .build();
+
+        filters.add(scan_filter);
+
+        scanResults = new HashMap<>();
+        scanCallback = new BLEScanCallback(scanResults);
+
+
+        //up is the permission code for the code below
+        bluetoothLeScanner.startScan(filters, settings, scanCallback);
+        is_scanning_ = true;
+
+        scanHandler = new Handler();
+        scanHandler.postDelayed(this::stopScan, SCAN_PERIOD);
+        }
+    ```
+    
+    ##### 2. stop scan
+    
+    스캔을 종료합니다.
+    
+    ```java
+    private void stopScan() {
+        if (is_scanning_ && bluetoothAdapter != null && bluetoothAdapter.isEnabled() && bluetoothLeScanner != null) {
+            // stop scanning
+
+            bluetoothLeScanner.stopScan(scanCallback);  //red line v2 - perm
+
+            scanComplete();
+        }
+        // reset flags
+        scanCallback= null;
+        is_scanning_= false;
+        scanHandler= null;
+        // update the status
+       // Tv_status.setText( "scanning stopped" );
+
+    }
+    ```
+    
+    ##### 3. scan complete
+    
+    스캔을 완료하면 스캔 결과를 화면에 표시합니다.
+    
+    ```java
+    private void scanComplete() {
+        // check if nothing found
+        if( scanResults.isEmpty() ) {
+            Tv_status.setText( "scan results is empty" );
+            Log.d( TAG, "scan results is empty" );
+            return;
+        }
+        // loop over the scan results and connect to them
+        for( String deviceAddr : scanResults.keySet() ) {
+            Log.d( TAG, "Found device: " + deviceAddr );
+            // get device instance using its MAC address
+            BluetoothDevice device= scanResults.get( deviceAddr );
+            if( MAC_ADDR.equals( deviceAddr) ) {
+                Log.d( TAG, "connecting device: " + deviceAddr );
+                // connect to the device
+                connectDevice(device);
+                PopUp();
+            }
+        }
+    }
+    ```
+    
+    ##### 4. connect Device
+    
+    Mac address를 이용하여 일치하는 기기를 연결합니다.
+    
+    ```java
+    //Connect to the ble device
+    private void connectDevice( BluetoothDevice device_ ) {
+        // update the status
+        Tv_read.setText( "Connecting to " + device_.getAddress() );
+        GattClientCallback gatt_client_cb= new GattClientCallback();
+        bluetoothGatt = device_.connectGatt( this, false, gatt_client_cb );  //red line v2 - perm
+    }
+    ```
+    
+    ##### 5. GATT
+    
+    GATT 서버와의 연결 과정입니다.
+    
+    ```java
+    private class GattClientCallback extends BluetoothGattCallback {
+        @Override
+        public void onConnectionStateChange( BluetoothGatt gatt_, int status_, int new_state_ ) {
+            super.onConnectionStateChange( gatt_, status_, new_state_ );  //check if the connection is stable
+            if( status_ == BluetoothGatt.GATT_FAILURE ) {
+                count = 0;
+                disconnectGattServer();
+                return;
+            } else if( status_ != BluetoothGatt.GATT_SUCCESS ) {
+                count = 0;
+                disconnectGattServer();
+                return;
+            }
+            if( new_state_ == BluetoothProfile.STATE_CONNECTED ) {
+                // update the connection status message
+                //Tv_status.setText( "Connected" );  //if error occur, then delete this code
+                // set the connection flag
+                connected_= true;
+                Log.d( TAG, "Connected to the GATT server" );
+                Log.d(TAG, String.valueOf(connected_)+" first");
+                gatt_.discoverServices();  //red line v3 - perm / characteristics ans descriptors를 제공하는 함수
+            } else if ( new_state_ == BluetoothProfile.STATE_DISCONNECTED ) {
+                count = 0;
+                disconnectGattServer();
+            }
+        }
+
+        // callback function if there is an action about write/read/state change in data
+
+        @Override
+        public void onServicesDiscovered( BluetoothGatt gatt_, int status_ ) {
+            super.onServicesDiscovered( gatt_, status_ );
+            // check if the discovery failed
+            if( status_ != BluetoothGatt.GATT_SUCCESS ) {
+                Log.e( TAG, "Device service discovery failed, status: " + status_ );
+                return;
+            }
+            // find discovered characteristics
+            List<BluetoothGattCharacteristic> matching_characteristics= BluetoothUtils.findBLECharacteristics( gatt_ );
+            if( matching_characteristics.isEmpty() ) {
+                Log.e( TAG, "Unable to find characteristics" );
+                return;
+            }
+            // log for successful discovery
+            Log.d( TAG, "Services discovery is successful" );
+            Log.d(TAG, String.valueOf(connected_) + " Second");  //검출에 성공하면 getServices() 함수를 사용하여 remote service를 취득
+            Log.d(TAG, String.valueOf(status_));
+
+
+        }
+
+        @Override
+        public void onCharacteristicChanged( BluetoothGatt gatt_, BluetoothGattCharacteristic characteristic_ ) {
+            super.onCharacteristicChanged( gatt_, characteristic_ );
+
+            Log.d( TAG, "characteristic changed: " + characteristic_.getUuid().toString() );
+            readCharacteristic( characteristic_ );
+        }
+
+        @Override
+        public void onCharacteristicWrite( BluetoothGatt gatt_, BluetoothGattCharacteristic characteristic_, int status_ ) {
+            super.onCharacteristicWrite( gatt_, characteristic_, status_ );
+            if( status_ == BluetoothGatt.GATT_SUCCESS ) {
+                Log.d( TAG, "Characteristic written successfully" );
+                Log.d(TAG, String.valueOf(connected_)+ " third");
+                Log.d(TAG, String.valueOf(status_));
+            } else {
+                Log.e( TAG, "Characteristic write unsuccessful, status: " + status_) ;
+                Log.d(TAG, String.valueOf(status_));
+                count = 0;
+                disconnectGattServer();
+            }
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt_, BluetoothGattCharacteristic characteristic_, int status_) {
+            super.onCharacteristicRead(gatt_, characteristic_, status_);
+            if (status_ == BluetoothGatt.GATT_SUCCESS) {
+                Log.d (TAG, "Characteristic read successfully" );
+                Log.d(TAG, String.valueOf(connected_)+ "fourth");
+                readCharacteristic(characteristic_);
+            } else {
+                Log.e( TAG, "Characteristic read unsuccessful, status: " + status_);
+                // Trying to read from the Time Characteristic? It doesn't have the property or permissions
+                // set to allow this. Normally this would be an error and you would want to:
+                // disconnectGattServer();
+            }
+        }
+
+        /*
+        Log the value of the characteristic
+        @param characteristic
+         */
+        private void readCharacteristic( BluetoothGattCharacteristic characteristic_ ) {
+            byte[] msg= characteristic_.getValue();
+            Log.d( TAG, "read: " + msg.toString() );
+        }
+
+    }
+    ```
+    
+    ##### 6. disconnect GATT Server
+    
+    GATT 서버와 연결을 끊습니다.
+    
+    ```java
+    //Disconnect Gatt Server
+    public void disconnectGattServer() {
+        Log.d( TAG, "Closing Gatt connection" );
+        // reset the connection flag
+        connected_= false;
+        // disconnect and close the gatt
+        if( bluetoothGatt != null ) {
+            if(count >1)
+                count = 0;
+            Tv_status.setText(".....");
+            bluetoothGatt.disconnect();  //red line v2
+            bluetoothGatt.close();  //red line v2
+        }
+    }
+    ```
+    
+    ##### 7. Scan Call Back
+    
+    스캔 결과를 반환하는 함수입니다.
+    
+    ```java
+    private class BLEScanCallback extends ScanCallback {
+        private Map<String, BluetoothDevice> cb_scan_results_;
+
+        BLEScanCallback(Map<String, BluetoothDevice> _scan_results) {
+            cb_scan_results_ = _scan_results;
+        }
+
+        //Callback when a BLE advertisement has been found.
+        @Override
+        public void onScanResult(int callbackType, ScanResult _result) {
+            super.onScanResult(callbackType, _result);
+
+            Log.d(TAG, "onScanResult" );
+            addScanResult( _result );
+        }
+
+        //Callback when batch results are delivered.
+        @Override
+        public void onBatchScanResults(List<ScanResult> _results) {
+            super.onBatchScanResults(_results);
+            for( ScanResult result: _results ) {
+                addScanResult( result );
+            }
+        }
+
+        //Callback when scan could not be started.
+        @Override
+        public void onScanFailed(int errorCode) {
+            super.onScanFailed(errorCode);
+            Log.e( TAG, "BLE scan failed with code " +errorCode );
+        }
+
+        private void addScanResult( ScanResult _result ) {
+            // get scanned device
+            BluetoothDevice device= _result.getDevice();
+            // get scanned device MAC address
+            String device_address= device.getAddress();
+            // add the device to the result list
+            int device_rssi = _result.getRssi();  // add for rssi
+            Rssi = device_rssi;
+            cb_scan_results_.put( device_address, device );
+            // log
+            Log.d( TAG, "scan results device: " + device );
+            Log.d( TAG, "scan results device rssi: " + Rssi );
+
+            Tv_status.setText( "add scanned device: " + device_address + " / " + Rssi);
+        }
+    }
+    ```
+    
+    
+    ##### etc
+    
+    OnResume은 BLE 기능을 지원하지 않을 경우 앱 종료 기능입니다.
+    
+    ```java
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        } //BLE기능을 지원하지 않을 경우 앱 종료
+    }
+    ```
+    
