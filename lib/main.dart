@@ -39,6 +39,8 @@ class SafeLight extends StatelessWidget {
       designSize: const Size(390, 844),
       builder: (context, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system, // 모드 변경
         theme: ThemeData(
           colorScheme: const ColorScheme.light(
             primary: ColorTheme.primary,
