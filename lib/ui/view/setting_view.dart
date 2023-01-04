@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
+import 'package:safelight/asset/static/license_docs.dart';
 import 'package:safelight/asset/static/size_theme.dart';
+import 'package:safelight/asset/static/system_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
 import 'package:safelight/ui/view/external_licenses_view.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
@@ -24,13 +27,22 @@ class _SettingViewState extends State<SettingView> {
   bool noti = true;
   bool gps = true;
   bool camera = true;
+  late String mode;
+  late Box box;
+
+  @override
+  void initState() {
+    super.initState();
+    box = Hive.box(SystemTheme.themeBox);
+    mode = box.get(SystemTheme.mode);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top + SizeTheme.h_lg,
             bottom: SizeTheme.h_lg,
@@ -44,7 +56,7 @@ class _SettingViewState extends State<SettingView> {
             leading: SingleChildRoundedCard(
               child: Icon(
                 Icons.person,
-                size: 42.w,
+                size: 40.w,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -237,14 +249,79 @@ class _SettingViewState extends State<SettingView> {
               body: Column(
                 children: [
                   // ListTile(
-                  //   title: Text('개인정보처리방침'),
-                  // ),
-                  // ListTile(
                   //   title: Text('이용 약관'),
                   // ),
                   ListTile(
+                    onTap: () => showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoActionSheet(
+                          title: const Text('앱 테마 설정'),
+                          actions: [
+                            CupertinoActionSheetAction(
+                              onPressed: () async {
+                                Navigator.pop(context);
+
+                                await box.put(
+                                    SystemTheme.mode, ThemeMode.system.name);
+
+                                setState(() {
+                                  mode = box.get(SystemTheme.mode);
+                                });
+                              },
+                              // isDefaultAction: true,
+                              child: const Text('시스템 설정'),
+                            ),
+                            CupertinoActionSheetAction(
+                              onPressed: () async {
+                                Navigator.pop(context);
+
+                                await box.put(
+                                    SystemTheme.mode, ThemeMode.light.name);
+                                setState(() {
+                                  mode = box.get(SystemTheme.mode);
+                                });
+                              },
+                              // isDefaultAction: true,
+                              child: const Text('라이트 모드'),
+                            ),
+                            CupertinoActionSheetAction(
+                              onPressed: () async {
+                                Navigator.pop(context);
+
+                                await box.put(
+                                    SystemTheme.mode, ThemeMode.dark.name);
+                                setState(() {
+                                  mode = box.get(SystemTheme.mode);
+                                });
+                              },
+                              child: const Text('다크 모드'),
+                            ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            isDestructiveAction: true,
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('취소'),
+                          ),
+                        );
+                      },
+                    ),
+                    title: const Text('시스템 모드 설정'),
+                    subtitle: mode == 'system'
+                        ? Text('시스템 설정')
+                        : mode == 'light'
+                            ? Text('라이트 모드')
+                            : Text('다크 모드'),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                  ),
+                  ListTile(
                     onTap: () {
-                      Get.to(() => const ExternalLicensesView());
+                      Get.to(
+                        () => LicensePage(
+                          applicationName: '세이프라이트',
+                          applicationVersion: 'v0.8.0',
+                        ),
+                      );
                     },
                     title: const Text('외부 라이센스'),
                   ),

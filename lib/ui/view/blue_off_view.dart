@@ -15,13 +15,13 @@ class BlueOffView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
             ColorTheme.highlight3,
-            ColorTheme.primary,
+            Theme.of(context).colorScheme.primary
           ],
         ),
       ),
@@ -54,10 +54,8 @@ class BlueOffView extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'SafeLight는 블루투스를 켜야 사용할 수 있습니다.',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .apply(color: ColorTheme.onPrimary),
+                        style: Theme.of(context).textTheme.labelLarge!.apply(
+                            color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     ),
                   ),

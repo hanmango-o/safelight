@@ -13,14 +13,17 @@ import '../implement/permission/location_permission_authorized_impl.dart';
 class UserController extends GetxController {
   late _SignController _signController;
   late _AuthController _authController;
+  late _SettingController _settingController;
 
   UserController() {
     _signController = _SignController();
     _authController = _AuthController();
+    _settingController = _SettingController();
   }
 
   _SignController get sign => _signController;
   _AuthController get auth => _authController;
+  _SettingController get setting => _settingController;
 }
 
 class _AuthController
@@ -64,6 +67,24 @@ class _SignController with AnonymouslySignImpl {
           asyncFunction: () => super.signOutAnonymously(),
           loadingWidget: const Center(child: CircularProgressIndicator()),
         );
+        break;
+    }
+  }
+}
+
+class _SettingController {
+  Rx<String> mode = ''.obs;
+
+  setMode(String mode) {
+    switch (ThemeMode.values.byName(mode)) {
+      case ThemeMode.system:
+        mode = '시스템 설정';
+        break;
+      case ThemeMode.light:
+        mode = '라이트 모드';
+        break;
+      case ThemeMode.dark:
+        mode = '다크 모드';
         break;
     }
   }

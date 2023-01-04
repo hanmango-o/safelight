@@ -52,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(80.h),
           child: Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
             height: 70.h,
             child: Column(
               children: [
@@ -205,7 +205,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.secondary,
                                 borderRadius: BorderRadius.circular(
                                   SizeTheme.r_sm,
                                 ),

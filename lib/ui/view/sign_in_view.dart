@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/resource/image_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
+import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
@@ -30,9 +31,10 @@ class _SignInViewState extends State<SignInView> {
           children: [
             SingleChildRoundedCard(
               child: Image(
-                width: 250.w,
+                width: 200.w,
                 image: AssetImage(ImageResource.IMG_EnterApp),
               ),
+              padding: EdgeInsets.all(SizeTheme.h_lg * 2),
             ),
             ElevatedButton(
               onPressed: () async {

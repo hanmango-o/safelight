@@ -79,7 +79,7 @@ class _ConnectedViewState extends State<ConnectedView> {
                         child: Icon(
                           Icons.camera_alt_outlined,
                           size: 32.sp,
-                          color: ColorTheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),

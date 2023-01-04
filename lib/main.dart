@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
+import 'package:safelight/asset/static/system_theme.dart';
 import 'package:safelight/firebase_options.dart';
 import 'package:safelight/ui/view/main_view.dart';
 import 'package:safelight/ui/view/sign_in_view.dart';
@@ -12,13 +16,16 @@ import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/nav_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
-// v0.8.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
+// v0.9.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await Hive.initFlutter();
+  await Hive.openBox(SystemTheme.themeBox);
 
   Get.put(UserController());
   Get.put(BlueController());
@@ -37,174 +44,34 @@ class SafeLight extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
-      builder: (context, child) => GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system, // 모드 변경
-        theme: ThemeData(
-          colorScheme: const ColorScheme.light(
-            primary: ColorTheme.primary,
-            onPrimary: ColorTheme.onPrimary,
-            secondary: ColorTheme.secondary,
-            onSecondary: ColorTheme.onSecondary,
-            background: ColorTheme.background,
-            onBackground: ColorTheme.onBackground,
-            surface: ColorTheme.surface,
-          ),
-          scaffoldBackgroundColor: ColorTheme.background,
-          appBarTheme: AppBarTheme(
-            backgroundColor: ColorTheme.secondary,
-            actionsIconTheme: IconThemeData(
-              color: ColorTheme.onSecondary,
-              size: 36.sp,
-            ),
-            elevation: 0,
-            centerTitle: false,
-            titleTextStyle: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: ColorTheme.onSecondary,
-            ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            iconColor: ColorTheme.background,
-            hintStyle: const TextStyle(
-              color: Colors.grey,
-              // fontSize: 14.sp,
-              // fontWeight: FontWeight.bold,
-            ),
-            prefixIconColor: Colors.grey,
-            labelStyle: TextStyle(
-              color: ColorTheme.onSecondary,
-              fontSize: 22.sp,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              vertical: SizeTheme.h_sm,
-              horizontal: SizeTheme.w_md,
-            ),
-            focusedErrorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorTheme.background,
+      builder: (context, child) => ValueListenableBuilder(
+          valueListenable: Hive.box(SystemTheme.themeBox).listenable(),
+          builder: (context, Box box, widget) {
+            String mode = box.get(
+              SystemTheme.mode,
+              defaultValue: ThemeMode.system.name,
+            );
+            return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              darkTheme: SystemTheme.systemMode(ColorTheme.dark),
+              themeMode: ThemeMode.values.byName(mode),
+              theme: SystemTheme.systemMode(ColorTheme.light),
+              getPages: [
+                GetPage(name: '/main', page: () => const MainView()),
+                GetPage(name: '/sign/in', page: () => const SignInView()),
+              ],
+              home: StreamBuilder(
+                stream: _userController.auth.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.data == null) {
+                    return const SignInView();
+                  } else {
+                    return const MainView();
+                  }
+                },
               ),
-            ),
-            disabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorTheme.background,
-              ),
-            ),
-            errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorTheme.background,
-              ),
-            ),
-            fillColor: ColorTheme.background,
-            filled: true,
-            focusColor: ColorTheme.background,
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorTheme.background,
-              ),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorTheme.background,
-              ),
-            ),
-
-            // suffixStyle: TextStyle(
-            //   color: Colors.black,
-            // ),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              minimumSize: Size(double.minPositive, 52.h),
-              padding: EdgeInsets.symmetric(horizontal: 36.w, vertical: 16.h),
-              textStyle: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(14.r),
-                ),
-              ),
-            ),
-          ),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            elevation: 0,
-            selectedIconTheme: IconThemeData(size: 32.sp),
-            unselectedIconTheme: IconThemeData(size: 32.sp),
-          ),
-          dividerTheme: const DividerThemeData(
-            color: ColorTheme.background,
-            thickness: 1.5,
-          ),
-          listTileTheme: const ListTileThemeData(
-            tileColor: ColorTheme.secondary,
-            shape: Border.symmetric(
-              horizontal: BorderSide(color: ColorTheme.background, width: 1),
-            ),
-          ),
-          textTheme: TextTheme(
-            headlineLarge: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              color: ColorTheme.onSecondary,
-            ),
-            titleLarge: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: ColorTheme.onSecondary,
-            ),
-            titleMedium: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.normal,
-              color: ColorTheme.onSecondary,
-            ),
-            bodyLarge: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: ColorTheme.onSecondary,
-            ),
-            bodyMedium: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-              color: ColorTheme.onSecondary,
-            ),
-            bodySmall: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.normal,
-              color: ColorTheme.onSecondary,
-            ),
-            labelLarge: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
-              color: ColorTheme.onBackground,
-            ),
-            labelMedium: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.normal,
-              color: ColorTheme.onSecondary,
-            ),
-          ),
-        ),
-        getPages: [
-          GetPage(name: '/main', page: () => const MainView()),
-          GetPage(name: '/sign/in', page: () => const SignInView()),
-          // GetPage(name: '/main/connect', page: () => ConnectedView()),
-        ],
-        home: StreamBuilder(
-          stream: _userController.auth.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return const SignInView();
-            } else {
-              return const MainView();
-            }
-          },
-        ),
-      ),
+            );
+          }),
     );
   }
 }

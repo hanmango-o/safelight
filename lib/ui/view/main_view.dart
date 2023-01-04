@@ -39,33 +39,22 @@ class _MainViewState extends State<MainView> {
         if (snapshot.data != BluetoothState.off) {
           return Scaffold(
             body: _widgetOptions[_selectedIndex],
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(
-                    color: Theme.of(context).colorScheme.background,
-                    width: 1.0,
-                  ),
+            bottomNavigationBar: BottomNavigationBar(
+              unselectedItemColor: Theme.of(context).colorScheme.surface,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded),
+                  label: '홈',
                 ),
-              ),
-              child: BottomNavigationBar(
-                unselectedItemColor: Theme.of(context).colorScheme.surface,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.home),
-                    label: '홈',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.more_horiz_rounded),
-                    label: '설정',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Theme.of(context).colorScheme.onSecondary,
-                onTap: (index) => _onItemTapped(index),
-              ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.more_horiz_rounded),
+                  label: '설정',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.onSecondary,
+              onTap: (index) => _onItemTapped(index),
             ),
           );
         } else {
