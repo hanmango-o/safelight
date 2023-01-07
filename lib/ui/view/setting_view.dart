@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,12 +8,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:safelight/asset/resource/auth_resource.dart';
 import 'package:safelight/asset/resource/sign_resource.dart';
 import 'package:safelight/asset/static/color_theme.dart';
-import 'package:safelight/asset/static/license_docs.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/asset/static/system_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
-import 'package:safelight/ui/view/external_licenses_view.dart';
+import 'package:safelight/ui/widget/flat_card.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
+import 'package:safelight/view_model/controller/service_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
 class SettingView extends StatefulWidget {
@@ -23,18 +25,19 @@ class SettingView extends StatefulWidget {
 
 class _SettingViewState extends State<SettingView> {
   final UserController _userController = Get.find<UserController>();
+
   bool bluetooth = true;
   bool noti = true;
   bool gps = true;
   bool camera = true;
-  late String mode;
+  late String? mode;
   late Box box;
 
   @override
   void initState() {
     super.initState();
     box = Hive.box(SystemTheme.themeBox);
-    mode = box.get(SystemTheme.mode);
+    mode = box.get(SystemTheme.mode) ?? ThemeMode.system.name;
   }
 
   @override
@@ -68,7 +71,10 @@ class _SettingViewState extends State<SettingView> {
               '회원가입을 해주세요',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
+            trailing: Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
           ),
         ),
         toolbarHeight: 120.h,
@@ -231,7 +237,10 @@ class _SettingViewState extends State<SettingView> {
                       '수동',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
                   // ListTile(
                   //   title: Text('보행 안전 경광등'),
@@ -252,67 +261,136 @@ class _SettingViewState extends State<SettingView> {
                   //   title: Text('이용 약관'),
                   // ),
                   ListTile(
-                    onTap: () => showCupertinoModalPopup(
+                    onTap: () => showModalBottomSheet(
+                      barrierColor: Theme.of(context)
+                          .colorScheme
+                          .onSecondary
+                          .withAlpha(100),
                       context: context,
-                      builder: (context) {
-                        return CupertinoActionSheet(
-                          title: const Text('앱 테마 설정'),
-                          actions: [
-                            CupertinoActionSheetAction(
-                              onPressed: () async {
-                                Navigator.pop(context);
-
-                                await box.put(
-                                    SystemTheme.mode, ThemeMode.system.name);
-
-                                setState(() {
-                                  mode = box.get(SystemTheme.mode);
-                                });
-                              },
-                              // isDefaultAction: true,
-                              child: const Text('시스템 설정'),
-                            ),
-                            CupertinoActionSheetAction(
-                              onPressed: () async {
-                                Navigator.pop(context);
-
-                                await box.put(
-                                    SystemTheme.mode, ThemeMode.light.name);
-                                setState(() {
-                                  mode = box.get(SystemTheme.mode);
-                                });
-                              },
-                              // isDefaultAction: true,
-                              child: const Text('라이트 모드'),
-                            ),
-                            CupertinoActionSheetAction(
-                              onPressed: () async {
-                                Navigator.pop(context);
-
-                                await box.put(
-                                    SystemTheme.mode, ThemeMode.dark.name);
-                                setState(() {
-                                  mode = box.get(SystemTheme.mode);
-                                });
-                              },
-                              child: const Text('다크 모드'),
-                            ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            isDestructiveAction: true,
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      builder: (BuildContext context) {
+                        return BoardFrame(
+                          title: '시스템 모드 설정',
+                          headerPadding: EdgeInsets.only(
+                            bottom: SizeTheme.h_sm,
+                          ),
+                          padding: EdgeInsets.all(SizeTheme.w_md),
+                          // padding: EdgeInsets.all(SizeTheme.w_lg),
+                          titleStyle: Theme.of(context).textTheme.titleLarge,
+                          trailing: TextButton(
+                            child: Text('닫기'),
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('취소'),
+                          ),
+                          body: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: SizeTheme.h_md,
+                                ),
+                                child: FlatCard(
+                                  title: '시스템모드',
+                                  subTail: '기본 OS 설정에 따릅니다.',
+                                  bottomTitle: false,
+                                  onTap: () async {
+                                    Navigator.pop(context);
+
+                                    await box.put(SystemTheme.mode,
+                                        ThemeMode.system.name);
+                                    setState(() {
+                                      mode = box.get(SystemTheme.mode);
+                                    });
+                                  },
+                                  trailing: mode == 'system'
+                                      ? Text(
+                                          '적용중',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge!
+                                              .apply(
+                                                color: ColorTheme.highlight1,
+                                              ),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: SizeTheme.h_md,
+                                ),
+                                child: FlatCard(
+                                  title: '다크모드',
+                                  subTail: '앱이 어두워집니다.',
+                                  bottomTitle: false,
+                                  onTap: () async {
+                                    Navigator.pop(context);
+
+                                    await box.put(
+                                        SystemTheme.mode, ThemeMode.dark.name);
+                                    setState(() {
+                                      mode = box.get(SystemTheme.mode);
+                                    });
+                                  },
+                                  trailing: mode == 'dark'
+                                      ? Text(
+                                          '적용중',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge!
+                                              .apply(
+                                                color: ColorTheme.highlight1,
+                                              ),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: SizeTheme.h_md,
+                                ),
+                                child: FlatCard(
+                                  title: '라이트모드',
+                                  subTail: '밝아집니다.',
+                                  bottomTitle: false,
+                                  onTap: () async {
+                                    Navigator.pop(context);
+
+                                    await box.put(
+                                        SystemTheme.mode, ThemeMode.light.name);
+                                    setState(() {
+                                      mode = box.get(SystemTheme.mode);
+                                    });
+                                  },
+                                  trailing: mode == 'light'
+                                      ? Text(
+                                          '적용중',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge!
+                                              .apply(
+                                                color: ColorTheme.highlight1,
+                                              ),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
                     ),
                     title: const Text('시스템 모드 설정'),
-                    subtitle: mode == 'system'
-                        ? Text('시스템 설정')
-                        : mode == 'light'
-                            ? Text('라이트 모드')
-                            : Text('다크 모드'),
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                    subtitle: Text(
+                      mode == 'system'
+                          ? '시스템설정'
+                          : mode == 'light'
+                              ? '라이트모드'
+                              : '다크모드',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
                   ListTile(
                     onTap: () {

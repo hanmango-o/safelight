@@ -1,3 +1,1 @@
-abstract class IServiceStrategy {
-  Future<void> execute();
-}
+abstract class IServiceStrategy {}

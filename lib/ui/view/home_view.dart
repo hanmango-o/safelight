@@ -6,10 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
+import 'package:safelight/asset/static/system_theme.dart';
 import 'package:safelight/ui/frame/board_frame.dart';
+import 'package:safelight/ui/view/flashlight_view.dart';
 import 'package:safelight/ui/view/navigator_view.dart';
+import 'package:safelight/ui/widget/flat_card.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
+import 'package:safelight/view_model/controller/service_controller.dart';
 import 'package:safelight/view_model/implement/bluetooth/default_search_impl.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -28,6 +32,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final BlueController _blueController = Get.find<BlueController>();
+  final ServiceController _serviceController = Get.find<ServiceController>();
 
   @override
   void initState() {
@@ -45,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('SafeLight'),
         actions: [
           IconButton(
-            onPressed: () => null,
+            onPressed: () => Get.to(() => FlashlightView()),
             icon: const Icon(Icons.flashlight_on_outlined),
           )
         ],
@@ -192,7 +197,73 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           );
                         case StatusType.STAND_BY:
-                          return Container();
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[350]!,
+                            highlightColor: Colors.grey[400]!,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemBuilder: (_, __) => Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: SizeTheme.h_lg,
+                                  vertical: SizeTheme.w_sm,
+                                ),
+                                child: Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        left: SizeTheme.w_sm,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 62.w,
+                                      height: 62.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(SizeTheme.r_sm),
+                                        ),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 230.w,
+                                          height: 16.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(SizeTheme.r_sm),
+                                            ),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 5.h),
+                                        ),
+                                        Container(
+                                          width: 143.w,
+                                          height: 16.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(SizeTheme.r_sm),
+                                            ),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              itemCount: 3,
+                            ),
+                          );
                         case StatusType.COMPLETE:
                           if (snapshot.data!.isEmpty) {
                             return Container(
@@ -244,50 +315,123 @@ class _HomeViewState extends State<HomeView> {
                                     SizeTheme.r_sm,
                                   ),
                                 ),
-                                onTap: () => showCupertinoModalPopup(
+                                // onTap: () => showCupertinoModalPopup(
+                                //   context: context,
+                                //   builder: (context) {
+                                //     return CupertinoActionSheet(
+                                //       title: const Text('모드 선택'),
+                                //       actions: [
+                                //         CupertinoActionSheetAction(
+
+                                //           isDefaultAction: true,
+                                //           child: const Text('음성 유도'),
+                                //         ),
+                                //         CupertinoActionSheetAction(
+
+                                //           isDefaultAction: true,
+                                //           child: const Text('압버튼 누르기'),
+                                //         ),
+                                //       ],
+                                //       cancelButton: CupertinoActionSheetAction(
+                                //         isDestructiveAction: true,
+                                //         onPressed: () => Navigator.pop(context),
+                                //         child: const Text('취소'),
+                                //       ),
+                                //     );
+                                //   },
+                                // ),
+                                onTap: () => showModalBottomSheet(
+                                  barrierColor: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondary
+                                      .withAlpha(100),
                                   context: context,
-                                  builder: (context) {
-                                    return CupertinoActionSheet(
-                                      title: const Text('모드 선택'),
-                                      actions: [
-                                        CupertinoActionSheetAction(
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-
-                                            _blueController.blueHandler
-                                                .sendCMD = VoiceInductor(
-                                              crosswalks: [
-                                                snapshot.data![index],
-                                              ],
-                                            );
-                                            _blueController.blueHandler.send();
-                                            _blueController.blueHandler.reset();
-                                          },
-                                          isDefaultAction: true,
-                                          child: const Text('음성 유도'),
-                                        ),
-                                        CupertinoActionSheetAction(
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-
-                                            _blueController.blueHandler
-                                                .sendCMD = AcousticSignal(
-                                              crosswalks: [
-                                                snapshot.data![index],
-                                              ],
-                                            );
-
-                                            _blueController.blueHandler.send();
-                                            _blueController.blueHandler.reset();
-                                          },
-                                          isDefaultAction: true,
-                                          child: const Text('압버튼 누르기'),
-                                        ),
-                                      ],
-                                      cancelButton: CupertinoActionSheetAction(
-                                        isDestructiveAction: true,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  builder: (BuildContext context) {
+                                    return BoardFrame(
+                                      title: '모드 선택',
+                                      headerPadding: EdgeInsets.only(
+                                        bottom: SizeTheme.h_sm,
+                                      ),
+                                      padding: EdgeInsets.all(SizeTheme.w_md),
+                                      titleStyle: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                      trailing: TextButton(
+                                        child: Text('닫기'),
                                         onPressed: () => Navigator.pop(context),
-                                        child: const Text('취소'),
+                                      ),
+                                      body: Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom: SizeTheme.h_md,
+                                            ),
+                                            child: FlatCard(
+                                              title: '음성 유도',
+                                              titleOnly: true,
+                                              leading: Icon(
+                                                Icons.location_pin,
+                                                color: ColorTheme.highlight3,
+                                              ),
+                                              trailing: Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+
+                                                _blueController.blueHandler
+                                                    .sendCMD = VoiceInductor(
+                                                  crosswalks: [
+                                                    snapshot.data![index],
+                                                  ],
+                                                );
+                                                _blueController.blueHandler
+                                                    .send();
+                                                _blueController.blueHandler
+                                                    .reset();
+                                              },
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom: SizeTheme.h_md,
+                                            ),
+                                            child: FlatCard(
+                                              title: '압버튼 누르기',
+                                              titleOnly: true,
+                                              leading: Icon(
+                                                Icons.directions_walk_rounded,
+                                                color: ColorTheme.highlight2,
+                                              ),
+                                              trailing: Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+
+                                                _blueController.blueHandler
+                                                    .sendCMD = AcousticSignal(
+                                                  crosswalks: [
+                                                    snapshot.data![index],
+                                                  ],
+                                                );
+
+                                                _blueController.blueHandler
+                                                    .send();
+                                                _blueController.blueHandler
+                                                    .reset();
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     );
                                   },

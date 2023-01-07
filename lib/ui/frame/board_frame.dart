@@ -7,6 +7,8 @@ class BoardFrame extends StatelessWidget {
   final Color? backgroundColor;
   final EdgeInsets? padding;
   final EdgeInsets? headerPadding;
+  final Widget? trailing;
+  final TextStyle? titleStyle;
 
   const BoardFrame({
     Key? key,
@@ -15,6 +17,8 @@ class BoardFrame extends StatelessWidget {
     this.backgroundColor,
     this.padding,
     this.headerPadding,
+    this.trailing,
+    this.titleStyle,
   }) : super(key: key);
 
   @override
@@ -33,9 +37,15 @@ class BoardFrame extends StatelessWidget {
                     vertical: SizeTheme.h_sm,
                     horizontal: SizeTheme.w_md,
                   ),
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.labelLarge,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: titleStyle ?? Theme.of(context).textTheme.labelLarge,
+                  ),
+                  trailing ?? SizedBox(),
+                ],
               ),
             ),
             body,

@@ -7,13 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:safelight/asset/static/color_theme.dart';
-import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/asset/static/system_theme.dart';
 import 'package:safelight/firebase_options.dart';
 import 'package:safelight/ui/view/main_view.dart';
 import 'package:safelight/ui/view/sign_in_view.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/nav_controller.dart';
+import 'package:safelight/view_model/controller/service_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
 
 // v0.9.0 | 한영찬(hanmango-o) | hanmango.o@gmail.com
@@ -30,6 +30,7 @@ Future<void> main() async {
   Get.put(UserController());
   Get.put(BlueController());
   Get.put(NavController());
+  Get.put(ServiceController());
 
   FlutterNativeSplash.remove();
   runApp(SafeLight());
@@ -47,14 +48,14 @@ class SafeLight extends StatelessWidget {
       builder: (context, child) => ValueListenableBuilder(
           valueListenable: Hive.box(SystemTheme.themeBox).listenable(),
           builder: (context, Box box, widget) {
-            String mode = box.get(
+            String? mode = box.get(
               SystemTheme.mode,
               defaultValue: ThemeMode.system.name,
             );
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,
               darkTheme: SystemTheme.systemMode(ColorTheme.dark),
-              themeMode: ThemeMode.values.byName(mode),
+              themeMode: ThemeMode.values.byName(mode ?? ThemeMode.system.name),
               theme: SystemTheme.systemMode(ColorTheme.light),
               getPages: [
                 GetPage(name: '/main', page: () => const MainView()),
