@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 
 class RoundedButton extends StatelessWidget {
-  final Function onTap;
+  final Function() onTap;
   final Color? backgroundColor;
   final EdgeInsets? padding;
   final String title;
@@ -21,7 +21,7 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onTap,
+      onTap: onTap,
       child: FittedBox(
         child: Container(
           padding: padding ??

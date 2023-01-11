@@ -5,19 +5,19 @@ import 'package:safelight/asset/static/size_theme.dart';
 import 'package:safelight/ui/widget/single_child_rounded_card.dart';
 
 class FlatCard extends StatelessWidget {
-  Color? backgroundColor;
-  String? subTitle;
-  String? subLabel;
-  String? subTail;
-  String title;
-  bool bottomTitle;
-  Widget? leading;
-  Function()? onTap;
-  Color? subTitleColor;
-  bool titleOnly;
-  Widget? trailing;
+  final Color? backgroundColor;
+  final String? subTitle;
+  final String? subLabel;
+  final String? subTail;
+  final String title;
+  final bool bottomTitle;
+  final Widget? leading;
+  final Function()? onTap;
+  final Color? subTitleColor;
+  final bool titleOnly;
+  final Widget? trailing;
 
-  FlatCard({
+  const FlatCard({
     Key? key,
     this.backgroundColor,
     this.subTitle,

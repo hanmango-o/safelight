@@ -9,9 +9,16 @@ import '../implement/navigator/get_reverse_geocoding_impl.dart';
 class NavController extends GetxController {
   // static Rx<String> location = ''.obs;
   NavHandler navHandler = NavHandler();
-  LocationVO? location;
+  LocationVO? position;
 
-  Future getLocation() async {
+  static late List<double>? location;
+
+  Future setLocation() async {
+    navHandler.strategy = GetLocationImpl();
+    location = await navHandler.fetch();
+  }
+
+  Future getLocationByGeo() async {
     navHandler.strategy = GetLocationImpl();
     List<double> location = await navHandler.fetch();
     navHandler.strategy = GetReverseGeocoding(location);

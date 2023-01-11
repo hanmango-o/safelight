@@ -5,6 +5,7 @@ import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
 import 'package:safelight/view_model/controller/blue_controller.dart';
 import 'package:safelight/view_model/controller/user_controller.dart';
+import 'package:safelight/view_model/implement/service/flashlight_impl.dart';
 import 'package:safelight/view_model/interface/search_command_strategy_interface.dart';
 import 'package:safelight/view_model/interface/send_command_strategy_interface.dart';
 
@@ -43,7 +44,9 @@ class BlueHandler {
   }
 
   Future<void> send() async {
+    BlueController.status.value = StatusType.IS_CONNECTING;
     await _sendCMD!.send();
+    BlueController.status.value = StatusType.CONNECTED_COMPLETE;
   }
 
   Future<void> reset() async {

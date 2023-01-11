@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 
@@ -22,14 +23,15 @@ class GetLocationImpl implements IFetchStrategy {
     GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
 
     final servicestatus = await geolocator.isLocationServiceEnabled();
+    print(servicestatus);
     if (servicestatus) {
-      // print(servicestatus);
+      print(servicestatus);
       final permission = await geolocator.checkPermission();
-      // print(permission);
+      print(permission);
       if (permission == LocationPermission.denied) {
         final permission = await geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          // print('Location permissions are denied');
+          print('Location permissions are denied');
         } else if (permission == LocationPermission.deniedForever) {
           // print("'Location permissions are permanently denied");
         } else {
@@ -57,7 +59,7 @@ class GetLocationImpl implements IFetchStrategy {
         // });
       }
     }
-    // log([lat, lon].toString());
+    log([lat, lon].toString());
 
     return [lat, lon];
     // LocationSettings locationSettings = LocationSettings(

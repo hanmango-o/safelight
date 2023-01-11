@@ -1,5 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:safelight/asset/resource/blue_resource.dart';
 import 'package:safelight/model/vo/crosswalk_vo.dart';
+import 'package:safelight/view_model/controller/blue_controller.dart';
 
 abstract class ISendCommandStrategy {
   final List<CrosswalkVO> _crosswalks;
@@ -10,8 +15,11 @@ abstract class ISendCommandStrategy {
 
   Future<void> connect(List<int> command) async {
     for (int i = 0; i < _crosswalks.length; i++) {
+      if (Platform.isIOS) {
+        await Future.delayed(const Duration(seconds: 1));
+      }
       try {
-        await _crosswalks[i].post.connect();
+        await _crosswalks[i].post.connect(autoConnect: false);
         List<BluetoothService> services =
             await _crosswalks[i].post.discoverServices();
         await services
@@ -27,6 +35,7 @@ abstract class ISendCommandStrategy {
             )
             .write(command, withoutResponse: true);
       } catch (e) {
+        BlueController.status.value = StatusType.ERROR;
         throw Exception(e);
       } finally {
         await Future.delayed(const Duration(seconds: 2));

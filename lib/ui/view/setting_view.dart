@@ -184,75 +184,75 @@ class _SettingViewState extends State<SettingView> {
                 ],
               ),
             ),
-            BoardFrame(
-              title: '보행 보조 서비스',
-              body: Column(
-                children: [
-                  ListTile(
-                    onTap: () => showCupertinoModalPopup(
-                      context: context,
-                      builder: (context) {
-                        return CupertinoActionSheet(
-                          title: const Text('주변 압버튼 스캔'),
-                          message: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              foregroundColor:
-                                  Theme.of(context).colorScheme.onSecondary,
-                            ),
-                            child: const Text('각 스캔 모드 설명보기'),
-                          ),
-                          actions: [
-                            CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              isDefaultAction: true,
-                              child: const Text('수동 모드'),
-                            ),
-                            CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Get.snackbar(
-                                  '개발 중입니다.',
-                                  '현재 버전에서는 사용할 수 없습니다.',
-                                );
-                              },
-                              isDefaultAction: true,
-                              child: const Text('자동 모드'),
-                            ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            isDestructiveAction: true,
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('취소'),
-                          ),
-                        );
-                      },
-                    ),
-                    title: const Text('주변 압버튼 스캔'),
-                    subtitle: Text(
-                      '수동',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-                  ),
-                  // ListTile(
-                  //   title: Text('보행 안전 경광등'),
-                  //   subtitle: Text(
-                  //     '항상 켜짐',
-                  //     style: Theme.of(context).textTheme.labelLarge,
-                  //   ),
-                  //   trailing: Icon(Icons.arrow_forward_ios_rounded),
-                  // ),
-                ],
-              ),
-            ),
+            // BoardFrame(
+            //   title: '보행 보조 서비스',
+            //   body: Column(
+            //     children: [
+            //       ListTile(
+            //         onTap: () => showCupertinoModalPopup(
+            //           context: context,
+            //           builder: (context) {
+            //             return CupertinoActionSheet(
+            //               title: const Text('주변 압버튼 스캔'),
+            //               message: ElevatedButton(
+            //                 onPressed: () {},
+            //                 style: ElevatedButton.styleFrom(
+            //                   backgroundColor:
+            //                       Theme.of(context).colorScheme.secondary,
+            //                   foregroundColor:
+            //                       Theme.of(context).colorScheme.onSecondary,
+            //                 ),
+            //                 child: const Text('각 스캔 모드 설명보기'),
+            //               ),
+            //               actions: [
+            //                 CupertinoActionSheetAction(
+            //                   onPressed: () {
+            //                     Navigator.pop(context);
+            //                   },
+            //                   isDefaultAction: true,
+            //                   child: const Text('수동 모드'),
+            //                 ),
+            //                 CupertinoActionSheetAction(
+            //                   onPressed: () {
+            //                     Navigator.pop(context);
+            //                     Get.snackbar(
+            //                       '개발 중입니다.',
+            //                       '현재 버전에서는 사용할 수 없습니다.',
+            //                     );
+            //                   },
+            //                   isDefaultAction: true,
+            //                   child: const Text('자동 모드'),
+            //                 ),
+            //               ],
+            //               cancelButton: CupertinoActionSheetAction(
+            //                 isDestructiveAction: true,
+            //                 onPressed: () => Navigator.pop(context),
+            //                 child: const Text('취소'),
+            //               ),
+            //             );
+            //           },
+            //         ),
+            //         title: const Text('주변 압버튼 스캔'),
+            //         subtitle: Text(
+            //           '수동',
+            //           style: Theme.of(context).textTheme.labelLarge,
+            //         ),
+            //         trailing: Icon(
+            //           Icons.arrow_forward_ios_rounded,
+            //           color: Theme.of(context).colorScheme.onBackground,
+            //         ),
+            //       ),
+            //       // ListTile(
+            //       //   title: Text('보행 안전 경광등'),
+            //       //   subtitle: Text(
+            //       //     '항상 켜짐',
+            //       //     style: Theme.of(context).textTheme.labelLarge,
+            //       //   ),
+            //       //   trailing: Icon(Icons.arrow_forward_ios_rounded),
+            //       // ),
+            //     ],
+            //   ),
+            // ),
             BoardFrame(
               title: '기타',
               body: Column(
@@ -396,8 +396,7 @@ class _SettingViewState extends State<SettingView> {
                     onTap: () {
                       Get.to(
                         () => LicensePage(
-                          applicationName: '세이프라이트',
-                          applicationVersion: 'v0.8.0',
+                          applicationName: 'SafeLight',
                         ),
                       );
                     },

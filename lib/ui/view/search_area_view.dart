@@ -84,7 +84,7 @@ class _SearchAreaViewState extends State<SearchAreaView> {
             title: Text(lists[index].name),
             subtitle: Text(lists[index].address),
             onTap: () {
-              _navController.location = lists[index];
+              _navController.position = lists[index];
             },
           );
         },

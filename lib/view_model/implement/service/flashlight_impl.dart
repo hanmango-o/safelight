@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:safelight/view_model/controller/service_controller.dart';
 import 'package:safelight/view_model/interface/service_strategy_interface.dart';
 import 'package:torch_light/torch_light.dart';
 
@@ -16,6 +17,18 @@ class FlashLightImpl implements IServiceStrategy {
     reset();
   }
 
+  void turnOnWithWeather() {
+    if (ServiceController.weather != null) {
+      int unixTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      if (!(unixTimestamp >= ServiceController.weather!.sunrise &&
+              unixTimestamp <= ServiceController.weather!.sunset) ||
+          (ServiceController.weather!.visibility < 500 ||
+              ServiceController.weather!.clouds > 50)) {
+        turnOn();
+      }
+    }
+  }
+
   void turnOn({
     bool isInfinite = false,
     int count = 10,
@@ -23,6 +36,7 @@ class FlashLightImpl implements IServiceStrategy {
     await reset();
     _timer = Timer.periodic(Duration(seconds: 2), (timer) async {
       print(timer.tick);
+
       if (!isInfinite && timer.tick == count) {
         timer.cancel();
       }
@@ -39,7 +53,7 @@ class FlashLightImpl implements IServiceStrategy {
   Future<void> _enableTorch() async {
     try {
       await TorchLight.enableTorch();
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 5000));
     } on Exception catch (_) {
       print(_);
     }

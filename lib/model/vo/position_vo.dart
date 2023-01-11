@@ -1,6 +1,8 @@
-class Position {
-  double latitude;
-  double longitude;
+import 'package:latlong2/latlong.dart';
 
-  Position({required this.latitude, required this.longitude});
+class Position {
+  String? dir;
+  LatLng? pos;
+
+  Position({this.dir, this.pos});
 }

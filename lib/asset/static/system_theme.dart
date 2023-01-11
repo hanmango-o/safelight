@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:safelight/asset/static/color_theme.dart';
 import 'package:safelight/asset/static/size_theme.dart';
 
 class SystemTheme {
@@ -18,6 +17,7 @@ class SystemTheme {
         onBackground: scheme.onBackground,
         surface: scheme.surface,
       ),
+      cardColor: scheme.background,
       scaffoldBackgroundColor: scheme.background,
       appBarTheme: AppBarTheme(
         backgroundColor: scheme.secondary,
@@ -25,6 +25,7 @@ class SystemTheme {
           color: scheme.onSecondary,
           size: 36.sp,
         ),
+        foregroundColor: scheme.onSecondary,
         elevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(

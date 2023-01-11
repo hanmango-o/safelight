@@ -33,18 +33,18 @@ class _ConnectedViewState extends State<ConnectedView> {
           children: [
             RichText(
               text: TextSpan(
-                text: widget.crosswalk.areaType == AreaType.SINGLE_ROAD
+                text: widget.crosswalk.type == AreaType.SINGLE_ROAD
                     ? '황색 점멸등 구간'
                     : '교차로',
                 style: Theme.of(context).textTheme.bodyMedium!.apply(
-                      color: widget.crosswalk.areaType == AreaType.SINGLE_ROAD
+                      color: widget.crosswalk.type == AreaType.SINGLE_ROAD
                           ? ColorTheme.highlight3
                           : ColorTheme.highlight1,
                     ),
                 children: [
                   const TextSpan(text: ' '),
                   TextSpan(
-                    text: widget.crosswalk.direction ?? '',
+                    text: widget.crosswalk.dir ?? '',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],

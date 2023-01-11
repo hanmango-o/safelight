@@ -1,7 +1,11 @@
 name: safelight
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.0+2
+# ios
+version: 1.1.0+4
+
+# android
+# version: 1.0.0+2
 environment:
   sdk: ">=2.17.6 <3.0.0"
 dependencies:
@@ -22,6 +26,9 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   torch_light: ^1.0.0
+  flutter_compass: ^0.7.0
+  cloud_firestore: ^3.5.1
+  latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +41,7 @@ flutter:
   uses-material-design: true
   assets:
     - lib/asset/image/
+    - lib/asset/image/ic/
 
 flutter_native_splash:
   color: "#758BFD"

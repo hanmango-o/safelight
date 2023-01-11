@@ -23,8 +23,8 @@ class _NavigatorViewState extends State<NavigatorView> {
   @override
   void initState() {
     super.initState();
-    _navController.getLocation();
-    _navController.location = null;
+    _navController.getLocationByGeo();
+    _navController.position = null;
   }
 
   @override
