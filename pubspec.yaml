@@ -29,6 +29,13 @@ dependencies:
   flutter_compass: ^0.7.0
   cloud_firestore: ^3.5.1
   latlong2: ^0.8.1
+  auto_size_text: ^3.0.0
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+  flutter_bloc: ^8.1.1
+  get_it: ^7.2.0
+  bloc: ^8.1.0
+  flutter_tts: ^3.6.3
 
 dev_dependencies:
   flutter_test:
@@ -40,13 +47,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/asset/image/
-    - lib/asset/image/ic/
+    - lib/assets/images/
+    - lib/assets/images/ic/
 
 flutter_native_splash:
   color: "#758BFD"
-  image: lib/asset/image/ic/ic_logo.png
-  branding: lib/asset/image/ic/ic_copyright.png
+  image: lib/assets/images/ic/ic_logo.png
+  branding: lib/assets/images/ic/ic_copyright.png
   branding_mode: bottom
   #color_dark: "#042a49"
   #background_image_dark: "assets/dark-background.png"
@@ -54,7 +61,7 @@ flutter_native_splash:
   #branding_dark: assets/dart_dark.png
   android_12:
     color: "#758BFD"
-    image: lib/asset/image/ic/ic_logo_android.png
+    image: lib/assets/images/ic/ic_logo_android.png
     #color: "#42a5f5"
     #icon_background_color: "#111111"
     #branding: assets/dart.png
