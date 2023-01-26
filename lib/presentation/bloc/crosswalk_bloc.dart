@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -6,21 +6,25 @@ import 'package:safelight/core/errors/failures.dart';
 import 'package:safelight/core/usecases/usecase.dart';
 import 'package:safelight/domain/usecases/crosswalk_usecase.dart';
 import 'package:safelight/domain/usecases/nav_usecase.dart';
+import 'package:safelight/domain/usecases/service_usecase.dart';
 import 'package:safelight/injection.dart';
 import 'package:safelight/presentation/bloc/crosswalk_event.dart';
 import 'package:safelight/presentation/bloc/crosswalk_state.dart';
 
 class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
+  static Timer timer = Timer(Duration.zero, () {});
   final SearchCrosswalk searchCrosswalk;
   final ConnectCrosswalk sendAcousticSignal;
   final ConnectCrosswalk sendVoiceInductor;
   final GetCurrentPosition getCurrentPosition;
+  final ControlFlash controlFlash;
 
   CrosswalkBloc({
     required this.searchCrosswalk,
     required this.sendAcousticSignal,
     required this.sendVoiceInductor,
     required this.getCurrentPosition,
+    required this.controlFlash,
   }) : super(Off(results: const [])) {
     on<SearchFiniteCrosswalkEvent>(_searchFiniteCrosswalkEvent);
     on<SendAcousticSignalEvent>(_sendAcousticSignalEvent);
@@ -32,6 +36,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
+      timer.cancel();
       emit(On());
 
       final results = await searchCrosswalk(NoParams());
@@ -59,42 +64,31 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   ) async {
     try {
       emit(Connect());
+      await controlFlash(NoParams());
+      if (event.crosswalk.pos != null) {
+        final results = await getCurrentPosition(NoParams());
+        results.fold(
+          (failure) {
+            emit(Done(enableCompass: false));
+          },
+          (latLng) async {
+            emit(Done(enableCompass: true, latLng: latLng));
+          },
+        );
+      } else {
+        emit(Done(enableCompass: false));
+      }
 
-      DI.get<FlutterTts>().speak('${event.crosswalk.name}의 스마트 압버튼에 연결합니다.');
-      final results = await sendAcousticSignal(event.crosswalk);
-      await results.fold(
-        (failure) {
-          if (failure is BlueFailure) {
-            emit(Error(message: '스마트 압버튼 연결 실패'));
-          }
-        },
-        (success) async {
-          bool enableCompass = false;
-          if (event.crosswalk.pos != null) {
-            final results = await getCurrentPosition(NoParams());
-            results.fold(
-              (failure) {
-                DI.get<FlutterTts>().speak(
-                    '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 보행하세요.');
-
-                emit(Done(enableCompass: enableCompass));
-              },
-              (latLng) {
-                DI.get<FlutterTts>().speak(
-                    '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 진동이 울리지 않는 방향으로 보행하세요.');
-
-                enableCompass = true;
-                emit(Done(enableCompass: enableCompass, latLng: latLng));
-              },
-            );
-          } else {
-            DI.get<FlutterTts>().speak(
-                '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 보행하세요.');
-
-            emit(Done(enableCompass: enableCompass));
-          }
-        },
-      );
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (timer.tick == 10) {
+          timer.cancel();
+        }
+        final results = await sendAcousticSignal(event.crosswalk);
+        if (results.isLeft()) {
+          timer.cancel();
+          emit(Error(message: '스마트 압버튼 연결 실패'));
+        }
+      });
     } catch (e) {
       emit(Error(message: 'connect failure'));
     }
@@ -106,40 +100,31 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   ) async {
     try {
       emit(Connect());
-      DI.get<FlutterTts>().speak('${event.crosswalk.name}의 스마트 압버튼에 연결합니다.');
-      final results = await sendVoiceInductor(event.crosswalk);
-      await results.fold(
-        (failure) {
-          if (failure is BlueFailure) {
-            emit(Error(message: 'connect failure'));
-          }
-        },
-        (success) async {
-          bool enableCompass = false;
-          if (event.crosswalk.pos != null) {
-            final results = await getCurrentPosition(NoParams());
-            results.fold(
-              (failure) {
-                DI.get<FlutterTts>().speak(
-                    '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 보행하세요.');
-                emit(Done(enableCompass: enableCompass));
-              },
-              (latLng) {
-                DI.get<FlutterTts>().speak(
-                    '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 진동이 울리지 않는 방향으로 보행하세요.');
 
-                enableCompass = true;
-                emit(Done(enableCompass: enableCompass, latLng: latLng));
-              },
-            );
-          } else {
-            DI.get<FlutterTts>().speak(
-                '${event.crosswalk.name}의 스마트 압버튼에 연결되었습니다. 보행자 신호에 주의하여 보행하세요.');
+      if (event.crosswalk.pos != null) {
+        final results = await getCurrentPosition(NoParams());
+        results.fold(
+          (failure) {
+            emit(Done(enableCompass: false));
+          },
+          (latLng) async {
+            emit(Done(enableCompass: true, latLng: latLng));
+          },
+        );
+      } else {
+        emit(Done(enableCompass: false));
+      }
 
-            emit(Done(enableCompass: enableCompass));
-          }
-        },
-      );
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (timer.tick == 10) {
+          timer.cancel();
+        }
+        final results = await sendVoiceInductor(event.crosswalk);
+        if (results.isLeft()) {
+          timer.cancel();
+          emit(Error(message: '스마트 압버튼 연결 실패'));
+        }
+      });
     } catch (e) {
       emit(Error(message: 'connect failure'));
     }

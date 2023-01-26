@@ -50,6 +50,8 @@ const String USECASE_SEND_ACOUSTIC_SIGNAL = 'USECASE_SEND_ACOUSTIC_SIGNAL';
 const String USECASE_SEND_VOICE_INDUCTOR = 'USECASE_SEND_VOICE_INDUCTOR';
 const String USECASE_SIGN_IN_ANONYMOUSLY = 'USECASE_SIGN_IN_ANONYMOUSLY';
 const String USECASE_SIGN_OUT_ANONYMOUSLY = 'USECASE_SIGN_OUT_ANONYMOUSLY';
+const String USECASE_CONTROL_FLASH_ON_WITH_WEATHER =
+    'USECASE_CONTROL_FLASH_ON_WITH_WEATHER';
 
 Future<void> init() async {
   // bloc injection area
@@ -80,18 +82,9 @@ Future<void> init() async {
       sendAcousticSignal: DI(instanceName: USECASE_SEND_ACOUSTIC_SIGNAL),
       sendVoiceInductor: DI(instanceName: USECASE_SEND_VOICE_INDUCTOR),
       getCurrentPosition: DI(),
+      controlFlash: DI(instanceName: USECASE_CONTROL_FLASH_ON_WITH_WEATHER),
     ),
     instanceName: BLOC_BLUE_SEARCH_FINITE,
-  );
-
-  DI.registerFactory(
-    () => CrosswalkBloc(
-      searchCrosswalk: DI(instanceName: USECASE_SEARCH_CROSSWALK_INFINITE),
-      sendAcousticSignal: DI(instanceName: USECASE_SEND_ACOUSTIC_SIGNAL),
-      sendVoiceInductor: DI(instanceName: USECASE_SEND_VOICE_INDUCTOR),
-      getCurrentPosition: DI(),
-    ),
-    instanceName: BLOC_BLUE_SEARCH_INFINITE,
   );
 
   // usecase injection area
@@ -126,6 +119,11 @@ Future<void> init() async {
     () => ControlFlashOff(repository: DI()),
     instanceName: USECASE_CONTROL_FLASH_OFF,
   );
+  DI.registerLazySingleton<ControlFlash>(
+    () => ControlFlashOnWithWeather(repository: DI()),
+    instanceName: USECASE_CONTROL_FLASH_ON_WITH_WEATHER,
+  );
+
   DI.registerLazySingleton<SearchCrosswalk>(
     () => Search2FiniteTimes(repository: DI()),
     instanceName: USECASE_SEARCH_CROSSWALK_FINITE,
@@ -146,7 +144,12 @@ Future<void> init() async {
     () => AuthRepositoryImpl(authDataSource: DI()),
   );
   DI.registerLazySingleton<FlashRepository>(
-    () => FlashRepositoryImpl(flashDataSource: DI()),
+    () => FlashRepositoryImpl(
+      flashDataSource: DI(),
+      navDataSource: DI(),
+      validator: DI(),
+      weatherDataSource: DI(),
+    ),
   );
   DI.registerLazySingleton<PermissionRepository>(
     () => PermissionRepositoryImpl(permissionDataSource: DI()),
@@ -157,9 +160,6 @@ Future<void> init() async {
       blueDataSource: DI(),
       navDataSource: DI(),
       crosswalkDataSource: DI(),
-      flashDataSource: DI(),
-      validator: DI(),
-      weatherDataSource: DI(),
     ),
   );
   DI.registerLazySingleton<NavigatorRepository>(

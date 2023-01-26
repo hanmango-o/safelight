@@ -19,6 +19,17 @@ class ControlFlashOn implements ControlFlash {
   }
 }
 
+class ControlFlashOnWithWeather implements ControlFlash {
+  final FlashRepository repository;
+
+  ControlFlashOnWithWeather({required this.repository});
+
+  @override
+  Future<Either<Failure, Void>> call(NoParams params) async {
+    return await repository.turnOnWithWeather();
+  }
+}
+
 class ControlFlashOff implements ControlFlash {
   final FlashRepository repository;
 

@@ -4,5 +4,6 @@ import 'package:safelight/core/usecases/usecase.dart';
 
 abstract class FlashRepository {
   Future<Either<Failure, Void>> turnOn();
+  Future<Either<Failure, Void>> turnOnWithWeather();
   Future<Either<Failure, Void>> turnOff();
 }

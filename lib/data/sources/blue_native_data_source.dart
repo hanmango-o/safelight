@@ -28,7 +28,7 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
 
       while (post.moveNext()) {
         if (post.current.device.name.startsWith('AHG001+') &&
-            post.current.rssi > -65) {
+            post.current.rssi > -85) {
           results.add(post.current);
         }
       }
@@ -41,7 +41,6 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
   @override
   Future<void> connect(Crosswalk crosswalk) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
       await crosswalk.post.connect(autoConnect: false);
     } catch (e) {
       rethrow;

@@ -537,7 +537,8 @@ class _HomeViewState extends State<HomeView> {
                 color: Theme.of(context).colorScheme.onBackground,
               ),
               onTap: () {
-                context
+                this
+                    .context
                     .read<CrosswalkBloc>()
                     .add(SendVoiceInductorEvent(crosswalk: crosswalk));
                 Scrollable.ensureVisible(
@@ -563,8 +564,9 @@ class _HomeViewState extends State<HomeView> {
                 Icons.arrow_forward_ios_rounded,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
-              onTap: () {
-                context
+              onTap: () async {
+                this
+                    .context
                     .read<CrosswalkBloc>()
                     .add(SendAcousticSignalEvent(crosswalk: crosswalk));
                 Scrollable.ensureVisible(
