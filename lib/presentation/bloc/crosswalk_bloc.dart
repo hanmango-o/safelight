@@ -36,6 +36,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
+      DI.get<FlutterTts>().speak('주변 횡단보도를 찾습니다.');
       timer.cancel();
       emit(On());
 
@@ -63,6 +64,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
+      DI.get<FlutterTts>().speak('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
       await controlFlash(NoParams());
       if (event.crosswalk.pos != null) {
@@ -72,6 +74,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
             emit(Done(enableCompass: false));
           },
           (latLng) async {
+            DI.get<FlutterTts>().speak('진동이 울리지 않는 방향으로 보행하세요.');
             emit(Done(enableCompass: true, latLng: latLng));
           },
         );
@@ -99,6 +102,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
+      DI.get<FlutterTts>().speak('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
 
       if (event.crosswalk.pos != null) {
@@ -108,6 +112,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
             emit(Done(enableCompass: false));
           },
           (latLng) async {
+            DI.get<FlutterTts>().speak('진동이 울리지 않는 방향으로 보행하세요.');
             emit(Done(enableCompass: true, latLng: latLng));
           },
         );
