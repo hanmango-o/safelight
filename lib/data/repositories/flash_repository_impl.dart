@@ -46,15 +46,15 @@ class FlashRepositoryImpl implements FlashRepository {
     try {
       final position = await navDataSource.getCurrentLatLng();
       final weather = await weatherDataSource.getCurrentWeather(position);
-      await flashDataSource.on();
       final enable = validator.checkFlashEnabled(weather);
+
       enable.fold(
         (failure) {
           throw ValidateFailure();
         },
-        (enable) {
+        (enable) async {
           if (enable) {
-            flashDataSource.on();
+            await flashDataSource.on();
           }
         },
       );

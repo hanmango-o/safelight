@@ -88,8 +88,8 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
         }
         final results = await sendAcousticSignal(event.crosswalk);
         if (results.isLeft()) {
-          timer.cancel();
           emit(Error(message: '스마트 압버튼 연결 실패'));
+          timer.cancel();
         }
       });
     } catch (e) {
@@ -104,7 +104,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       DI.get<FlutterTts>().speak('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-
+      await controlFlash(NoParams());
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
         results.fold(
@@ -126,8 +126,8 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
         }
         final results = await sendVoiceInductor(event.crosswalk);
         if (results.isLeft()) {
-          timer.cancel();
           emit(Error(message: '스마트 압버튼 연결 실패'));
+          timer.cancel();
         }
       });
     } catch (e) {
