@@ -268,7 +268,7 @@ class _HomeViewState extends State<HomeView> {
                                     .read<CrosswalkBloc>()
                                     .add(SearchFiniteCrosswalkEvent());
                               }).timeout(
-                                const Duration(minutes: 3),
+                                const Duration(seconds: 100),
                                 onTimeout: () {
                                   Navigator.pop(this.context);
                                 },
