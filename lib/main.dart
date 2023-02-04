@@ -13,7 +13,7 @@ import 'package:safelight/presentation/cubit/location_permission_cubit.dart';
 import 'package:safelight/presentation/views/main_view.dart';
 import 'package:safelight/presentation/views/sign_in_view.dart';
 import 'package:safelight/initializer.dart' as initializer;
-// v1.2.3(ios), v1.1.2(android) | 한영찬(hanmango-o) | hanmango.o@gmail.com
+// v1.3.0(ios), v1.1.2(android) | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
