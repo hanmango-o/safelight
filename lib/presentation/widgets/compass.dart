@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/images.dart';
+import 'package:safelight/core/utils/assets.dart';
 import 'package:safelight/core/utils/themes.dart';
 
 class Compass extends StatefulWidget {
@@ -89,7 +90,7 @@ class _CompassFrameState extends State<Compass> {
           widget.pos.longitude,
         );
 
-        if ((direction - bearing).abs() > 10) {
+        if ((direction - bearing).abs() > 17) {
           HapticFeedback.vibrate();
         }
 

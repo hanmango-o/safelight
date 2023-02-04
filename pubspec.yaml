@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  get: ^4.6.5
   http: ^0.13.5
   flutter_local_notifications: ^13.0.0
   flutter_screenutil: ^5.5.4
@@ -36,6 +35,8 @@ dependencies:
   get_it: ^7.2.0
   bloc: ^8.1.0
   flutter_tts: ^3.6.3
+  carousel_slider: ^4.2.1
+  lottie: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,7 @@ flutter:
   assets:
     - lib/assets/images/
     - lib/assets/images/ic/
+    - lib/assets/jsons/lotties/
 
 flutter_native_splash:
   color: "#758BFD"

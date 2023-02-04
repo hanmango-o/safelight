@@ -19,7 +19,7 @@ class Crosswalk extends Equatable {
   });
 
   @override
-  List<Object?> get props => [name, post, type, dir, pos];
+  List<Object?> get props => [name];
 
   @override
   String toString() {

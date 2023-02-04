@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:safelight/core/usecases/usecase.dart';
 import 'package:safelight/core/utils/enums.dart';
-import 'package:safelight/core/utils/images.dart';
+import 'package:safelight/core/utils/assets.dart';
 import 'package:safelight/core/utils/themes.dart';
 import 'package:safelight/domain/entities/crosswalk.dart';
 import 'package:safelight/domain/usecases/service_usecase.dart';
@@ -34,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    context.read<CrosswalkBloc>().add(SearchFiniteCrosswalkEvent());
+    context.read<CrosswalkBloc>().add(SearchInfiniteCrosswalkEvent());
   }
 
   @override
@@ -51,6 +53,17 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         actions: [
+          Semantics(
+            label: '자동 스캔 켜기',
+            child: IconButton(
+              onPressed: () {
+                context
+                    .read<CrosswalkBloc>()
+                    .add(SearchInfiniteCrosswalkEvent());
+              },
+              icon: const Icon(Icons.refresh),
+            ),
+          ),
           Semantics(
             label: '안전 경광등 페이지 이동',
             child: IconButton(
@@ -79,110 +92,127 @@ class _HomeViewState extends State<HomeView> {
                 child: BlocBuilder<CrosswalkBloc, CrosswalkState>(
                   builder: (_, state) {
                     if (state is On) {
-                      return Shimmer.fromColors(
-                        baseColor: Theme.of(context)
-                            .colorScheme
-                            .onBackground
-                            .withAlpha(80),
-                        highlightColor: Theme.of(context)
-                            .colorScheme
-                            .onBackground
-                            .withAlpha(120),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (_, __) => Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: SizeTheme.h_lg,
-                              vertical: SizeTheme.w_sm,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    left: SizeTheme.w_sm,
-                                  ),
+                      if (state.infinite) {
+                        return resultBody(
+                          context: context,
+                          title: '자동으로 내 주변 횡단보도에 연결중입니다.',
+                          chip: Align(
+                            alignment: Alignment.topLeft,
+                            child: Chip(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              avatar: Padding(
+                                padding: EdgeInsets.all(2),
+                                child: CupertinoActivityIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                                Container(
-                                  width: 62.w,
-                                  height: 62.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(SizeTheme.r_sm),
+                              ),
+                              label: Text(
+                                '자동 스캔',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .apply(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: 230.w,
-                                      height: 16.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(SizeTheme.r_sm),
-                                        ),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 5.h),
-                                    ),
-                                    Container(
-                                      width: 143.w,
-                                      height: 16.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(SizeTheme.r_sm),
-                                        ),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                              ),
                             ),
                           ),
-                          itemCount: 3,
-                        ),
-                      );
+                          image: Semantics(
+                            label: '자동 스캔 이미지',
+                            child: Lottie.asset(
+                              Gif.LOTTIE_SEARCH,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Shimmer.fromColors(
+                          baseColor: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withAlpha(80),
+                          highlightColor: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withAlpha(120),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemBuilder: (_, __) => Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: SizeTheme.h_lg,
+                                vertical: SizeTheme.w_sm,
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: SizeTheme.w_sm,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 62.w,
+                                    height: 62.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(SizeTheme.r_sm),
+                                      ),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        width: 230.w,
+                                        height: 16.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(SizeTheme.r_sm),
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5.h),
+                                      ),
+                                      Container(
+                                        width: 143.w,
+                                        height: 16.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(SizeTheme.r_sm),
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            itemCount: 3,
+                          ),
+                        );
+                      }
                     } else if (state is Off) {
                       if (state.results.isEmpty) {
-                        return Container(
-                          padding: EdgeInsets.all(
-                            SizeTheme.h_lg,
-                          ),
-                          margin: EdgeInsets.only(
-                            left: SizeTheme.w_md,
-                            right: SizeTheme.w_md,
-                            bottom: SizeTheme.w_md,
-                          ),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondary,
-                            borderRadius: BorderRadius.circular(
-                              SizeTheme.r_sm,
+                        return resultBody(
+                          context: context,
+                          title: '주변에 스마트 압버튼이 없어요',
+                          image: Semantics(
+                            label: '압버튼 없음',
+                            child: Lottie.asset(
+                              Gif.LOTTIE_EMPTY,
+                              fit: BoxFit.fill,
+                              repeat: false,
                             ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                width: 130.w,
-                                image: AssetImage(Images.Error),
-                                semanticLabel: '압버튼 없음',
-                              ),
-                              SizedBox(height: 26.h),
-                              Text(
-                                '주변에 블루투스 압버튼이 없어요',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ],
                           ),
                         );
                       } else {
@@ -203,122 +233,136 @@ class _HomeViewState extends State<HomeView> {
                                   SizeTheme.r_sm,
                                 ),
                               ),
-                              onTap: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondary
-                                    .withAlpha(100),
-                                context: context,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background,
-                                isDismissible: false,
-                                builder: (BuildContext context) {
-                                  return SizedBox(
-                                    height: 700.h,
-                                    child: Board(
-                                      title: '안전 리모콘',
-                                      headerPadding: EdgeInsets.all(
-                                        SizeTheme.w_md,
-                                      ),
-                                      titleStyle: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                      trailing: TextButton(
-                                        child: ConstrainedBox(
-                                          constraints:
-                                              BoxConstraints(maxWidth: 50.w),
-                                          child: const FittedBox(
-                                              child: Text('닫기')),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  barrierColor: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondary
+                                      .withAlpha(100),
+                                  context: context,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  isDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 700.h,
+                                      child: Board(
+                                        title: '안전 리모콘',
+                                        headerPadding: EdgeInsets.all(
+                                          SizeTheme.w_md,
                                         ),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      body: Expanded(
-                                        child: SizedBox(
-                                          height: 600.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: ListView(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            children: <Widget>[
-                                              _renderSelectedMode(
-                                                context,
-                                                state.results[index],
-                                                index,
-                                              ),
-                                              _renderAfterModeSelected(
-                                                context,
-                                                state.results[index],
-                                                index,
-                                              ),
-                                            ],
+                                        titleStyle: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                        trailing: TextButton(
+                                          child: ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 50.w),
+                                            child: const FittedBox(
+                                                child: Text('닫기')),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                        body: Expanded(
+                                          child: SizedBox(
+                                            height: 600.h,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: ListView(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              children: <Widget>[
+                                                _renderSelectedMode(
+                                                  context,
+                                                  state.results[index],
+                                                  index,
+                                                ),
+                                                _renderAfterModeSelected(
+                                                  context,
+                                                  state.results[index],
+                                                  index,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ).whenComplete(() async {
-                                flashOff(NoParams());
+                                    );
+                                  },
+                                ).whenComplete(() async {
+                                  flashOff(NoParams());
 
-                                this
-                                    .context
-                                    .read<CrosswalkBloc>()
-                                    .add(SearchFiniteCrosswalkEvent());
-                              }).timeout(
-                                const Duration(seconds: 100),
-                                onTimeout: () {
-                                  Navigator.pop(this.context);
-                                },
-                              ),
-                              leading: SingleChildRoundedCard(
-                                child: Image(
-                                  width: 42.w,
-                                  height: 42.w,
-                                  image: AssetImage(
-                                    state.results[index].type ==
-                                            ECrosswalk.SINGLE_ROAD
-                                        ? Images.TrafficSingle
-                                        : state.results[index].type ==
-                                                ECrosswalk.INTERSECTION
-                                            ? Images.TrafficCross
-                                            : Images.TrafficYellow,
-                                  ),
-                                ),
-                              ),
-                              title: RichText(
-                                text: TextSpan(
-                                  text: state.results[index].type ==
-                                          ECrosswalk.SINGLE_ROAD
-                                      ? '단일 신호등 지역'
-                                      : state.results[index].type ==
-                                              ECrosswalk.INTERSECTION
-                                          ? '교차로 지역'
-                                          : '점멸 신호등 지역',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .apply(
-                                        color: state.results[index].type ==
+                                  this
+                                      .context
+                                      .read<CrosswalkBloc>()
+                                      .add(SearchFiniteCrosswalkEvent());
+                                }).timeout(
+                                  const Duration(minutes: 3),
+                                  onTimeout: () {
+                                    Navigator.pop(this.context);
+                                  },
+                                );
+                              },
+                              leading: state.results[index].type ==
+                                      ECrosswalk.UNKNOWN
+                                  ? null
+                                  : SingleChildRoundedCard(
+                                      child: Image(
+                                        width: 42.w,
+                                        height: 42.w,
+                                        image: AssetImage(
+                                          state.results[index].type ==
+                                                  ECrosswalk.SINGLE_ROAD
+                                              ? Images.TrafficSingle
+                                              : state.results[index].type ==
+                                                      ECrosswalk.INTERSECTION
+                                                  ? Images.TrafficCross
+                                                  : Images.TrafficYellow,
+                                        ),
+                                      ),
+                                    ),
+                              title: state.results[index].type ==
+                                      ECrosswalk.UNKNOWN
+                                  ? null
+                                  : RichText(
+                                      text: TextSpan(
+                                        text: state.results[index].type ==
                                                 ECrosswalk.SINGLE_ROAD
-                                            ? ColorTheme.highlight3
+                                            ? '단일 신호등 지역'
                                             : state.results[index].type ==
                                                     ECrosswalk.INTERSECTION
-                                                ? ColorTheme.highlight2
-                                                : ColorTheme.highlight1,
+                                                ? '교차로 지역'
+                                                : '점멸 신호등 지역',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .apply(
+                                              color: state.results[index]
+                                                          .type ==
+                                                      ECrosswalk.SINGLE_ROAD
+                                                  ? ColorTheme.highlight3
+                                                  : state.results[index].type ==
+                                                          ECrosswalk
+                                                              .INTERSECTION
+                                                      ? ColorTheme.highlight2
+                                                      : ColorTheme.highlight1,
+                                            ),
+                                        children: [
+                                          const TextSpan(text: ' '),
+                                          TextSpan(
+                                            text:
+                                                state.results[index].dir ?? '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ],
                                       ),
-                                  children: [
-                                    const TextSpan(text: ' '),
-                                    TextSpan(
-                                      text: state.results[index].dir ?? '',
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
                                     ),
-                                  ],
-                                ),
-                              ),
                               subtitle: Text(
                                 state.results[index].name,
                                 style:
@@ -332,37 +376,15 @@ class _HomeViewState extends State<HomeView> {
                         );
                       }
                     } else if (state is Error) {
-                      return Container(
-                        padding: EdgeInsets.all(
-                          SizeTheme.h_lg,
-                        ),
-                        margin: EdgeInsets.only(
-                          left: SizeTheme.w_md,
-                          right: SizeTheme.w_md,
-                          bottom: SizeTheme.w_md,
-                        ),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius: BorderRadius.circular(
-                            SizeTheme.r_sm,
+                      return resultBody(
+                        context: context,
+                        title: state.message,
+                        image: Semantics(
+                          label: '에러 이미지',
+                          child: Lottie.asset(
+                            Gif.LOTTIE_STOP_SIGN,
+                            fit: BoxFit.fill,
                           ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline_outlined,
-                              size: 150.h,
-                              color: ColorTheme.highlight4,
-                              semanticLabel: '경고 아이콘',
-                            ),
-                            SizedBox(height: 26.h),
-                            Text(
-                              state.message,
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ],
                         ),
                       );
                     } else {
@@ -376,9 +398,10 @@ class _HomeViewState extends State<HomeView> {
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(),
-              minimumSize: Size(double.maxFinite, 80.h),
+              minimumSize: Size(double.maxFinite, 90.h),
+              maximumSize: Size(double.maxFinite, 90.h),
             ),
-            onPressed: () async {
+            onPressed: () {
               context.read<CrosswalkBloc>().add(SearchFiniteCrosswalkEvent());
             },
             icon: BlocBuilder<CrosswalkBloc, CrosswalkState>(
@@ -392,12 +415,72 @@ class _HomeViewState extends State<HomeView> {
                 }
               },
             ),
-            label: Text(
-              '횡단보도 압버튼 찾기',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .apply(color: Theme.of(context).colorScheme.onPrimary),
+            label: FittedBox(
+              child: Text(
+                '횡단보도 압버튼 찾기',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .apply(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container resultBody({
+    required BuildContext context,
+    required String title,
+    required Widget image,
+    Widget? chip,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: SizeTheme.w_md,
+        right: SizeTheme.w_md,
+        bottom: SizeTheme.w_md,
+      ),
+      padding: EdgeInsets.all(SizeTheme.w_sm),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: BorderRadius.circular(
+          SizeTheme.r_sm,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          chip ?? const SizedBox(),
+          Flexible(
+            child: FittedBox(
+              child: image,
+            ),
+          ),
+          Container(
+            constraints: BoxConstraints(maxHeight: 70.h),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+              borderRadius: BorderRadius.circular(
+                SizeTheme.r_sm,
+              ),
+            ),
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              vertical: SizeTheme.h_md,
+            ),
+            child: Center(
+              child: FittedBox(
+                child: Text(
+                  title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .apply(color: Theme.of(context).colorScheme.onSecondary),
+                ),
+              ),
             ),
           ),
         ],

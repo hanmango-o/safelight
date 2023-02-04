@@ -6,6 +6,7 @@ class Board extends StatelessWidget {
   final String title;
   final Widget body;
   final Color? backgroundColor;
+  final Color? headerColor;
   final EdgeInsets? padding;
   final EdgeInsets? headerPadding;
   final Widget? trailing;
@@ -22,6 +23,7 @@ class Board extends StatelessWidget {
     this.trailing,
     this.titleStyle,
     this.height,
+    this.headerColor,
   }) : super(key: key);
 
   @override
@@ -36,7 +38,7 @@ class Board extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: Theme.of(context).colorScheme.background,
+              color: headerColor ?? Theme.of(context).colorScheme.background,
               child: Padding(
                 padding: headerPadding ??
                     EdgeInsets.symmetric(
@@ -47,17 +49,20 @@ class Board extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 180.w),
+                      constraints: BoxConstraints(
+                        maxWidth: trailing == null ? double.infinity : 180.w,
+                      ),
                       child: FittedBox(
                         child: Text(
                           title,
                           style: titleStyle ??
                               Theme.of(context).textTheme.labelLarge,
+                          textScaleFactor: 1,
                         ),
                       ),
                     ),
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 60.w),
+                      constraints: const BoxConstraints(maxWidth: 60),
                       child: trailing ?? FittedBox(child: trailing),
                     ),
                   ],

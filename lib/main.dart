@@ -56,6 +56,7 @@ class SafeLight extends StatelessWidget {
               ),
             ],
             child: MaterialApp(
+              // showSemanticsDebugger: true,
               debugShowCheckedModeBanner: false,
               darkTheme: SystemTheme.systemMode(ColorTheme.dark),
               themeMode: ThemeMode.values.byName(mode ?? ThemeMode.system.name),

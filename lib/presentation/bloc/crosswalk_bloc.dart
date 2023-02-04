@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:safelight/core/errors/failures.dart';
 import 'package:safelight/core/usecases/usecase.dart';
+import 'package:safelight/core/utils/tts.dart';
+import 'package:safelight/domain/entities/crosswalk.dart';
 import 'package:safelight/domain/usecases/crosswalk_usecase.dart';
 import 'package:safelight/domain/usecases/nav_usecase.dart';
 import 'package:safelight/domain/usecases/service_usecase.dart';
@@ -13,22 +15,38 @@ import 'package:safelight/presentation/bloc/crosswalk_state.dart';
 
 class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   static Timer timer = Timer(Duration.zero, () {});
-  final SearchCrosswalk searchCrosswalk;
+  final tts = DI.get<TTS>();
+  final SearchCrosswalk search2FiniteTimes;
+  final SearchCrosswalk search2InfiniteTimes;
   final ConnectCrosswalk sendAcousticSignal;
   final ConnectCrosswalk sendVoiceInductor;
   final GetCurrentPosition getCurrentPosition;
   final ControlFlash controlFlash;
 
   CrosswalkBloc({
-    required this.searchCrosswalk,
+    required this.search2FiniteTimes,
+    required this.search2InfiniteTimes,
     required this.sendAcousticSignal,
     required this.sendVoiceInductor,
     required this.getCurrentPosition,
     required this.controlFlash,
   }) : super(Off(results: const [])) {
     on<SearchFiniteCrosswalkEvent>(_searchFiniteCrosswalkEvent);
+    on<SearchInfiniteCrosswalkEvent>(_searchInfiniteCrosswalkEvent);
     on<SendAcousticSignalEvent>(_sendAcousticSignalEvent);
     on<SendVoiceInductorEvent>(_sendVoiceInductorEvent);
+  }
+
+  Future _searchInfiniteCrosswalkEvent(
+    SearchInfiniteCrosswalkEvent event,
+    Emitter<CrosswalkState> emit,
+  ) async {
+    tts('자동 스캔이 시작됩니다.');
+    timer.cancel();
+    emit(On(infinite: true));
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      await search2InfiniteTimes(NoParams());
+    });
   }
 
   Future _searchFiniteCrosswalkEvent(
@@ -36,11 +54,11 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
-      DI.get<FlutterTts>().speak('주변 횡단보도를 찾습니다.');
       timer.cancel();
       emit(On());
 
-      final results = await searchCrosswalk(NoParams());
+      final results = await search2FiniteTimes(NoParams());
+
       results.fold(
         (failure) {
           if (failure is BlueFailure) {
@@ -50,7 +68,8 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
           }
         },
         (results) {
-          DI.get<FlutterTts>().speak('${results.length} 개의 스마트 압버튼을 찾았습니다.');
+          results = results as List<Crosswalk>;
+          tts('${results.length} 개의 스마트 압버튼을 찾았습니다.');
           emit(Off(results: results));
         },
       );
@@ -64,8 +83,9 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
-      DI.get<FlutterTts>().speak('${event.crosswalk.name}에 연결합니다.');
+      tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
+      // Block
       await controlFlash(NoParams());
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
@@ -74,7 +94,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
             emit(Done(enableCompass: false));
           },
           (latLng) async {
-            DI.get<FlutterTts>().speak('진동이 울리지 않는 방향으로 보행하세요.');
+            tts('진동이 울리지 않는 방향으로 보행하세요.');
             emit(Done(enableCompass: true, latLng: latLng));
           },
         );
@@ -83,9 +103,6 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
       }
 
       timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (timer.tick == 10) {
-          timer.cancel();
-        }
         final results = await sendAcousticSignal(event.crosswalk);
         if (results.isLeft()) {
           emit(Error(message: '스마트 압버튼 연결 실패'));
@@ -102,7 +119,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
-      DI.get<FlutterTts>().speak('${event.crosswalk.name}에 연결합니다.');
+      tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
       await controlFlash(NoParams());
       if (event.crosswalk.pos != null) {
@@ -112,7 +129,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
             emit(Done(enableCompass: false));
           },
           (latLng) async {
-            DI.get<FlutterTts>().speak('진동이 울리지 않는 방향으로 보행하세요.');
+            tts('진동이 울리지 않는 방향으로 보행하세요.');
             emit(Done(enableCompass: true, latLng: latLng));
           },
         );
@@ -121,9 +138,6 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
       }
 
       timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (timer.tick == 10) {
-          timer.cancel();
-        }
         final results = await sendVoiceInductor(event.crosswalk);
         if (results.isLeft()) {
           emit(Error(message: '스마트 압버튼 연결 실패'));

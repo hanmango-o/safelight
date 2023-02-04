@@ -7,6 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:safelight/core/utils/tts.dart';
 import 'package:safelight/core/utils/validators.dart';
 import 'package:safelight/data/repositories/auth_repository_impl.dart';
 import 'package:safelight/data/repositories/crosswalk_repository_impl.dart';
@@ -78,7 +79,8 @@ Future<void> init() async {
 
   DI.registerFactory(
     () => CrosswalkBloc(
-      searchCrosswalk: DI(instanceName: USECASE_SEARCH_CROSSWALK_FINITE),
+      search2FiniteTimes: DI(instanceName: USECASE_SEARCH_CROSSWALK_FINITE),
+      search2InfiniteTimes: DI(instanceName: USECASE_SEARCH_CROSSWALK_INFINITE),
       sendAcousticSignal: DI(instanceName: USECASE_SEND_ACOUSTIC_SIGNAL),
       sendVoiceInductor: DI(instanceName: USECASE_SEND_VOICE_INDUCTOR),
       getCurrentPosition: DI(),
@@ -210,4 +212,6 @@ Future<void> init() async {
   DI.registerLazySingleton(() => tts);
 
   DI.registerLazySingleton<WeatherValidator>(() => WeatherValidator());
+
+  DI.registerLazySingleton<TTS>(() => TTS(tts: DI()));
 }

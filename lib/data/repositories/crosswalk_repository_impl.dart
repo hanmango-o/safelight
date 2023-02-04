@@ -1,3 +1,4 @@
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:safelight/core/errors/exceptions.dart';
 import 'package:safelight/core/usecases/usecase.dart';
 import 'package:safelight/data/sources/blue_native_data_source.dart';
@@ -43,10 +44,23 @@ class CrosswalkRepositoryImpl implements CrosswalkRepository {
     List<int> command,
   ) async {
     try {
-      await blueDataSource.send(crosswalk, command);
+      await blueDataSource.send(crosswalk.post, command: command);
       return Right(Void());
     } on BlueException {
       return Left(BlueFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, Void>> getCrosswalkInfiniteTimes() async {
+    try {
+      final blueResults = await blueDataSource.scan();
+      for (ScanResult result in blueResults) {
+        await blueDataSource.send(result.device);
+      }
+    } on BlueException {
+      return Left(BlueFailure());
+    }
+    return Right(Void());
   }
 }

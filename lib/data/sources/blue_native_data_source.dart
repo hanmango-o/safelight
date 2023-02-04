@@ -6,8 +6,11 @@ import 'package:safelight/domain/entities/crosswalk.dart';
 
 abstract class BlueNativeDataSource {
   Future<List<ScanResult>> scan();
-  Future<void> connect(Crosswalk crosswalk);
-  Future<void> send(Crosswalk crosswalk, List<int> command);
+  Future<void> connect(BluetoothDevice post);
+  Future<void> send(
+    BluetoothDevice post, {
+    List<int> command = const [0x31, 0x00, 0x02],
+  });
 }
 
 class BlueNativeDataSourceImpl implements BlueNativeDataSource {
@@ -32,6 +35,9 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
           results.add(post.current);
         }
       }
+
+      results.sort((a, b) => b.rssi.compareTo(a.rssi));
+
       return results;
     } catch (e) {
       throw BlueException();
@@ -39,19 +45,22 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
   }
 
   @override
-  Future<void> connect(Crosswalk crosswalk) async {
+  Future<void> connect(BluetoothDevice post) async {
     try {
-      await crosswalk.post.connect(autoConnect: false);
+      await post.connect(autoConnect: false);
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> send(Crosswalk crosswalk, List<int> command) async {
+  Future<void> send(
+    BluetoothDevice post, {
+    List<int> command = const [0x31, 0x00, 0x02],
+  }) async {
     try {
-      await connect(crosswalk);
-      List<BluetoothService> services = await crosswalk.post.discoverServices();
+      await connect(post);
+      List<BluetoothService> services = await post.discoverServices();
       await services
           .firstWhere(
             (service) =>
@@ -64,9 +73,9 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
                 Guid('0003cdd2-0000-1000-8000-00805f9b0131'),
           )
           .write(command, withoutResponse: true);
-      await crosswalk.post.disconnect();
+      await post.disconnect();
     } catch (e) {
-      await crosswalk.post.disconnect();
+      await post.disconnect();
       throw BlueException();
     }
   }

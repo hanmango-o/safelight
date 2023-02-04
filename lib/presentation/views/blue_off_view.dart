@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:safelight/core/utils/images.dart';
+import 'package:lottie/lottie.dart';
+import 'package:safelight/core/utils/assets.dart';
 import 'package:safelight/core/utils/themes.dart';
 import 'package:safelight/injection.dart';
 
@@ -47,31 +48,39 @@ class _BlueOffViewState extends State<BlueOffView> {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                children: [
-                  Image(
-                    width: 220.w,
-                    image: AssetImage(Images.BusStop),
-                    semanticLabel: '블루투스 상태 화면 배경',
+            children: [
+              SizedBox(height: SizeTheme.h_lg),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: SizeTheme.h_lg),
+                margin: EdgeInsets.all(SizeTheme.w_md),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(SizeTheme.r_sm),
                   ),
-                  SizedBox(height: SizeTheme.h_lg),
-                  Container(
-                    width: double.infinity,
-                    color: const Color.fromARGB(29, 0, 0, 0),
-                    padding: EdgeInsets.symmetric(vertical: SizeTheme.h_lg),
-                    child: Center(
-                      child: Text(
-                        'SafeLight는 블루투스를 켜야 사용할 수 있습니다.',
-                        semanticsLabel:
-                            'SafeLight는 블루투스를 켜야 사용할 수 있습니다. 블루투스를 켜주세요.',
-                        style: Theme.of(context).textTheme.labelLarge!.apply(
-                            color: Theme.of(context).colorScheme.onPrimary),
-                      ),
-                    ),
+                  color: const Color.fromARGB(29, 0, 0, 0),
+                ),
+                child: Center(
+                  child: Text(
+                    'SafeLight는 블루투스를 켜야 사용할 수 있습니다.',
+                    semanticsLabel:
+                        'SafeLight는 블루투스를 켜야 사용할 수 있습니다. 블루투스를 켜주세요.',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge!
+                        .apply(color: Theme.of(context).colorScheme.onPrimary),
                   ),
-                ],
+                ),
+              ),
+              SizedBox(height: SizeTheme.h_lg),
+              Flexible(
+                child: Semantics(
+                  label: '블루투스 상태 화면 배경',
+                  child: Lottie.asset(
+                    Gif.LOTTIE_CHECK_BLUE,
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
             ],
           ),

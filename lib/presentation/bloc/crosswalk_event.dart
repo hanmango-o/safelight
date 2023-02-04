@@ -8,6 +8,8 @@ abstract class CrosswalkEvent extends Equatable {
 
 class SearchFiniteCrosswalkEvent extends CrosswalkEvent {}
 
+class SearchInfiniteCrosswalkEvent extends CrosswalkEvent {}
+
 class SendAcousticSignalEvent extends CrosswalkEvent {
   final Crosswalk crosswalk;
 

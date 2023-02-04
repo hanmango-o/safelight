@@ -28,6 +28,8 @@ class FlashNativeDataSourceImpl implements FlashNativeDataSource {
         await Future.delayed(const Duration(milliseconds: 1000));
         await TorchLight.disableTorch();
       });
+    } on FlashException {
+      throw FlashException();
     } catch (e) {
       throw FlashException();
     }
@@ -39,7 +41,7 @@ class FlashNativeDataSourceImpl implements FlashNativeDataSource {
       timer.cancel();
       await TorchLight.disableTorch();
     } catch (e) {
-      rethrow;
+      throw FlashException();
     }
   }
 }

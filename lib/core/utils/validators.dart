@@ -10,7 +10,7 @@ class WeatherValidator implements Validator {
       int unixTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       if (!(unixTimestamp >= weather.sunrise &&
               unixTimestamp <= weather.sunset) ||
-          (weather.visibility < 500 || weather.clouds > 50)) {
+          (weather.visibility < 500)) {
         return const Right(true);
       }
       return const Right(false);

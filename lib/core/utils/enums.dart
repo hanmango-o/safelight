@@ -34,6 +34,14 @@ enum ECrosswalk {
   ///
   /// [FLASH_CROSSING]은 [ECrosswalk]에서 2번 인덱스에 위치한다.
   FLASH_CROSSING,
+
+  /// [UNKNOWN]은 알 수 없는 지역을 의미한다.
+  ///
+  /// 알 수 없는 지역이란, [SINGLE_ROAD], [INTERSECTION], [FLASH_CROSSING] 중 하나로 확인할 수 없는 지역을 의미한다.
+  /// 주로, Firebase DB를 통해 확인할 수 없는 지역이 이에 해당한다.
+  ///
+  /// [UNKNOWN]은 [ECrosswalk]에서 마지막 인덱스에 위치한다.
+  UNKNOWN,
 }
 
 /// [EBlueState]는 블루투스 통신 상태를 나타내는 [Enum]이다.

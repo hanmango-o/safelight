@@ -6,7 +6,7 @@ import 'package:safelight/domain/repositories/flash_repository.dart';
 abstract class ServiceUseCase {}
 
 abstract class ControlFlash extends ServiceUseCase
-    implements UseCase<void, NoParams> {}
+    implements UseCase<Void, NoParams> {}
 
 class ControlFlashOn implements ControlFlash {
   final FlashRepository repository;

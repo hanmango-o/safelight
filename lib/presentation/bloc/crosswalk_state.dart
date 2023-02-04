@@ -9,7 +9,14 @@ abstract class CrosswalkState extends Equatable {
   List<Object?> get props => [];
 }
 
-class On extends CrosswalkState {}
+class On extends CrosswalkState {
+  final bool infinite;
+
+  On({this.infinite = false});
+
+  @override
+  List<Object?> get props => [infinite];
+}
 
 class Off extends CrosswalkState {
   final List<Crosswalk> results;

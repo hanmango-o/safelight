@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:safelight/core/usecases/usecase.dart';
 import 'package:safelight/core/utils/themes.dart';
+import 'package:safelight/core/utils/tts.dart';
 import 'package:safelight/domain/usecases/service_usecase.dart';
+import 'package:safelight/injection.dart';
 
 class FlashlightView extends StatefulWidget {
   final ControlFlash flashOn;
@@ -19,6 +20,8 @@ class FlashlightView extends StatefulWidget {
 }
 
 class _FlashlightViewState extends State<FlashlightView> {
+  final tts = DI.get<TTS>();
+
   @override
   void dispose() {
     super.dispose();
@@ -44,7 +47,12 @@ class _FlashlightViewState extends State<FlashlightView> {
                 onPressed: () async {
                   final result = await widget.flashOn(NoParams());
                   if (result.isLeft()) {
-                    Get.snackbar('안전 경광등을 사용할 수 없습니다.', '다시 시도해주세요.');
+                    tts('안전 경광등을 사용할 수 없습니다.');
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('안전 경광등을 사용할 수 없습니다.'),
+                    ));
+                  } else {
+                    tts('안전 경광등이 켜졌습니다.');
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -65,7 +73,12 @@ class _FlashlightViewState extends State<FlashlightView> {
                 onPressed: () async {
                   final result = await widget.flashOff(NoParams());
                   if (result.isLeft()) {
-                    Get.snackbar('안전 경광등을 사용할 수 없습니다.', '다시 시도해주세요.');
+                    tts('안전 경광등을 사용할 수 없습니다.');
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('안전 경광등을 사용할 수 없습니다.'),
+                    ));
+                  } else {
+                    tts('안전 경광등이 꺼졌습니다.');
                   }
                 },
                 style: ElevatedButton.styleFrom(

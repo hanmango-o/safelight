@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:latlong2/latlong.dart';
@@ -35,7 +37,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
     } else if (meter1 < meter2) {
       return {'pos': pos2, 'dir': geo2['dir']};
     }
-    throw ServerException();
+    return {'pos': null, 'dir': null};
   }
 
   @override
@@ -44,6 +46,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
     LatLng position,
   ) async {
     try {
+      Set<CrosswalkModel> temps = {};
       List<CrosswalkModel> results = [];
 
       Iterator<ScanResult> post = lists.iterator;
@@ -59,6 +62,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
 
       while (post.moveNext()) {
         bool isFind = false;
+
         for (var map in CrosswalkAPI.map) {
           if (map.containsValue(post.current.device.name)) {
             var geo1 = map['pos'][0];
@@ -69,8 +73,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
               geo2,
               position,
             );
-            results.insert(
-              0,
+            temps.add(
               CrosswalkModel.fromMap({
                 'name': map['name'],
                 'post': post.current.device,
@@ -90,12 +93,13 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
           CrosswalkModel.fromMap({
             'name': '횡단보도',
             'post': post.current.device,
-            'type': ECrosswalk.SINGLE_ROAD,
+            'type': ECrosswalk.UNKNOWN,
             'dir': null,
             'pos': null,
           }),
         );
       }
+      results.insertAll(0, temps.toList());
       return results;
     } catch (e) {
       throw ServerException();

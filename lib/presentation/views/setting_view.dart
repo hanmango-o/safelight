@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,6 +13,7 @@ import 'package:safelight/injection.dart';
 import 'package:safelight/presentation/bloc/auth_bloc.dart';
 import 'package:safelight/presentation/cubit/bluetooth_permission_cubit.dart';
 import 'package:safelight/presentation/cubit/location_permission_cubit.dart';
+import 'package:safelight/presentation/views/dutorial_view.dart';
 import 'package:safelight/presentation/widgets/flat_card.dart';
 import 'package:safelight/presentation/widgets/single_child_rounded_card.dart';
 import 'package:safelight/presentation/widgets/board.dart';
@@ -99,74 +101,57 @@ class _SettingViewState extends State<SettingView> {
               title: '앱 내 권한',
               body: Column(
                 children: [
-                  Semantics(
-                    label: '블루투스 권한 제어 버튼',
-                    child: ListTile(
-                      onTap: () async {
-                        await context
-                            .read<BluetoothPermissionCubit>()
-                            .setPermissionStatus();
-                        await context
-                            .read<BluetoothPermissionCubit>()
-                            .getPermissionStatus();
-                      },
-                      leading: const Icon(
-                        Icons.bluetooth,
-                        color: ColorTheme.highlight3,
-                      ),
-                      title: const Text(
-                        '블루투스 허용',
-                        semanticsLabel: '',
-                      ),
-                      trailing: Semantics(
-                        child: BlocBuilder<BluetoothPermissionCubit, bool>(
-                          builder: (_, state) {
-                            return CupertinoSwitch(
-                              value: state,
-                              thumbColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              trackColor: Theme.of(context)
-                                  .colorScheme
-                                  .onBackground
-                                  .withOpacity(0.28),
-                              activeColor:
-                                  Theme.of(context).colorScheme.primary,
-                              onChanged: (bool? value) async {
-                                await context
-                                    .read<BluetoothPermissionCubit>()
-                                    .setPermissionStatus();
-                                await context
-                                    .read<BluetoothPermissionCubit>()
-                                    .getPermissionStatus();
-                              },
-                            );
+                  BlocBuilder<BluetoothPermissionCubit, bool>(
+                    builder: (_, state) {
+                      return Semantics.fromProperties(
+                        properties: SemanticsProperties(
+                          checked: state,
+                        ),
+                        child: ListTile(
+                          onTap: () async {
+                            await context
+                                .read<BluetoothPermissionCubit>()
+                                .setPermissionStatus();
+                            await context
+                                .read<BluetoothPermissionCubit>()
+                                .getPermissionStatus();
                           },
+                          leading: const Icon(
+                            Icons.bluetooth,
+                            color: ColorTheme.highlight3,
+                          ),
+                          title: const Text(
+                            '블루투스 권한',
+                          ),
+                          trailing: CupertinoSwitch(
+                            value: state,
+                            thumbColor: Theme.of(context).colorScheme.secondary,
+                            trackColor: Theme.of(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.28),
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            onChanged: (bool? value) async {
+                              await context
+                                  .read<BluetoothPermissionCubit>()
+                                  .setPermissionStatus();
+                              await context
+                                  .read<BluetoothPermissionCubit>()
+                                  .getPermissionStatus();
+                            },
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                  Semantics(
-                    label: '사용자 위치 정보 권한 제어 버튼',
-                    child: BlocBuilder<LocationPermissionCubit, bool>(
-                        builder: (_, state) {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.gps_fixed_rounded,
-                          color: ColorTheme.highlight4,
+                  BlocBuilder<LocationPermissionCubit, bool>(
+                    builder: (_, state) {
+                      return Semantics.fromProperties(
+                        properties: SemanticsProperties(
+                          checked: state,
                         ),
-                        title: const Text(
-                          '사용자 위치 정보 허용',
-                          semanticsLabel: '',
-                        ),
-                        trailing: CupertinoSwitch(
-                          value: state,
-                          thumbColor: Theme.of(context).colorScheme.secondary,
-                          trackColor: Theme.of(context)
-                              .colorScheme
-                              .onBackground
-                              .withOpacity(0.28),
-                          activeColor: Theme.of(context).colorScheme.primary,
-                          onChanged: (bool? value) async {
+                        child: ListTile(
+                          onTap: () async {
                             await context
                                 .read<LocationPermissionCubit>()
                                 .setPermissionStatus();
@@ -174,9 +159,33 @@ class _SettingViewState extends State<SettingView> {
                                 .read<LocationPermissionCubit>()
                                 .getPermissionStatus();
                           },
+                          leading: const Icon(
+                            Icons.gps_fixed_rounded,
+                            color: ColorTheme.highlight4,
+                          ),
+                          title: const Text(
+                            '사용자 위치 정보 권한',
+                          ),
+                          trailing: CupertinoSwitch(
+                            value: state,
+                            thumbColor: Theme.of(context).colorScheme.secondary,
+                            trackColor: Theme.of(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.28),
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            onChanged: (bool? value) async {
+                              await context
+                                  .read<LocationPermissionCubit>()
+                                  .setPermissionStatus();
+                              await context
+                                  .read<LocationPermissionCubit>()
+                                  .getPermissionStatus();
+                            },
+                          ),
                         ),
                       );
-                    }),
+                    },
                   ),
                 ],
               ),
@@ -319,7 +328,10 @@ class _SettingViewState extends State<SettingView> {
                           : mode == 'light'
                               ? '라이트모드 적용중'
                               : '다크모드 적용중',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .apply(color: ColorTheme.highlight2),
                     ),
                     trailing: Icon(
                       Icons.arrow_forward_ios_rounded,
@@ -338,6 +350,17 @@ class _SettingViewState extends State<SettingView> {
                       );
                     },
                     title: const Text('외부 라이센스'),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DutorialView(),
+                        ),
+                      );
+                    },
+                    title: const Text('도움말'),
                   ),
                 ],
               ),

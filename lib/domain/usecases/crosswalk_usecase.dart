@@ -34,7 +34,7 @@ class SendVoiceInductor implements ConnectCrosswalk {
 }
 
 abstract class SearchCrosswalk extends CrosswalkUseCase
-    implements UseCase<List<Crosswalk>, NoParams> {}
+    implements UseCase<Object, NoParams> {}
 
 class Search2FiniteTimes implements SearchCrosswalk {
   final CrosswalkRepository repository;
@@ -53,8 +53,7 @@ class Search2InfiniteTimes implements SearchCrosswalk {
   Search2InfiniteTimes({required this.repository});
 
   @override
-  Future<Either<Failure, List<Crosswalk>>> call(NoParams params) async {
-    // return await repository.getCrosswalkFiniteTimes();
-    throw Exception();
+  Future<Either<Failure, Void>> call(NoParams params) async {
+    return await repository.getCrosswalkInfiniteTimes();
   }
 }
