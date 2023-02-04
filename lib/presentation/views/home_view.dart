@@ -451,13 +451,11 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           chip ?? const SizedBox(),
           Flexible(
-            child: FittedBox(
-              child: image,
-            ),
+            child: image,
           ),
           Container(
             constraints: BoxConstraints(maxHeight: 70.h),
