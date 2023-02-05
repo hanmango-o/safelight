@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:safelight/core/usecases/usecase.dart';
 import 'package:safelight/core/utils/themes.dart';
@@ -48,7 +50,7 @@ class _FlashlightViewState extends State<FlashlightView> {
                   final result = await widget.flashOn(NoParams());
                   if (result.isLeft()) {
                     tts('안전 경광등을 사용할 수 없습니다.');
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('안전 경광등을 사용할 수 없습니다.'),
                     ));
                   } else {
@@ -74,7 +76,7 @@ class _FlashlightViewState extends State<FlashlightView> {
                   final result = await widget.flashOff(NoParams());
                   if (result.isLeft()) {
                     tts('안전 경광등을 사용할 수 없습니다.');
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('안전 경광등을 사용할 수 없습니다.'),
                     ));
                   } else {

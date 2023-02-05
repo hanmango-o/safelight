@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
                               backgroundColor:
                                   Theme.of(context).colorScheme.background,
                               avatar: Padding(
-                                padding: EdgeInsets.all(2),
+                                padding: const EdgeInsets.all(2),
                                 child: CupertinoActivityIndicator(
                                   color: Theme.of(context).colorScheme.primary,
                                 ),

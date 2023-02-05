@@ -88,17 +88,16 @@ class _DutorialViewState extends State<DutorialView> {
                   visible: true,
                   child: Flexible(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (_currentIndex == keys.length - 1) {
                           Navigator.pop(context);
                         } else {
-                          setState(() {
-                            Scrollable.ensureVisible(
-                              keys[++_currentIndex].currentContext!,
-                              duration: const Duration(milliseconds: 600),
-                              curve: Curves.easeInOut,
-                            );
-                          });
+                          await Scrollable.ensureVisible(
+                            keys[++_currentIndex].currentContext!,
+                            duration: const Duration(milliseconds: 600),
+                            curve: Curves.easeInOut,
+                          );
+                          setState(() {});
                         }
                       },
                       child: Container(
@@ -482,7 +481,7 @@ class _DutorialViewState extends State<DutorialView> {
                   padding: EdgeInsets.all(SizeTheme.w_md),
                   width: double.infinity,
                   backgroundColor: Theme.of(context).colorScheme.secondary,
-                  child: Text(
+                  child: const Text(
                       ' SafeLight의 주요 기능은 주변 횡단보도의 음향신호기를 찾고, 동작시키는 안전 리모컨 기능입니다.\n\n v1.2 에서는 기존 시각장애인용 리모컨의 기능을 앱을 통해 수행할 수 있습니다. 또한, 시야가 확보되지 않는 밤길 안전을 위한 안전 경광등 기능과 횡단보도 보행 중 정확한 방향을 잡아주는 안전 나침반 기능도 사용할 수 있습니다.'),
                 ),
               ),
