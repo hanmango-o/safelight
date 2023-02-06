@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/errors/failures.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/domain/repositories/navigator_repository.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../repositories/navigator_repository.dart';
 
 abstract class NavUseCase {}
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
 
 abstract class SettingTheme {}
 

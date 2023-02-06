@@ -7,35 +7,35 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/tts.dart';
-import 'package:safelight/core/utils/validators.dart';
-import 'package:safelight/data/repositories/auth_repository_impl.dart';
-import 'package:safelight/data/repositories/crosswalk_repository_impl.dart';
-import 'package:safelight/data/repositories/flash_repository_impl.dart';
-import 'package:safelight/data/repositories/navigator_repository_impl.dart';
-import 'package:safelight/data/repositories/permission_repository_impl.dart';
-import 'package:safelight/data/sources/auth_remote_data_source.dart';
-import 'package:safelight/data/sources/blue_native_data_source.dart';
-import 'package:safelight/data/sources/crosswalk_remote_data_source.dart';
-import 'package:safelight/data/sources/flash_native_data_source.dart';
-import 'package:safelight/data/sources/navigate_remote_data_source.dart';
-import 'package:safelight/data/sources/permission_native_data_source.dart';
-import 'package:safelight/data/sources/weather_remote_data_source.dart';
-import 'package:safelight/domain/repositories/auth_repository.dart';
-import 'package:safelight/domain/repositories/flash_repository.dart';
-import 'package:safelight/domain/repositories/navigator_repository.dart';
-import 'package:safelight/domain/usecases/auth_usecase.dart';
-import 'package:safelight/domain/usecases/service_usecase.dart';
-import 'package:safelight/domain/usecases/crosswalk_usecase.dart';
-import 'package:safelight/domain/usecases/nav_usecase.dart';
-import 'package:safelight/domain/usecases/permission_usecase.dart';
-import 'package:safelight/presentation/bloc/auth_bloc.dart';
-import 'package:safelight/presentation/bloc/crosswalk_bloc.dart';
-import 'package:safelight/presentation/cubit/bluetooth_permission_cubit.dart';
-import 'package:safelight/presentation/cubit/location_permission_cubit.dart';
 
+import 'core/utils/tts.dart';
+import 'core/utils/validators.dart';
+import 'data/repositories/auth_repository_impl.dart';
+import 'data/repositories/crosswalk_repository_impl.dart';
+import 'data/repositories/flash_repository_impl.dart';
+import 'data/repositories/navigator_repository_impl.dart';
+import 'data/repositories/permission_repository_impl.dart';
+import 'data/sources/auth_remote_data_source.dart';
+import 'data/sources/blue_native_data_source.dart';
+import 'data/sources/crosswalk_remote_data_source.dart';
+import 'data/sources/flash_native_data_source.dart';
+import 'data/sources/navigate_remote_data_source.dart';
+import 'data/sources/permission_native_data_source.dart';
+import 'data/sources/weather_remote_data_source.dart';
+import 'domain/repositories/auth_repository.dart';
 import 'domain/repositories/crosswalk_repository.dart';
+import 'domain/repositories/flash_repository.dart';
+import 'domain/repositories/navigator_repository.dart';
 import 'domain/repositories/permission_repository.dart';
+import 'domain/usecases/auth_usecase.dart';
+import 'domain/usecases/crosswalk_usecase.dart';
+import 'domain/usecases/nav_usecase.dart';
+import 'domain/usecases/permission_usecase.dart';
+import 'domain/usecases/service_usecase.dart';
+import 'presentation/bloc/auth_bloc.dart';
+import 'presentation/bloc/crosswalk_bloc.dart';
+import 'presentation/cubit/bluetooth_permission_cubit.dart';
+import 'presentation/cubit/location_permission_cubit.dart';
 
 final DI = GetIt.instance;
 
@@ -72,8 +72,8 @@ Future<void> init() async {
 
   DI.registerLazySingleton(
     () => AuthBloc(
-      signIn: DI(instanceName: USECASE_SIGN_IN_ANONYMOUSLY),
-      signOut: DI(instanceName: USECASE_SIGN_OUT_ANONYMOUSLY),
+      signInAnonymously: DI(instanceName: USECASE_SIGN_IN_ANONYMOUSLY),
+      signOutAnonymously: DI(instanceName: USECASE_SIGN_OUT_ANONYMOUSLY),
     ),
   );
 
@@ -97,13 +97,15 @@ Future<void> init() async {
     ),
   );
 
-  DI.registerLazySingleton<AuthUseCase>(
-      () => SignInAnonymously(repository: DI()),
-      instanceName: USECASE_SIGN_IN_ANONYMOUSLY);
+  DI.registerLazySingleton<SignIn>(
+    () => SignInAnonymously(repository: DI()),
+    instanceName: USECASE_SIGN_IN_ANONYMOUSLY,
+  );
 
-  DI.registerLazySingleton<AuthUseCase>(
-      () => SignOutAnonymously(repository: DI()),
-      instanceName: USECASE_SIGN_OUT_ANONYMOUSLY);
+  DI.registerLazySingleton<SignOut>(
+    () => SignOutAnonymously(repository: DI()),
+    instanceName: USECASE_SIGN_OUT_ANONYMOUSLY,
+  );
 
   DI.registerLazySingleton<ConnectCrosswalk>(
     () => SendAcousticSignal(repository: DI()),

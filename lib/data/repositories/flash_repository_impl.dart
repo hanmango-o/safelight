@@ -1,12 +1,13 @@
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/validators.dart';
-import 'package:safelight/data/sources/flash_native_data_source.dart';
-import 'package:safelight/data/sources/navigate_remote_data_source.dart';
-import 'package:safelight/data/sources/weather_remote_data_source.dart';
-import 'package:safelight/domain/repositories/flash_repository.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../core/utils/validators.dart';
+import '../../domain/repositories/flash_repository.dart';
+import '../sources/flash_native_data_source.dart';
+import '../sources/navigate_remote_data_source.dart';
+import '../sources/weather_remote_data_source.dart';
 
 class FlashRepositoryImpl implements FlashRepository {
   FlashNativeDataSource flashDataSource;

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
+
+import '../../domain/entities/crosswalk.dart';
 
 abstract class CrosswalkEvent extends Equatable {
   @override

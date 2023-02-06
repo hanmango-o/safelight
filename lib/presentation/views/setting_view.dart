@@ -6,17 +6,19 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/themes.dart';
-import 'package:safelight/domain/usecases/permission_usecase.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/bloc/auth_bloc.dart';
-import 'package:safelight/presentation/cubit/bluetooth_permission_cubit.dart';
-import 'package:safelight/presentation/cubit/location_permission_cubit.dart';
-import 'package:safelight/presentation/views/dutorial_view.dart';
-import 'package:safelight/presentation/widgets/flat_card.dart';
-import 'package:safelight/presentation/widgets/single_child_rounded_card.dart';
-import 'package:safelight/presentation/widgets/board.dart';
+
+import '../../core/utils/themes.dart';
+import '../../domain/usecases/permission_usecase.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
+import '../cubit/bluetooth_permission_cubit.dart';
+import '../cubit/location_permission_cubit.dart';
+import '../widgets/board.dart';
+import '../widgets/flat_card.dart';
+import '../widgets/single_child_rounded_card.dart';
+import 'dutorial_view.dart';
 
 class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -52,44 +54,43 @@ class _SettingViewState extends State<SettingView> {
             left: SizeTheme.w_md,
             right: SizeTheme.w_md,
           ),
-          child: Semantics(
-            label: '로그인 화면 이동 버튼, 현재 로그인 상태',
-            child: ListTile(
-              onTap: () async {
-                showDialog(
-                  barrierDismissible: false,
-                  builder: (ctx) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                      ),
-                    );
+          child: BlocBuilder<AuthBloc, AuthState>(
+            builder: (_, state) {
+              if (state is Error) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+              return Semantics(
+                label: '로그인 화면 이동 버튼, 현재 로그인 상태',
+                child: ListTile(
+                  onTap: () {
+                    context.read<AuthBloc>().add(SignOutAnonymouslyEvent());
                   },
-                  context: context,
-                );
-                await context.read<AuthBloc>().signOut(NoParams());
-                Navigator.of(context).pop();
-              },
-              leading: SingleChildRoundedCard(
-                child: Icon(
-                  Icons.person,
-                  size: 40.w,
-                  color: Theme.of(context).colorScheme.primary,
+                  leading: SingleChildRoundedCard(
+                    child: Icon(
+                      Icons.person,
+                      size: 40.w,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  title: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '익명 사용자',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  trailing: (state is Loading)
+                      ? const CircularProgressIndicator()
+                      : Icon(
+                          Icons.logout,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                 ),
-              ),
-              title: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '익명 사용자',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              trailing: Icon(
-                Icons.logout,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-            ),
+              );
+            },
           ),
         ),
         toolbarHeight: 120.h,

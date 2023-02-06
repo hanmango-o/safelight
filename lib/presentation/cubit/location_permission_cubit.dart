@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safelight/core/utils/enums.dart';
-import 'package:safelight/domain/usecases/permission_usecase.dart';
+
+import '../../core/utils/enums.dart';
+import '../../domain/usecases/permission_usecase.dart';
 
 class LocationPermissionCubit extends Cubit<bool> {
   final GetPermission getPermission;

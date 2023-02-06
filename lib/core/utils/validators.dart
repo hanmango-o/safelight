@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/errors/failures.dart';
-import 'package:safelight/domain/entities/weather.dart';
+
+import '../../domain/entities/weather.dart';
+import '../errors/failures.dart';
 
 abstract class Validator {}
 

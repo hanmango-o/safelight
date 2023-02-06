@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/enums.dart';
-import 'package:safelight/core/utils/assets.dart';
-import 'package:safelight/core/utils/themes.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
-import 'package:safelight/domain/usecases/service_usecase.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/bloc/crosswalk_bloc.dart';
-import 'package:safelight/presentation/bloc/crosswalk_event.dart';
-import 'package:safelight/presentation/bloc/crosswalk_state.dart';
-import 'package:safelight/presentation/views/flashlight_view.dart';
-import 'package:safelight/presentation/widgets/flat_card.dart';
-import 'package:safelight/presentation/widgets/single_child_rounded_card.dart';
-import 'package:safelight/presentation/widgets/board.dart';
-import 'package:safelight/presentation/widgets/compass.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../core/usecases/usecase.dart';
+import '../../core/utils/assets.dart';
+import '../../core/utils/enums.dart';
+import '../../core/utils/themes.dart';
+import '../../domain/entities/crosswalk.dart';
+import '../../domain/usecases/service_usecase.dart';
+import '../bloc/crosswalk_bloc.dart';
+import '../bloc/crosswalk_event.dart';
+import '../bloc/crosswalk_state.dart';
+import '../widgets/board.dart';
+import '../widgets/compass.dart';
+import '../widgets/flat_card.dart';
+import '../widgets/single_child_rounded_card.dart';
+import 'flashlight_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -299,7 +300,7 @@ class _HomeViewState extends State<HomeView> {
                                   this
                                       .context
                                       .read<CrosswalkBloc>()
-                                      .add(SearchFiniteCrosswalkEvent());
+                                      .add(SearchInfiniteCrosswalkEvent());
                                 }).timeout(
                                   const Duration(minutes: 3),
                                   onTimeout: () {

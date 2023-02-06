@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/themes.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/widgets/board.dart';
-import 'package:safelight/presentation/widgets/compass.dart';
-import 'package:safelight/presentation/widgets/single_child_rounded_card.dart';
+
+import '../../core/utils/themes.dart';
+import '../widgets/board.dart';
+import '../widgets/compass.dart';
+import '../widgets/single_child_rounded_card.dart';
 
 class DutorialView extends StatefulWidget {
   const DutorialView({super.key});

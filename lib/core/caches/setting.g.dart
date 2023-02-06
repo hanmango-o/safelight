@@ -17,16 +17,22 @@ class SettingAdapter extends TypeAdapter<Setting> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Setting(
-      mode: fields[0] as ThemeMode,
+      colorMode: fields[0] as ColorMode,
+      tts: fields[1] as bool,
+      flashMode: fields[2] as FlashMode,
     );
   }
 
   @override
   void write(BinaryWriter writer, Setting obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.mode);
+      ..write(obj.colorMode)
+      ..writeByte(1)
+      ..write(obj.tts)
+      ..writeByte(2)
+      ..write(obj.flashMode);
   }
 
   @override

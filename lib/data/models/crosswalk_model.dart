@@ -1,4 +1,4 @@
-import 'package:safelight/domain/entities/crosswalk.dart';
+import '../../domain/entities/crosswalk.dart';
 
 class CrosswalkModel extends Crosswalk {
   const CrosswalkModel({

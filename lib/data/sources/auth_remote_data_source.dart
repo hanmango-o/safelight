@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:safelight/core/errors/exceptions.dart';
+
+import '../../core/errors/exceptions.dart';
 
 abstract class AuthRemoteDataSource {
   Future<void> signInAnonymously();

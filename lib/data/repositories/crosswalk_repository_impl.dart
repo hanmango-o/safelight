@@ -1,13 +1,14 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/data/sources/blue_native_data_source.dart';
-import 'package:safelight/data/sources/crosswalk_remote_data_source.dart';
-import 'package:safelight/data/sources/navigate_remote_data_source.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/domain/repositories/crosswalk_repository.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../domain/entities/crosswalk.dart';
+import '../../domain/repositories/crosswalk_repository.dart';
+import '../sources/blue_native_data_source.dart';
+import '../sources/crosswalk_remote_data_source.dart';
+import '../sources/navigate_remote_data_source.dart';
 
 class CrosswalkRepositoryImpl implements CrosswalkRepository {
   BlueNativeDataSource blueDataSource;
@@ -52,7 +53,7 @@ class CrosswalkRepositoryImpl implements CrosswalkRepository {
   }
 
   @override
-  Future<Either<Failure, Void>> getCrosswalkInfiniteTimes() async {
+  Future<Either<Failure, List<Crosswalk>?>> getCrosswalkInfiniteTimes() async {
     try {
       final blueResults = await blueDataSource.scan();
       for (ScanResult result in blueResults) {
@@ -61,6 +62,6 @@ class CrosswalkRepositoryImpl implements CrosswalkRepository {
     } on BlueException {
       return Left(BlueFailure());
     }
-    return Right(Void());
+    return const Right(null);
   }
 }

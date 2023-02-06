@@ -1,9 +1,10 @@
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/data/sources/navigate_remote_data_source.dart';
-import 'package:safelight/domain/repositories/navigator_repository.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/errors/failures.dart';
+import '../../domain/repositories/navigator_repository.dart';
+import '../sources/navigate_remote_data_source.dart';
 
 class NavigatorRepositoryImpl implements NavigatorRepository {
   NavigateRemoteDataSource navDataSource;

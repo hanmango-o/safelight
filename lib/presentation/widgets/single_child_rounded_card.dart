@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:safelight/core/utils/themes.dart';
+
+import '../../core/utils/themes.dart';
 
 class SingleChildRoundedCard extends StatelessWidget {
   final Widget child;

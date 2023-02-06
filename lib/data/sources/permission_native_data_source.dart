@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:safelight/core/errors/exceptions.dart';
+
+import '../../core/errors/exceptions.dart';
 
 abstract class PermissionNativeDataSource {
   Future<bool> getBluetoothPermissionStatus();

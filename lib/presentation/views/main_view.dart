@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/views/blue_off_view.dart';
-import 'package:safelight/presentation/views/home_view.dart';
-import 'package:safelight/presentation/views/setting_view.dart';
+
+import 'blue_off_view.dart';
+import 'home_view.dart';
+import 'setting_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);

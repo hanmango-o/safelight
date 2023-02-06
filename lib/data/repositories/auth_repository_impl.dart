@@ -1,9 +1,10 @@
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/data/sources/auth_remote_data_source.dart';
-import 'package:safelight/domain/repositories/auth_repository.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../sources/auth_remote_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRemoteDataSource authDataSource;

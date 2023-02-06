@@ -1,8 +1,9 @@
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/enums.dart';
-import 'package:safelight/domain/repositories/permission_repository.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../core/utils/enums.dart';
+import '../repositories/permission_repository.dart';
 
 abstract class PermissionUseCase {}
 

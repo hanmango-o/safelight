@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/errors/failures.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
-import 'package:safelight/domain/repositories/crosswalk_repository.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../entities/crosswalk.dart';
+import '../repositories/crosswalk_repository.dart';
 
 abstract class CrosswalkUseCase {}
 
@@ -34,7 +35,7 @@ class SendVoiceInductor implements ConnectCrosswalk {
 }
 
 abstract class SearchCrosswalk extends CrosswalkUseCase
-    implements UseCase<Object, NoParams> {}
+    implements UseCase<List<Crosswalk>?, NoParams> {}
 
 class Search2FiniteTimes implements SearchCrosswalk {
   final CrosswalkRepository repository;
@@ -42,7 +43,7 @@ class Search2FiniteTimes implements SearchCrosswalk {
   Search2FiniteTimes({required this.repository});
 
   @override
-  Future<Either<Failure, List<Crosswalk>>> call(NoParams params) async {
+  Future<Either<Failure, List<Crosswalk>?>> call(NoParams params) async {
     return await repository.getCrosswalkFiniteTimes();
   }
 }
@@ -53,7 +54,7 @@ class Search2InfiniteTimes implements SearchCrosswalk {
   Search2InfiniteTimes({required this.repository});
 
   @override
-  Future<Either<Failure, Void>> call(NoParams params) async {
+  Future<Either<Failure, List<Crosswalk>?>> call(NoParams params) async {
     return await repository.getCrosswalkInfiniteTimes();
   }
 }

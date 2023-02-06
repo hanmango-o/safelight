@@ -4,16 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:safelight/core/utils/themes.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/bloc/auth_bloc.dart';
-import 'package:safelight/presentation/bloc/crosswalk_bloc.dart';
-import 'package:safelight/presentation/cubit/bluetooth_permission_cubit.dart';
-import 'package:safelight/presentation/cubit/location_permission_cubit.dart';
-import 'package:safelight/presentation/views/main_view.dart';
-import 'package:safelight/presentation/views/sign_in_view.dart';
 import 'package:safelight/initializer.dart' as initializer;
-// v1.3.0(ios), v1.1.2(android) | 한영찬(hanmango-o) | hanmango.o@gmail.com
+
+import 'core/utils/themes.dart';
+import 'presentation/bloc/auth_bloc.dart';
+import 'presentation/bloc/crosswalk_bloc.dart';
+import 'presentation/cubit/bluetooth_permission_cubit.dart';
+import 'presentation/cubit/location_permission_cubit.dart';
+import 'presentation/views/main_view.dart';
+import 'presentation/views/sign_in_view.dart';
+
+// v1.3.1(ios), v1.1.2(android) | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

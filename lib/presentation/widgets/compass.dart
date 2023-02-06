@@ -5,8 +5,9 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/assets.dart';
-import 'package:safelight/core/utils/themes.dart';
+
+import '../../core/utils/assets.dart';
+import '../../core/utils/themes.dart';
 
 class Compass extends StatefulWidget {
   final LatLng? latLng;

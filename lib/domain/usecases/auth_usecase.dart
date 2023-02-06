@@ -1,13 +1,15 @@
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/domain/repositories/auth_repository.dart';
 
-abstract class AuthUseCase implements UseCase<Void, NoParams> {}
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../repositories/auth_repository.dart';
 
-abstract class SignIn extends AuthUseCase {}
+abstract class AuthUseCase {}
 
-abstract class SignOut extends AuthUseCase {}
+abstract class SignIn extends AuthUseCase
+    implements UseCase<Void, Map<String, dynamic>?> {}
+
+abstract class SignOut extends AuthUseCase implements UseCase<Void, NoParams> {}
 
 class SignInAnonymously implements SignIn {
   AuthRepository repository;
@@ -15,7 +17,7 @@ class SignInAnonymously implements SignIn {
   SignInAnonymously({required this.repository});
 
   @override
-  Future<Either<Failure, Void>> call(NoParams params) async {
+  Future<Either<Failure, Void>> call(Map<String, dynamic>? user) async {
     return await repository.signInAnonymously();
   }
 }

@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
+
+import '../../domain/entities/crosswalk.dart';
 
 @immutable
 abstract class CrosswalkState extends Equatable {

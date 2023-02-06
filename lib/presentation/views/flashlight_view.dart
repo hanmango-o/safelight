@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/themes.dart';
-import 'package:safelight/core/utils/tts.dart';
-import 'package:safelight/domain/usecases/service_usecase.dart';
 import 'package:safelight/injection.dart';
+
+import '../../core/usecases/usecase.dart';
+import '../../core/utils/themes.dart';
+import '../../core/utils/tts.dart';
+import '../../domain/usecases/service_usecase.dart';
 
 class FlashlightView extends StatefulWidget {
   final ControlFlash flashOn;

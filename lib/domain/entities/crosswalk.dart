@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/enums.dart';
+
+import '../../core/utils/enums.dart';
 
 class Crosswalk extends Equatable {
   final String name;
@@ -14,8 +15,8 @@ class Crosswalk extends Equatable {
     required this.name,
     required this.post,
     required this.type,
-    required this.dir,
-    required this.pos,
+    this.dir,
+    this.pos,
   });
 
   @override

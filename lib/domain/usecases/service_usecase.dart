@@ -1,7 +1,8 @@
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/domain/repositories/flash_repository.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../repositories/flash_repository.dart';
 
 abstract class ServiceUseCase {}
 

@@ -1,9 +1,10 @@
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/data/sources/permission_native_data_source.dart';
-import 'package:safelight/domain/repositories/permission_repository.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../domain/repositories/permission_repository.dart';
+import '../sources/permission_native_data_source.dart';
 
 class PermissionRepositoryImpl implements PermissionRepository {
   PermissionNativeDataSource permissionDataSource;

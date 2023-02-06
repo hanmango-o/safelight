@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safelight/core/errors/failures.dart';
-import 'package:safelight/core/usecases/usecase.dart';
-import 'package:safelight/core/utils/tts.dart';
-import 'package:safelight/domain/entities/crosswalk.dart';
-import 'package:safelight/domain/usecases/crosswalk_usecase.dart';
-import 'package:safelight/domain/usecases/nav_usecase.dart';
-import 'package:safelight/domain/usecases/service_usecase.dart';
 import 'package:safelight/injection.dart';
-import 'package:safelight/presentation/bloc/crosswalk_event.dart';
-import 'package:safelight/presentation/bloc/crosswalk_state.dart';
+
+import '../../core/errors/failures.dart';
+import '../../core/usecases/usecase.dart';
+import '../../core/utils/tts.dart';
+import '../../domain/usecases/crosswalk_usecase.dart';
+import '../../domain/usecases/nav_usecase.dart';
+import '../../domain/usecases/service_usecase.dart';
+import 'crosswalk_event.dart';
+import 'crosswalk_state.dart';
 
 class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   static Timer timer = Timer(Duration.zero, () {});
@@ -67,8 +67,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
           }
         },
         (results) {
-          results = results as List<Crosswalk>;
-          tts('${results.length} 개의 스마트 압버튼을 찾았습니다.');
+          tts('${results!.length} 개의 스마트 압버튼을 찾았습니다.');
           emit(Off(results: results));
         },
       );
@@ -84,7 +83,6 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-      // Block
       await controlFlash(NoParams());
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/errors/exceptions.dart';
-import 'package:safelight/core/utils/apis.dart';
-import 'package:safelight/core/utils/enums.dart';
-import 'package:safelight/data/models/crosswalk_model.dart';
+
+import '../../core/errors/exceptions.dart';
+import '../../core/utils/apis.dart';
+import '../../core/utils/enums.dart';
+import '../models/crosswalk_model.dart';
 
 abstract class CrosswalkRemoteDataSource {
   Future<List<CrosswalkModel>> getCrosswalks(
