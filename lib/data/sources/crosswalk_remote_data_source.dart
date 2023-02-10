@@ -93,9 +93,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
         }
         results.add(
           CrosswalkModel.fromMap({
-            'name': '횡단보도',
             'post': post.current.device,
-            'type': ECrosswalk.UNKNOWN,
             'dir': null,
             'pos': null,
           }),
