@@ -5,7 +5,7 @@ import '../../core/usecases/usecase.dart';
 
 /// [AuthRepository]는 사용자 인증(로그인/로그아웃)과 관련된 Repository이다.
 ///
-/// `AuthUseCase`의 비즈니스 로직들의 요청을 처리하고 요청에 따른 Return Type을 반환한다.
+/// `AuthUseCase`의 비즈니스 로직들의 요청을 처리하고 요청에 따른 결과를 반환한다.
 ///
 /// [AuthRepository]는 Repository의 interface로서 캡슐화의 역할을 수행한다.
 /// 이에 따라 [AuthRepository]는 `lib/data/repositories/auth_repository_impl.dart`의
@@ -34,7 +34,7 @@ abstract class AuthRepository {
 
   /// [signOutAnonymously]는 익명 로그아웃을 수행한다.
   ///
-  /// [Either]로서 ([Failure], [Void])의 형태로 반환되며, 경우에 따라 아래와 같이 결과가 반환된다.
+  /// [Either]로서 ([Failure], [Void])의 형태로 반환되며, 아래와 같이 결과가 반환된다.
   ///
   /// |return||case|
   /// |:-------|-|:--------|
