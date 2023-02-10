@@ -64,6 +64,8 @@ class FlashRepositoryImpl implements FlashRepository {
       return Left(FlashFailure());
     } on ValidateFailure {
       return Left(ValidateFailure());
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 }

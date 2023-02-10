@@ -84,7 +84,8 @@ Future<void> init() async {
       sendAcousticSignal: DI(instanceName: USECASE_SEND_ACOUSTIC_SIGNAL),
       sendVoiceInductor: DI(instanceName: USECASE_SEND_VOICE_INDUCTOR),
       getCurrentPosition: DI(),
-      controlFlash: DI(instanceName: USECASE_CONTROL_FLASH_ON_WITH_WEATHER),
+      controlFlashOnWithWeather:
+          DI(instanceName: USECASE_CONTROL_FLASH_ON_WITH_WEATHER),
     ),
     instanceName: BLOC_BLUE_SEARCH_FINITE,
   );
@@ -140,7 +141,7 @@ Future<void> init() async {
     () => GetPermission(repository: DI()),
   );
   DI.registerLazySingleton<GetCurrentPosition>(
-    () => GetCurrentPosition(navRepository: DI()),
+    () => GetCurrentPosition(repository: DI()),
   );
 
   // repository injection area

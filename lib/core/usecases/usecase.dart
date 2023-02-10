@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../errors/failures.dart';
 
 abstract class UseCase<Type, Params> {
+  /// ㅇㅇㅇㅇ
   Future<Either<Failure, Type>> call(Params params);
 }
 

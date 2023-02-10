@@ -20,7 +20,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   final ConnectCrosswalk sendAcousticSignal;
   final ConnectCrosswalk sendVoiceInductor;
   final GetCurrentPosition getCurrentPosition;
-  final ControlFlash controlFlash;
+  final ControlFlash controlFlashOnWithWeather;
 
   CrosswalkBloc({
     required this.search2FiniteTimes,
@@ -28,7 +28,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     required this.sendAcousticSignal,
     required this.sendVoiceInductor,
     required this.getCurrentPosition,
-    required this.controlFlash,
+    required this.controlFlashOnWithWeather,
   }) : super(Off(results: const [])) {
     on<SearchFiniteCrosswalkEvent>(_searchFiniteCrosswalkEvent);
     on<SearchInfiniteCrosswalkEvent>(_searchInfiniteCrosswalkEvent);
@@ -83,7 +83,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-      await controlFlash(NoParams());
+      await controlFlashOnWithWeather(NoParams());
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
         results.fold(
@@ -118,7 +118,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-      await controlFlash(NoParams());
+      await controlFlashOnWithWeather(NoParams());
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
         results.fold(

@@ -58,7 +58,7 @@ class SafeLight extends StatelessWidget {
               ),
             ],
             child: MaterialApp(
-              // showSemanticsDebugger: true,
+              // showSemanticsDebugger: true, // 접근성 테스트할 때 사용
               debugShowCheckedModeBanner: false,
               darkTheme: SystemTheme.systemMode(ColorTheme.dark),
               themeMode: ThemeMode.values.byName(mode ?? ThemeMode.system.name),

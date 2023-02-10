@@ -15,11 +15,13 @@ import '../repositories/auth_repository.dart';
 /// 시스템의 사용자 인증과 관련된 모든 것을 의미한다.
 /// 큰 범위에서 로그인, 로그아웃으로 구분되어 있다.
 ///
-/// *로그인/로그아웃 외에 다른 Auth 서비스가 필요한 경우 [AuthUseCase]를 상속받는 구조로 추가할 수 있다.*
-///
+/// ---
+/// ## Service
 /// [AuthUseCase]는 아래의 Auth 서비스를 가지고 있다.
 ///
-/// |sub class||설명|
+/// * *로그인/로그아웃 외에 다른 Auth 서비스가 필요한 경우 [AuthUseCase]를 상속받는 구조로 추가할 수 있다.*
+///
+/// |service||설명|
 /// |:-------|-|:--------|
 /// |[SignIn]||로그인 관련 비즈니스 로직의 super class|
 /// |[SignOut]||로그아웃 관련 비즈니스 로직의 super class|
@@ -183,7 +185,8 @@ class SignInAnonymously implements SignIn {
   /// domain layer의 repository interface로 변수형을 선언([AuthRepository])하고 실제 DI하는 값은
   /// data layer의 repository implements로 주입하여, 캡슐화한다.
   ///
-  /// 이에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// See also:
+  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
   AuthRepository repository;
 
   /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
@@ -268,7 +271,8 @@ class SignOutAnonymously implements SignOut {
   /// domain layer의 repository interface로 변수형을 선언([AuthRepository])하고 실제 DI하는 값은
   /// data layer의 repository implements로 주입하여, 캡슐화한다.
   ///
-  /// 이에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// See also:
+  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
   AuthRepository repository;
 
   /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.

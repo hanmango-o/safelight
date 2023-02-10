@@ -24,7 +24,10 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
   });
 
   Map<String, dynamic> _getDirectionAndPosition(
-      var geo1, var geo2, LatLng pos) {
+    var geo1,
+    var geo2,
+    LatLng pos,
+  ) {
     LatLng pos1 = LatLng(geo1['geo'].latitude, geo1['geo'].longitude);
     LatLng pos2 = LatLng(geo2['geo'].latitude, geo2['geo'].longitude);
 
