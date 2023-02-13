@@ -101,7 +101,7 @@ abstract class SearchCrosswalk extends CrosswalkUseCase
 ///
 /// |return||case|
 /// |:-------|-|:--------|
-/// |[Void||횡단보도 연결에 성공하는 경우|
+/// |[Void]||횡단보도 연결에 성공하는 경우|
 /// |[Failure]||횡단보도 연결에 실패하는 경우|
 abstract class ConnectCrosswalk extends CrosswalkUseCase
     implements UseCase<Void, Crosswalk> {}

@@ -40,9 +40,8 @@ Future<void> init() async {
 
   FlutterTts flutterTts = DI.get<FlutterTts>();
   await flutterTts.awaitSpeakCompletion(true);
+  await flutterTts.setSharedInstance(true);
   await flutterTts.setVolume(1.0);
-  await flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.playback,
-      [IosTextToSpeechAudioCategoryOptions.defaultToSpeaker]);
 
   await [
     Permission.location,

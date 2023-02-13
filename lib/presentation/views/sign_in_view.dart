@@ -1,14 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../core/caches/setting.dart';
 import '../../core/utils/assets.dart';
 import '../../core/utils/themes.dart';
 import '../bloc/auth_bloc.dart';
@@ -98,49 +94,6 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   child: Text(
                     '처음 사용하시나요?',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .apply(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    var box = await Hive.openBox<Setting>(Setting.db);
-                    log(box.toString());
-                    // await box.put('setting', Setting(mode: Mode.DARK));
-                    final a = box.get(Setting.db);
-                    final b = box.get(Setting.db, defaultValue: Setting());
-                    log(a.toString());
-                    log(b.toString());
-                    return showDialog(
-                      barrierDismissible: false,
-                      builder: (ctx) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        );
-                      },
-                      context: context,
-                    );
-                    // await box.put(key, value)
-
-                    // Setting setting = box.get(key)
-                    // return showDialog(
-                    //   barrierDismissible: false,
-                    //   builder: (ctx) {
-                    //     return const Center(
-                    //       child: CircularProgressIndicator(
-                    //         strokeWidth: 2,
-                    //       ),
-                    //     );
-                    //   },
-                    //   context: context,
-                    // );
-                  },
-                  child: Text(
-                    'test',
                     style: Theme.of(context)
                         .textTheme
                         .labelLarge!

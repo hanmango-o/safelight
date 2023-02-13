@@ -62,7 +62,7 @@ class _FlashlightViewState extends State<FlashlightView> {
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
                   ),
-                  backgroundColor: ColorTheme.highlight3,
+                  backgroundColor: ColorTheme.highlight5,
                 ),
                 child: const Text('안전 경광등 켜기'),
               ),
@@ -90,7 +90,12 @@ class _FlashlightViewState extends State<FlashlightView> {
                   ),
                   backgroundColor: ColorTheme.highlight1,
                 ),
-                child: const Text('안전 경광등 끄기'),
+                child: const Text(
+                  '안전 경광등 끄기',
+                  style: TextStyle(
+                    color: ColorTheme.highlight6,
+                  ),
+                ),
               ),
             ),
           ),

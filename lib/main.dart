@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:safelight/core/utils/tts.dart';
 import 'package:safelight/injection.dart';
 import 'package:safelight/initializer.dart' as initializer;
 
@@ -40,6 +41,7 @@ class SafeLight extends StatelessWidget {
             SystemTheme.mode,
             defaultValue: ThemeMode.system.name,
           );
+          TTS.enable = box.get('tts', defaultValue: false);
           return MultiBlocProvider(
             providers: [
               BlocProvider(

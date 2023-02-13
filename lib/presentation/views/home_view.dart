@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -73,9 +74,11 @@ class _HomeViewState extends State<HomeView> {
                 MaterialPageRoute(
                   builder: (context) => FlashlightView(
                     flashOn: DI.get<ControlFlash>(
-                        instanceName: USECASE_CONTROL_FLASH_ON),
+                      instanceName: USECASE_CONTROL_FLASH_ON,
+                    ),
                     flashOff: DI.get<ControlFlash>(
-                        instanceName: USECASE_CONTROL_FLASH_OFF),
+                      instanceName: USECASE_CONTROL_FLASH_OFF,
+                    ),
                   ),
                 ),
               ),
@@ -90,8 +93,65 @@ class _HomeViewState extends State<HomeView> {
             child: Board(
               title: '내 주변 횡단보도',
               body: Expanded(
-                child: BlocBuilder<CrosswalkBloc, CrosswalkState>(
-                  builder: (_, state) {
+                child: BlocConsumer<CrosswalkBloc, CrosswalkState>(
+                  listener: (context, state) {
+                    if (state is On) {
+                      if (state.infinite) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Semantics.fromProperties(
+                              properties: SemanticsProperties(
+                                liveRegion: true,
+                              ),
+                              child: Text('자동으로 내 주변 횡단보도에 연결중입니다.'),
+                            ),
+                          ),
+                        );
+                      }
+                    } else if (state is Off) {
+                      if (state.results.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Semantics.fromProperties(
+                              properties: SemanticsProperties(
+                                liveRegion: true,
+                              ),
+                              child: Text(
+                                '주변에 스마트압버튼이 없습니다.',
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            content: Semantics.fromProperties(
+                              properties: const SemanticsProperties(
+                                liveRegion: true,
+                              ),
+                              child: Text(
+                                '${state.results.length} 개의 스마트 압버튼을 찾았습니다.',
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    } else if (state is Error) {
+                      SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        content: Semantics.fromProperties(
+                          properties: const SemanticsProperties(
+                            liveRegion: true,
+                          ),
+                          child: Text(
+                            state.message,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
                     if (state is On) {
                       if (state.infinite) {
                         return resultBody(
@@ -206,7 +266,7 @@ class _HomeViewState extends State<HomeView> {
                       if (state.results.isEmpty) {
                         return resultBody(
                           context: context,
-                          title: '주변에 스마트 압버튼이 없어요',
+                          title: '주변에 스마트 압버튼이 없습니다.',
                           image: Semantics(
                             label: '압버튼 없음',
                             child: Lottie.asset(
@@ -495,8 +555,46 @@ class _HomeViewState extends State<HomeView> {
       padding: EdgeInsets.symmetric(
         horizontal: SizeTheme.w_md,
       ),
-      child: BlocBuilder<CrosswalkBloc, CrosswalkState>(
-        builder: (_, state) {
+      child: BlocConsumer<CrosswalkBloc, CrosswalkState>(
+        listener: (context, state) {
+          if (state is Error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Semantics.fromProperties(
+                  properties: const SemanticsProperties(
+                    liveRegion: true,
+                  ),
+                  child: Text(state.message),
+                ),
+              ),
+            );
+          } else if (state is Done) {
+            if (state.enableCompass && state.latLng != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Semantics.fromProperties(
+                    properties: SemanticsProperties(
+                      liveRegion: true,
+                    ),
+                    child: Text('진동이 울리지 않는 방향으로 보행하세요.'),
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Semantics.fromProperties(
+                    properties: SemanticsProperties(
+                      liveRegion: true,
+                    ),
+                    child: Text('음향신호기의 안내에 따라 보행하세요.'),
+                  ),
+                ),
+              );
+            }
+          }
+        },
+        builder: (context, state) {
           if (state is Connect) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Error) {
