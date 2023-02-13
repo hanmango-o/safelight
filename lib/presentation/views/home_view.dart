@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:safelight/injection.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:io' show Platform;
 
 import '../../core/usecases/usecase.dart';
 import '../../core/utils/assets.dart';
@@ -66,25 +67,28 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.refresh),
             ),
           ),
-          Semantics(
-            label: '안전 경광등 페이지 이동',
-            child: IconButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FlashlightView(
-                    flashOn: DI.get<ControlFlash>(
-                      instanceName: USECASE_CONTROL_FLASH_ON,
-                    ),
-                    flashOff: DI.get<ControlFlash>(
-                      instanceName: USECASE_CONTROL_FLASH_OFF,
+          Visibility(
+            visible: !Platform.isAndroid,
+            child: Semantics(
+              label: '안전 경광등 페이지 이동',
+              child: IconButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FlashlightView(
+                      flashOn: DI.get<ControlFlash>(
+                        instanceName: USECASE_CONTROL_FLASH_ON,
+                      ),
+                      flashOff: DI.get<ControlFlash>(
+                        instanceName: USECASE_CONTROL_FLASH_OFF,
+                      ),
                     ),
                   ),
                 ),
+                icon: const Icon(Icons.flashlight_on_outlined),
               ),
-              icon: const Icon(Icons.flashlight_on_outlined),
             ),
-          ),
+          )
         ],
       ),
       body: Column(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safelight/injection.dart';
+import 'dart:io' show Platform;
 
 import '../../core/errors/failures.dart';
 import '../../core/usecases/usecase.dart';
@@ -83,7 +84,9 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-      await controlFlashOnWithWeather(NoParams());
+      if (!Platform.isAndroid) {
+        await controlFlashOnWithWeather(NoParams());
+      }
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
         results.fold(
@@ -92,7 +95,11 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
           },
           (latLng) async {
             tts('진동이 울리지 않는 방향으로 보행하세요.');
-            emit(Done(enableCompass: true, latLng: latLng));
+            bool enableCompass = true;
+            if (Platform.isAndroid) {
+              enableCompass = false;
+            }
+            emit(Done(enableCompass: enableCompass, latLng: latLng));
           },
         );
       } else {
@@ -118,7 +125,9 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     try {
       tts('${event.crosswalk.name}에 연결합니다.');
       emit(Connect());
-      await controlFlashOnWithWeather(NoParams());
+      if (!Platform.isAndroid) {
+        await controlFlashOnWithWeather(NoParams());
+      }
       if (event.crosswalk.pos != null) {
         final results = await getCurrentPosition(NoParams());
         results.fold(
@@ -127,7 +136,11 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
           },
           (latLng) async {
             tts('진동이 울리지 않는 방향으로 보행하세요.');
-            emit(Done(enableCompass: true, latLng: latLng));
+            bool enableCompass = true;
+            if (Platform.isAndroid) {
+              enableCompass = false;
+            }
+            emit(Done(enableCompass: enableCompass, latLng: latLng));
           },
         );
       } else {

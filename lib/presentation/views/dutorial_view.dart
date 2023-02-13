@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:safelight/injection.dart';
+import 'dart:io' show Platform;
 
 import '../../core/utils/themes.dart';
+import '../../core/utils/tts.dart';
 import '../widgets/board.dart';
 import '../widgets/compass.dart';
 import '../widgets/single_child_rounded_card.dart';
@@ -227,36 +229,48 @@ class _DutorialViewState extends State<DutorialView> {
                       SizedBox(height: SizeTheme.h_sm),
                       TextButton(
                         onPressed: () {
-                          DI
-                              .get<FlutterTts>()
-                              .speak('안전 나침반이 켜집니다. 진동이 울리지 않는 방향으로 보행하세요.');
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 680.h,
-                                child: Scaffold(
-                                  body: Padding(
-                                    padding: EdgeInsets.all(SizeTheme.w_md),
-                                    child: Compass(
-                                      latLng: LatLng(0, 0),
-                                      pos: LatLng(90, 90),
-                                      end: SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('종료'),
+                          if (Platform.isAndroid) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Semantics.fromProperties(
+                                  properties: SemanticsProperties(
+                                    liveRegion: true,
+                                  ),
+                                  child: Text('안드로이드에서는 사용할 수 없습니다.'),
+                                ),
+                              ),
+                            );
+                          } else {
+                            final tts = DI.get<TTS>();
+                            tts('안전 나침반이 켜집니다. 진동이 울리지 않는 방향으로 보행하세요.');
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 680.h,
+                                  child: Scaffold(
+                                    body: Padding(
+                                      padding: EdgeInsets.all(SizeTheme.w_md),
+                                      child: Compass(
+                                        latLng: LatLng(0, 0),
+                                        pos: LatLng(90, 90),
+                                        end: SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('종료'),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
+                                );
+                              },
+                            );
+                          }
                         },
                         child: Text(
                           '안전 나침반 체험하기',
