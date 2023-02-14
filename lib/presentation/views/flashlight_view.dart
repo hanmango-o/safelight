@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:safelight/injection.dart';
 
 import '../../core/usecases/usecase.dart';
+import '../../core/utils/message.dart';
 import '../../core/utils/themes.dart';
 import '../../core/utils/tts.dart';
 import '../../domain/usecases/service_usecase.dart';
@@ -24,6 +25,7 @@ class FlashlightView extends StatefulWidget {
 
 class _FlashlightViewState extends State<FlashlightView> {
   final tts = DI.get<TTS>();
+  final message = DI.get<Message>();
 
   @override
   void dispose() {
@@ -51,11 +53,18 @@ class _FlashlightViewState extends State<FlashlightView> {
                   final result = await widget.flashOn(NoParams());
                   if (result.isLeft()) {
                     tts('안전 경광등을 사용할 수 없습니다.');
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('안전 경광등을 사용할 수 없습니다.'),
-                    ));
+                    message.snackbar(
+                      context,
+                      text: '안전 경광등을 사용할 수 없습니다.',
+                      position: SnackBarBehavior.fixed,
+                    );
                   } else {
                     tts('안전 경광등이 켜졌습니다.');
+                    message.snackbar(
+                      context,
+                      text: '안전 경광등이 켜졌습니다.',
+                      position: SnackBarBehavior.fixed,
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -77,11 +86,18 @@ class _FlashlightViewState extends State<FlashlightView> {
                   final result = await widget.flashOff(NoParams());
                   if (result.isLeft()) {
                     tts('안전 경광등을 사용할 수 없습니다.');
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('안전 경광등을 사용할 수 없습니다.'),
-                    ));
+                    message.snackbar(
+                      context,
+                      text: '안전 경광등을 사용할 수 없습니다.',
+                      position: SnackBarBehavior.fixed,
+                    );
                   } else {
                     tts('안전 경광등이 꺼졌습니다.');
+                    message.snackbar(
+                      context,
+                      text: '안전 경광등이 꺼졌습니다.',
+                      position: SnackBarBehavior.fixed,
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

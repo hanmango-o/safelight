@@ -7,6 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:safelight/core/utils/message.dart';
 
 import 'core/utils/tts.dart';
 import 'core/utils/validators.dart';
@@ -217,4 +218,6 @@ Future<void> init() async {
   DI.registerLazySingleton<WeatherValidator>(() => WeatherValidator());
 
   DI.registerLazySingleton<TTS>(() => TTS(tts: DI()));
+
+  DI.registerLazySingleton<Message>(() => Message());
 }

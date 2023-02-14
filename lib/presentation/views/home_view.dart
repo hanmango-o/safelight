@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -11,6 +10,7 @@ import 'dart:io' show Platform;
 import '../../core/usecases/usecase.dart';
 import '../../core/utils/assets.dart';
 import '../../core/utils/enums.dart';
+import '../../core/utils/message.dart';
 import '../../core/utils/themes.dart';
 import '../../domain/entities/crosswalk.dart';
 import '../../domain/usecases/service_usecase.dart';
@@ -31,6 +31,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final message = DI.get<Message>();
+
   List<GlobalKey> keys = [GlobalKey(), GlobalKey()];
   final ControlFlash flashOff = DI.get<ControlFlash>(
     instanceName: USECASE_CONTROL_FLASH_OFF,
@@ -101,56 +103,38 @@ class _HomeViewState extends State<HomeView> {
                   listener: (context, state) {
                     if (state is On) {
                       if (state.infinite) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Semantics.fromProperties(
-                              properties: SemanticsProperties(
-                                liveRegion: true,
-                              ),
-                              child: Text('자동으로 내 주변 횡단보도에 연결중입니다.'),
-                            ),
+                        message.snackbar(
+                          context,
+                          text: '자동으로 내 주변 횡단보도에 연결중입니다.',
+                          margin: EdgeInsets.only(
+                            bottom: 90.h,
                           ),
                         );
                       }
                     } else if (state is Off) {
                       if (state.results.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Semantics.fromProperties(
-                              properties: SemanticsProperties(
-                                liveRegion: true,
-                              ),
-                              child: Text(
-                                '주변에 스마트압버튼이 없습니다.',
-                              ),
-                            ),
+                        message.snackbar(
+                          context,
+                          text: '주변에 스마트압버튼이 없습니다.',
+                          margin: EdgeInsets.only(
+                            bottom: 90.h,
                           ),
                         );
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            content: Semantics.fromProperties(
-                              properties: const SemanticsProperties(
-                                liveRegion: true,
-                              ),
-                              child: Text(
-                                '${state.results.length} 개의 스마트 압버튼을 찾았습니다.',
-                              ),
-                            ),
+                        message.snackbar(
+                          context,
+                          text: '${state.results.length} 개의 스마트 압버튼을 찾았습니다.',
+                          margin: EdgeInsets.only(
+                            bottom: 90.h,
                           ),
                         );
                       }
                     } else if (state is Error) {
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: Semantics.fromProperties(
-                          properties: const SemanticsProperties(
-                            liveRegion: true,
-                          ),
-                          child: Text(
-                            state.message,
-                          ),
+                      message.snackbar(
+                        context,
+                        text: state.message,
+                        margin: EdgeInsets.only(
+                          bottom: 90.h,
                         ),
                       );
                     }
@@ -460,6 +444,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
+          SizedBox(height: 35.h),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(),
@@ -562,38 +547,23 @@ class _HomeViewState extends State<HomeView> {
       child: BlocConsumer<CrosswalkBloc, CrosswalkState>(
         listener: (context, state) {
           if (state is Error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Semantics.fromProperties(
-                  properties: const SemanticsProperties(
-                    liveRegion: true,
-                  ),
-                  child: Text(state.message),
-                ),
-              ),
+            message.snackbar(
+              context,
+              text: state.message,
+              duration: const Duration(seconds: 4),
             );
           } else if (state is Done) {
             if (state.enableCompass && state.latLng != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Semantics.fromProperties(
-                    properties: SemanticsProperties(
-                      liveRegion: true,
-                    ),
-                    child: Text('진동이 울리지 않는 방향으로 보행하세요.'),
-                  ),
-                ),
+              message.snackbar(
+                context,
+                text: '진동이 울리지 않는 방향으로 보행하세요.',
+                duration: const Duration(seconds: 4),
               );
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Semantics.fromProperties(
-                    properties: SemanticsProperties(
-                      liveRegion: true,
-                    ),
-                    child: Text('음향신호기의 안내에 따라 보행하세요.'),
-                  ),
-                ),
+              message.snackbar(
+                context,
+                text: '음향신호기의 안내에 따라 보행하세요.',
+                duration: const Duration(seconds: 4),
               );
             }
           }
