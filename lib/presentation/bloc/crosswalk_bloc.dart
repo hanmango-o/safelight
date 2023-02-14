@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safelight/data/sources/blue_native_data_source.dart';
 import 'package:safelight/injection.dart';
 import 'dart:io' show Platform;
 
@@ -41,10 +42,18 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     SearchInfiniteCrosswalkEvent event,
     Emitter<CrosswalkState> emit,
   ) async {
+    if (BlueNativeDataSourceImpl.subscription != null) {
+      BlueNativeDataSourceImpl.subscription!.cancel();
+    }
+    if (BlueNativeDataSourceImpl.subscription != null) {
+      BlueNativeDataSourceImpl.subscription!.cancel();
+    }
     tts('자동 스캔이 시작됩니다.');
     timer.cancel();
     emit(On(infinite: true));
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    await search2InfiniteTimes(NoParams());
+
+    timer = Timer.periodic(const Duration(seconds: 20), (timer) async {
       await search2InfiniteTimes(NoParams());
     });
   }
@@ -54,6 +63,12 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
     Emitter<CrosswalkState> emit,
   ) async {
     try {
+      if (BlueNativeDataSourceImpl.subscription != null) {
+        BlueNativeDataSourceImpl.subscription!.cancel();
+      }
+      if (BlueNativeDataSourceImpl.subscription != null) {
+        BlueNativeDataSourceImpl.subscription!.cancel();
+      }
       timer.cancel();
       emit(On());
 
@@ -106,13 +121,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
         emit(Done(enableCompass: false));
       }
 
-      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        final results = await sendAcousticSignal(event.crosswalk);
-        if (results.isLeft()) {
-          emit(Error(message: '스마트 압버튼 연결 실패'));
-          timer.cancel();
-        }
-      });
+      await sendAcousticSignal(event.crosswalk);
     } catch (e) {
       emit(Error(message: 'connect failure'));
     }
@@ -146,14 +155,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
       } else {
         emit(Done(enableCompass: false));
       }
-
-      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        final results = await sendVoiceInductor(event.crosswalk);
-        if (results.isLeft()) {
-          emit(Error(message: '스마트 압버튼 연결 실패'));
-          timer.cancel();
-        }
-      });
+      await sendVoiceInductor(event.crosswalk);
     } catch (e) {
       emit(Error(message: 'connect failure'));
     }

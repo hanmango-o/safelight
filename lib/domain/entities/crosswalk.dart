@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
 import 'package:latlong2/latlong.dart';
 
 import '../../core/utils/enums.dart';
@@ -47,7 +48,7 @@ class Crosswalk extends Equatable {
   /// ```
   ///
   /// 또한, DB(Firestore)에서 해당 횡단보도의 정보를 찾을 때, [post]의 [BluetoothDevice.name]을 활용한다.
-  final BluetoothDevice post;
+  final DiscoveredDevice post;
 
   /// 현재 횡단보도의 종류를 나타내는 값이다.
   ///

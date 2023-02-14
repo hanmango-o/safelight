@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/errors/exceptions.dart';
@@ -9,7 +9,7 @@ import '../models/crosswalk_model.dart';
 
 abstract class CrosswalkRemoteDataSource {
   Future<List<CrosswalkModel>> getCrosswalks(
-    List<ScanResult> results,
+    List<DiscoveredDevice> results,
     LatLng position,
   );
 }
@@ -44,14 +44,14 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
 
   @override
   Future<List<CrosswalkModel>> getCrosswalks(
-    List<ScanResult> lists,
+    List<DiscoveredDevice> lists,
     LatLng position,
   ) async {
     try {
       Set<CrosswalkModel> temps = {};
       List<CrosswalkModel> results = [];
 
-      Iterator<ScanResult> post = lists.iterator;
+      Iterator<DiscoveredDevice> post = lists.iterator;
 
       if (CrosswalkAPI.map.isEmpty) {
         CollectionReference collectionRef =
@@ -66,7 +66,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
         bool isFind = false;
 
         for (var map in CrosswalkAPI.map) {
-          if (map.containsValue(post.current.device.name)) {
+          if (map.containsValue(post.current.name)) {
             var geo1 = map['pos'][0];
             var geo2 = map['pos'][1];
 
@@ -78,7 +78,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
             temps.add(
               CrosswalkModel.fromMap({
                 'name': map['name'],
-                'post': post.current.device,
+                'post': post.current,
                 'type': ECrosswalk.values[map['type']],
                 'dir': pos['dir'],
                 'pos': pos['pos'],
@@ -93,7 +93,7 @@ class CrosswalkRemoteDataSourceImpl implements CrosswalkRemoteDataSource {
         }
         results.add(
           CrosswalkModel.fromMap({
-            'post': post.current.device,
+            'post': post.current,
             'dir': null,
             'pos': null,
           }),

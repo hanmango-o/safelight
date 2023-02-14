@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:lottie/lottie.dart';
+import 'package:safelight/core/utils/tts.dart';
 import 'package:safelight/injection.dart';
 
 import '../../core/utils/assets.dart';
 import '../../core/utils/themes.dart';
 
 class BlueOffView extends StatefulWidget {
-  final BluetoothState state;
+  final BleStatus state;
 
   const BlueOffView({Key? key, required this.state}) : super(key: key);
 
@@ -17,10 +17,12 @@ class BlueOffView extends StatefulWidget {
 }
 
 class _BlueOffViewState extends State<BlueOffView> {
+  final tts = DI.get<TTS>();
+
   @override
   void initState() {
     super.initState();
-    DI.get<FlutterTts>().speak('블루투스가 꺼져 있습니다. 블루투스를 켜주세요.');
+    tts('블루투스가 꺼져 있습니다. 블루투스를 켜주세요.');
   }
 
   @override
@@ -41,7 +43,7 @@ class _BlueOffViewState extends State<BlueOffView> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '블루투스 상태 : ${widget.state != BluetoothState.on ? '꺼짐' : ''}',
+            '블루투스 상태 : ${widget.state != BleStatus.poweredOff ? '꺼짐' : ''}',
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
           backgroundColor: Colors.transparent,

@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -209,9 +209,6 @@ Future<void> init() async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   DI.registerLazySingleton(() => auth);
 
-  final FlutterBluePlus bluetooth = FlutterBluePlus.instance;
-  DI.registerLazySingleton(() => bluetooth);
-
   final FlutterTts tts = FlutterTts();
   DI.registerLazySingleton(() => tts);
 
@@ -220,4 +217,6 @@ Future<void> init() async {
   DI.registerLazySingleton<TTS>(() => TTS(tts: DI()));
 
   DI.registerLazySingleton<Message>(() => Message());
+
+  DI.registerLazySingleton<FlutterReactiveBle>(() => FlutterReactiveBle());
 }

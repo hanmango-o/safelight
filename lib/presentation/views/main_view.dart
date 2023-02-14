@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:safelight/injection.dart';
 
@@ -15,6 +16,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
+  final bluetooth = DI.get<FlutterReactiveBle>();
   final List<Widget> _widgetOptions = const <Widget>[
     HomeView(),
     SettingView(),
@@ -31,11 +33,11 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<BluetoothState>(
-      stream: DI.get<FlutterBluePlus>().state,
-      initialData: BluetoothState.on,
+    return StreamBuilder<BleStatus>(
+      stream: bluetooth.statusStream,
+      initialData: BleStatus.ready,
       builder: (context, snapshot) {
-        if (snapshot.data != BluetoothState.off) {
+        if (snapshot.data != BleStatus.poweredOff) {
           return Scaffold(
             body: _widgetOptions[_selectedIndex],
             bottomNavigationBar: BottomNavigationBar(

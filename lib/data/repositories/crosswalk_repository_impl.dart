@@ -1,5 +1,5 @@
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../../core/errors/exceptions.dart';
 import '../../core/errors/failures.dart';
@@ -133,8 +133,8 @@ class CrosswalkRepositoryImpl implements CrosswalkRepository {
   Future<Either<Failure, List<Crosswalk>?>> getCrosswalkInfiniteTimes() async {
     try {
       final blueResults = await blueDataSource.scan();
-      for (ScanResult result in blueResults) {
-        await blueDataSource.send(result.device);
+      for (DiscoveredDevice result in blueResults) {
+        await blueDataSource.send(result);
       }
     } on BlueException {
       return Left(BlueFailure());
