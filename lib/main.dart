@@ -1,26 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:safelight/core/utils/tts.dart';
-import 'package:safelight/injection.dart';
-import 'package:safelight/initializer.dart' as initializer;
-
-import 'core/utils/themes.dart';
-import 'presentation/bloc/auth_bloc.dart';
-import 'presentation/bloc/crosswalk_bloc.dart';
-import 'presentation/cubit/bluetooth_permission_cubit.dart';
-import 'presentation/cubit/location_permission_cubit.dart';
-import 'presentation/views/main_view.dart';
-import 'presentation/views/sign_in_view.dart';
+part of safelight;
 
 // v1.3.1(ios), v1.1.2(android) | 한영찬(hanmango-o) | hanmango.o@gmail.com
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializer.init();
+  await init();
   FlutterNativeSplash.remove();
   runApp(SafeLight(auth: DI.get<FirebaseAuth>()));
 }

@@ -1,16 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-
-import '../../core/utils/assets.dart';
-import '../../core/utils/themes.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
-import 'dutorial_view.dart';
+part of ui;
 
 class SignInView extends StatefulWidget {
   const SignInView({Key? key}) : super(key: key);
@@ -52,8 +42,8 @@ class _SignInViewState extends State<SignInView> {
             Column(
               children: [
                 BlocBuilder<AuthBloc, AuthState>(
-                  builder: (_, state) {
-                    if (state is Error) {
+                  builder: (context, state) {
+                    if (state is AuthError) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(state.message),
                       ));
@@ -74,7 +64,7 @@ class _SignInViewState extends State<SignInView> {
                           ),
                           minimumSize: Size(double.maxFinite, 80.h),
                         ),
-                        child: (state is Loading)
+                        child: (state is AuthLoading)
                             ? CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color: Theme.of(context).colorScheme.onPrimary,

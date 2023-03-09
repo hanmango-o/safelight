@@ -1,201 +1,192 @@
-import 'package:dartz/dartz.dart';
+part of usecase;
 
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
-import '../repositories/auth_repository.dart';
-
-/// [AuthUseCase]는 사용자의 인증 상태를 제어하는 모든 [UseCase] 로직들의 super class이다.
+/// 사용자의 인증(Auth)을 제어하는 모든 비즈니스 로직의 상위 개념이다.
 ///
-/// 시스템을 사용하는 사용자는 [AuthUseCase]에 정의된 형태로 인증을 받아야 한다.
-/// 즉, 로그인/로그아웃 또는 그 외의 모든 인증과 관련된 비즈니스 로직은 [AuthUseCase]의 자식 형태로 구현되어야 하며
-/// [AuthUseCase]는 모든 인증 체계의 super class로서 위치해야 한다.
+/// 시스템을 사용하는 사용자는 AuthUsecase의 하위 객체(Usecase)를 통해 인증받을 수 있다.
+/// 로그인/로그아웃 또는 그 외의 모든 인증과 관련된 비즈니스 로직은 AuthUseCase의 자식 형태로 상속(Extends)되어야 하며
+/// AuthUseCase는 모든 인증(Auth) 시스템의 상위 클래스(Super class)로서 위치해야 한다.
 ///
-/// ---
-/// ## Authentication
-/// 시스템의 사용자 인증과 관련된 모든 것을 의미한다.
-/// 큰 범위에서 로그인, 로그아웃으로 구분되어 있다.
+/// 세이프라이트에서 인증(Authentication)이란, 시스템을 사용하는 사용자의 상태를 확인하고 제어하는 모든 행위를 의미한다.
+/// 로그인/로그아웃과 같이 사용자의 상태를 확인하거나 제어해야하는 모든 로직이 인증(Auth)에 해당한다.
 ///
-/// ---
-/// ## Service
-/// [AuthUseCase]는 아래의 Auth 서비스를 가지고 있다.
+/// **Summary :**
 ///
-/// * *로그인/로그아웃 외에 다른 Auth 서비스가 필요한 경우 [AuthUseCase]를 상속받는 구조로 추가할 수 있다.*
+///   - **DO**
+///   구현이 필요한 Interface가 사용자의 인증(Auth)과 관련되어 있다면, AuthUseCase를 상속(Extends) 받아야 한다.
 ///
-/// |service||설명|
-/// |:-------|-|:--------|
-/// |[SignIn]||로그인 관련 비즈니스 로직의 super class|
-/// |[SignOut]||로그아웃 관련 비즈니스 로직의 super class|
+/// {@template usecase_warning1}
+///   - **DON'T**
+///   해당 객체는 데이터 타입으로 직접 사용되어서는 안된다.
+///   하위 Interface의 부모 클래스(Super class)로서 이러한 Interface가
+///   상위 개념과 관련되어 있다는 것을 알려주는 역할만을 수행한다.
+/// {@endtemplate}
 ///
-/// ---
-/// ## 주의할 점
-/// [AuthUseCase]는 실질적인 비즈니스 로직으로서 사용되지 않는다.
+///     ```dart
+///     AuthUsecase usecase = SubUsecase(); // Do not use this.
+///     ```
 ///
-/// 익명 로그인, 익명 로그아웃과 같은 실질적인(details) 비즈니스 로직들의 최상단 클래스로서
-/// 이러한 비즈니스 로직들이 사용자의 인증(Authetication)과 관련되어 있다는 것을 알려주는 역할만을 수행한다.
+/// **See also :**
 ///
-/// 이후 구현이 필요한 비즈니스 로직이 사용자의 인증(Authentication)과 관련되어 있다면, [AuthUseCase]의 sub class로 배치되어야 한다.
+///   - 현재 AuthUsecase를 상속받은 Interface는 로그인([SignIn]), 로그아웃([SignOut])이 있다.
+///   - `version 1.*` 에서는 모든 사용자 인증은 `FirebaseAuth`를 사용하고 있다.
 abstract class AuthUseCase {}
 
-/// [SignIn]은 [UseCase]로서, 모든 로그인 로직들의 super class이다.
+/// 모든 로그인 Usecase 로직들의 Interface이다.
 ///
-/// 로그인 관련 모든 비즈니스 로직은 [SignIn]의 sub class로 구현되어야 한다.
-/// [SignIn]이 포함하고 있는 비즈니스 로직은 아래와 같다.
+/// 사용자 로그인과 관련된 [UseCase]는 SignIn을 구현(implements)하여야 한다.
+/// 해당 Interface를 구현한 하위 클래스는 [UseCase]로서 실질적인 비즈니스 로직으로 사용된다.
 ///
-/// |sub class||설명|
-/// |:-------|-|:--------|
-/// |[SignInAnonymously]||익명 로그인 비즈니스 로직|
+/// [call] 메소드의 Argument로 `Map<String, dynamic>?`를 사용하여 사용자 정보를 담아야한다.
+/// 단, 사용자 정보가 필요하지 않는 경우 `null`을 사용한다.
 ///
-/// ---
-/// ## 주의할 점
-/// [SignIn]은 실질적인 비즈니스 로직으로서 사용되지 않는다.
+///   - 사용자 정보를 사용하는 경우
+///     ```dart
+///     // Use this if you have a user info.
+///     Map<String, dynamic> user = {
+///       'name' : '홍길동',
+///       'id' : xxx@email.com,
+///       'pw' : q1w2e3r4!,
+///       //some user info...
+///     };
+///     SomeSignInUsecase(user); // Use call method.
+///     ```
 ///
-/// 로그인 관련 비즈니스 로직들의 super class로서 이러한 비즈니스 로직들이
-/// 사용자 로그인과 관련되어 있는 것을 알려주는 역할만을 수행한다.
+///   - 사용자 정보를 사용하지 않는 경우
+///     ```dart
+///     // Use this if you don't hava a user info.
+///     SomeSignInUsecase(null); // Use call method.
+///     ```
 ///
-/// 이후 구현이 필요한 로그인 관련 비즈니스 로직은 [SignIn]의 sub class로 배치되어야 한다.
+/// **Summary :**
 ///
-/// 또한, [SignIn]은 사용자가 로그아웃 상태일 경우에 사용해야 한다.
-/// 만약 사용자가 로그아웃 상태가 아니라면 [SignOut]의 비즈니스 로직이 선행되어야 한다.
+///   - **DO**
+///   구현이 필요한 클래스([UseCase])가 사용자의 로그인과 관련되어 있다면, SignIn을 구현(Implements)하여야 한다.
+///   구현(Implements)을 통해 하위 클래스를 실질적인 비즈니스 로직으로 사용할 수 있다.
 ///
-/// ---
-/// ## UseCase
-/// [SignIn]의 sub class들은 [UseCase]의 [call] 메소드를 구현(implements)해야 한다.
-/// 이때, [call] 메소드의 Parameter와 Return Type은 아래와 같다.
+/// {@template usecase_warning2}
+///   - **PREFER**
+///   해당 Interface는 하위 클래스([UseCase]) 사용 시, 데이터 타입으로 사용할 것을 권장한다.
+///     ```dart
+///     ThisInterface foo = SomeImplClass(); // Use this.
+///     SomeImplClass foo = SomeImplClass(); // Do not use this.
+///     ```
+/// {@endtemplate}
 ///
-/// ### Parameter
-/// 사용자의 정보를 담은 [Map]의 형태를 Parameter로 가진다.
+///   - **DON’T**
+///   SignIn을 구현한 하위 클래스는 사용자가 로그인 상태일 때 사용되어서는 안된다.
+///   즉, 사용자가 로그아웃 상태일 경우에만 사용해야 한다.
 ///
-/// `Map<String, dynamic>?`의 형태로 전달받은 데이터는
-/// 해당 로그인 로직에 필요한 데이터(ex. id, pw)를 포함하고 있어야 하며,
+/// **See also :**
 ///
-/// 필요에 따라 [User] 객체로 변환하는 과정이 수행되어야 한다.
-///
-/// ### Return Type
-/// [Either]로서 ([Failure], [Void])의 형태로 반환된다.
-///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||로그인에 성공하는 경우|
-/// |[Failure]||로그인에 실패하는 경우|
+///   - 사용자를 로그아웃 상태로 만들고 싶다면, [SignOut] Interface의 하위 클래스를 사용한다.
 abstract class SignIn extends AuthUseCase
     implements UseCase<Void, Map<String, dynamic>?> {}
 
-/// [SignOut]은 [UseCase]로서, 모든 로그아웃 로직들의 super class이다.
+/// 모든 로그아웃 Usecase 로직들의 Interface이다.
 ///
-/// 로그아웃 관련 모든 비즈니스 로직은 [SignOut]의 sub class로 구현되어야 한다.
-/// [SignOut]이 포함하고 있는 비즈니스 로직은 아래와 같다.
+/// 사용자 로그아웃과 관련된 [UseCase]는 SignOut을 구현(implements)하여야 한다.
+/// 해당 Interface를 구현한 하위 클래스는 [UseCase]로서 실질적인 비즈니스 로직으로 사용된다.
 ///
-/// |sub class||설명|
-/// |:-------|-|:--------|
-/// |[SignOutAnonymously]||익명 로그아웃 비즈니스 로직|
+/// {@template usecase_part1}
+/// [call] 메소드의 Argument로 [NoParams]를 사용한다.
 ///
-/// ---
-/// ## 주의할 점
-/// [SignOut]은 실질적인 비즈니스 로직으로서 사용되지 않는다.
+/// ```dart
+/// final usecase = SomeUsecaseImpl();
+/// usecase(NoParams()); // Use call method.
+/// ```
+/// {@endtemplate}
 ///
-/// 로그아웃 관련 비즈니스 로직들의 super class로서 이러한 비즈니스 로직들이
-/// 사용자 로그아웃과 관련되어 있는 것을 알려주는 역할만을 수행한다.
+/// **Summary :**
 ///
-/// 이후 구현이 필요한 로그아웃 관련 비즈니스 로직은 [SignOut]의 sub class로 배치되어야 한다.
+///   - **DO**
+///   구현이 필요한 클래스([UseCase])가 사용자의 로그아웃과 관련되어 있다면, SignOut을 구현(Implements)하여야 한다.
+///   구현(Implements)을 통해 하위 클래스를 실질적인 비즈니스 로직으로 사용할 수 있다.
 ///
-/// 또한, [SignOut]은 사용자가 로그인 상태일 경우에 사용해야 한다.
+/// {@macro usecase_warning2}
 ///
-/// ---
-/// ## UseCase
-/// [SignOut]의 sub class들은 [UseCase]의 [call] 메소드를 구현(implements)해야 한다.
-/// 이때, [call] 메소드의 Parameter와 Return Type은 아래와 같다.
+///   - **DON’T**
+///   SignOut을 구현한 하위 클래스는 사용자가 로그아웃 상태일 때 사용되어서는 안된다.
+///   즉, 사용자가 로그인 상태일 경우에만 사용해야 한다.
 ///
-/// ### Parameter
-/// [NoParams]로서 할당 받는 값이 없다.
+/// **See also :**
 ///
-/// ### Return Type
-/// [Either]로서 ([Failure], [Void])의 형태로 반환된다.
-///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||로그아웃에 성공하는 경우|
-/// |[Failure]||로그아웃에 실패하는 경우|
+///   - 사용자를 로그인 상태로 만들고 싶다면, [SignIn] Interface의 하위 클래스를 사용한다.
 abstract class SignOut extends AuthUseCase implements UseCase<Void, NoParams> {}
 
-/// [SignInAnonymously]는 익명 로그인 비즈니스 로직이다.
+/// 익명 로그인을 수행하는 비즈니스 로직이다.
 ///
-/// 사용자가 익명으로 로그인 할 시 사용되며, [call] 메소드를 통해 [AuthRepository.signInAnonymously]를 호출하여 익명 로그인을 시도한다.
-///
-/// 익명 로그인의 경우 사용자 정보가 필요하지 않으므로, 사용 시 [call]의 `user` Parameter에 `null`을 Argument로 넘겨야 한다.
-///
-/// [SignInAnonymously]의 로직이 수행될 경우, 아래와 같이 결과가 반환된다.
-///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||익명 로그인 성공|
-/// |[ServerFailure]||인터넷 연결 불안정으로 인한 로그인 실패|
-///
-/// ---
-/// ## 주의할 점
-/// [SignInAnonymously]은 [SignIn]에 속하기 때문에 사용자가 로그아웃된 상태에서만 사용되어야 한다.
-///
-/// * 자세한 사항은 `SignIn > 주의할 점`을 참고
-///
-/// ---
-/// ## Members
-/// [SignInAnonymously]의 member는 아래와 같다.
-///
-/// ### field
-/// * [repository]
-///
-/// ### method
-/// * [call]
-///
-/// ---
-/// ## Example
-/// [SignInAnonymously]는 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+/// SignInAnonymously는 사용자가 익명으로 로그인하는 경우 사용된다. 익명 로그인은 사용자의 정보를 받지 않고 로그인하는 기능을 의미한다.
+/// 익명 로그인의 경우 사용자 정보가 필요하지 않으므로, [call]의 `user` Parameter에 `null`을 Argument로 넘겨야 한다.
 ///
 /// ```dart
-/// SignInAnonymously signInAnonymously = SignInAnonymously(repository);
+/// SignIn signIn = SignInAnonymously(); // Create usecase object.
+/// signIn(null); // Use call method.
 /// ```
 ///
-/// 단, 아래와 같이 [SignInAnonymously]의 super class인 [SignIn]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+/// [call] 메소드를 통해 [AuthRepository.signInAnonymously]를 호출하여 익명 로그인을 시도한다.
+/// 해당 메소드를 수행하면 아래와 같은 경우에 따라 결과가 반환된다.
 ///
-/// ```dart
-/// // 변수형 SignIn 사용
-/// SignIn signInAnonymously = SignInAnonymously(repository);
+///   - **[ServerFailure] :**
+///   인터넷 연결 불안정 및 로그인 로직 수행 중 오류 발생
 ///
-/// // 외부 의존성 주입이 완료된 경우
-/// SignIn signInAnonymously = DI.get<SignIn>();
-/// ```
+///   - **[Void] :**
+///   익명 로그인 성공
 ///
-/// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
-/// 이때 argument로 [Map]을 넘겨주어야 하지만, [SignInAnonymously]의 경우 익명 로그인이므로 `null`을 넘겨준다.
+/// **Summary :**
 ///
-/// ```dart
-/// signInAnonymously(null);
-/// ```
+///   - **DO**
+///   사용자 정보없이 로그인해야 한다면, SignInAnonymously를 사용해야 한다.
+///   SignInAnonymously는 Safelight에서 Default로 사용된다.
 ///
-/// 아래는 위 과정에 대한 전문이다.
-/// ```dart
-/// SignInAnonymously signInAnonymously = SignInAnonymously(repository); // 비권장
-/// SignIn signInAnonymously = SignInAnonymously(repository); // 권장
-/// SignIn signInAnonymously = DI.get<SignIn>(); // Best Practice
+/// {@template usecase_part3}
+///   - **PREFER**
+///   외부 DI를 통해 객체를 생성하는 것을 권장한다.
+///   또한, 생성된 객체는 되도록 상위 Interface를 데이터 타입으로 가지도록 해야 한다.
+/// {@endtemplate}
 ///
-/// signInAnonymously(null); // call 메소드 호출
-/// ```
+/// **See also :**
+///
+///   - SignInAnonymously는 [SignIn]에 속하기 때문에 사용자가 로그아웃된 상태에서만 사용되어야 한다.
+///     (자세한 사항은 `SignIn > Summary`을 참고)
+///   - 현재 익명 로그인은 UI에서 `로그인 없이 이용하기` 버튼을 누를 경우 동작되게 된다.
 class SignInAnonymously implements SignIn {
-  /// [AuthRepository] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+  /// 익명 로그인을 위한 Repository를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// domain layer의 repository interface로 변수형을 선언([AuthRepository])하고 실제 DI하는 값은
-  /// data layer의 repository implements로 주입하여, 캡슐화한다.
+  /// [call] 메소드 내에서 [AuthRepository.signInAnonymously]를 사용되며 익명 로그인을 시도하게 된다.
   ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@template usecase_part2}
+  /// **See also :**
+  ///
+  ///  - DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@endtemplate}
   AuthRepository repository;
 
-  /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
+  /// 익명 로그인 Usecase를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+  ///
   /// ```dart
-  /// SignInAnonymously signInAnonymously = SignInAnonymously(repository); // 비권장
-  /// SignIn signInAnonymously = SignInAnonymously(repository); // 권장
-  /// SignIn signInAnonymously = DI.get<SignIn>(); // Best Practice
+  /// SignInAnonymously signInAnonymously = SignInAnonymously(repository);
+  /// ```
+  ///
+  /// 단, [SignIn]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+  ///
+  /// ```dart
+  /// // Use SignIn Type
+  /// SignIn signInAnonymously = SignInAnonymously(repository);
+  /// ```
+  ///
+  /// ```dart
+  /// // Use DI
+  /// SignIn signInAnonymously = DI.get<SignIn>(); // Best Practice.
+  /// ```
+  ///
+  /// **Example :**
+  /// ```dart
+  /// SignInAnonymously signInAnonymously = SignInAnonymously(repository); // Do not use this.
+  /// SignIn signInAnonymously = SignInAnonymously(repository);
+  /// SignIn signInAnonymously = DI.get<SignIn>(); // Best Practice.
+  /// signInAnonymously(null); // Use call method.
   /// ```
   SignInAnonymously({required this.repository});
 
@@ -205,83 +196,68 @@ class SignInAnonymously implements SignIn {
   }
 }
 
-/// [SignOutAnonymously]는 익명 로그아웃 비즈니스 로직이다.
+/// 익명 로그인 상태 사용자의 로그아웃을 수행하는 비즈니스 로직이다.
 ///
-/// 사용자가 익명으로 로그아웃 할 시 사용되며, [call] 메소드를 통해 [AuthRepository.signOutAnonymously]를 호출하여 익명 로그아웃을 시도한다.
+/// SignOutAnonymously는 익명 로그인([SignInAnonymously])된 사용자가 로그아웃하는 경우 사용된다.
 ///
-/// 사용 시 [call]의 parameter에 [NoParams] 객체를 Argument로 넘겨주어야 한다.
+/// {@macro usecase_part1}
 ///
-/// [SignOutAnonymously]의 로직이 수행될 경우, 아래와 같이 결과가 반환된다.
+/// [call] 메소드를 통해 [AuthRepository.signOutAnonymously]를 호출하여 익명 로그아웃을 시도한다.
+/// 해당 메소드를 수행하면 아래와 같은 경우에 따라 결과가 반환된다.
 ///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||익명 로그아웃 성공|
-/// |[ServerFailure]||인터넷 연결 불안정으로 인한 로그아웃 실패|
+///   - **[Void] :**
+///   익명 로그아웃 성공
 ///
-/// ---
-/// ## 주의할 점
-/// [SignOutAnonymously]은 [SignOut]에 속하기 때문에 사용자가 로그인된 상태에서만 사용되어야 한다.
+///   - **[ServerFailure] :**
+///   인터넷 연결 불안정 및 로그아웃 로직 수행 중 오류 발생
 ///
-/// ---
-/// ## Members
-/// [SignOutAnonymously]의 member는 아래와 같다.
+/// **Summary :**
 ///
-/// ### field
-/// * [repository]
+/// {@macro usecase_part3}
 ///
-/// ### method
-/// * [call]
+///   - **DO**
+///   익명 로그인된 사용자가 로그아웃을 해야 한다면, SignOutAnonymously를 사용해야 한다.
 ///
-/// ---
-/// ## Example
-/// [SignOutAnonymously]는 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+/// **See also :**
 ///
-/// ```dart
-/// SignOutAnonymously signOutAnonymously = SignOutAnonymously(repository);
-/// ```
-///
-/// 단, 아래와 같이 [SignOutAnonymously]의 super class인 [SignOut]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
-///
-/// ```dart
-/// // 변수형 SignOut 사용
-/// SignOut signOutAnonymously = SignOutAnonymously(repository);
-///
-/// // 외부 의존성 주입이 완료된 경우
-/// SignOut signOutAnonymously = DI.get<SignOut>();
-/// ```
-///
-/// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
-/// 이때 argument로 [NoParams]를 넘겨준다.
-///
-/// ```dart
-/// signOutAnonymously(NoParams());
-/// ```
-///
-/// 아래는 위 과정에 대한 전문이다.
-/// ```dart
-/// SignOutAnonymously signOutAnonymously = SignOutAnonymously(repository); // 비권장
-/// SignOut signOutAnonymously = SignOutAnonymously(repository); // 권장
-/// SignOut signOutAnonymously = DI.get<SignOut>(); // Best Practice
-///
-/// signOutAnonymously(NoParams()); // call 메소드 호출
-/// ```
+///   - SignOutAnonymously는 [SignOut]에 속하기 때문에 사용자가 익명 로그인된 상태에서만 사용되어야 한다.
+///     (자세한 사항은 `SignOut > Summary`을 참고)
+///   - 현재 익명 로그아웃은 설정 화면 UI에서 `사용자 정보` 버튼을 누를 경우 동작되게 된다.
 class SignOutAnonymously implements SignOut {
-  /// [AuthRepository] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+  /// 익명 로그아웃을 위한 Repository를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// domain layer의 repository interface로 변수형을 선언([AuthRepository])하고 실제 DI하는 값은
-  /// data layer의 repository implements로 주입하여, 캡슐화한다.
+  /// [call] 메소드 내에서 [AuthRepository.signOutAnonymously]를 사용되며 익명 로그아웃을 시도하게 된다.
   ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@macro usecase_part2}
   AuthRepository repository;
 
-  /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
+  /// 익명 로그아웃 Usecase를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+  ///
   /// ```dart
-  /// SignOutAnonymously signOutAnonymously = SignOutAnonymously(repository); // 비권장
-  /// SignOut signOutAnonymously = SignOutAnonymously(repository); // 권장
-  /// SignOut signOutAnonymously = DI.get<SignOut>(); // Best Practice
+  /// SignOutAnonymously signOutAnonymously = SignOutAnonymously(repository);
+  /// ```
+  ///
+  /// 단, [SignOut]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+  ///
+  /// ```dart
+  /// // Use SignOut Type
+  /// SignOut signOutAnonymously = SignOutAnonymously(repository);
+  /// ```
+  ///
+  /// ```dart
+  /// // Use DI
+  /// SignOut signOutAnonymously = DI.get<SignOut>(); // Best Practice.
+  /// ```
+  ///
+  /// **Example :**
+  ///
+  /// ```dart
+  /// SignOutAnonymously signOutAnonymously = SignOutAnonymously(repository); // Do not use this.
+  /// SignOut signOutAnonymously = SignOutAnonymously(repository);
+  /// SignOut signOutAnonymously = DI.get<SignOut>(); // Best Practice.
+  /// signInAnonymously(NoParams()); // Use call method.
   /// ```
   SignOutAnonymously({required this.repository});
 

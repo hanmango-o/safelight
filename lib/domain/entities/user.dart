@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of object;
 
 /// [User]는 사용자 객체이다.
 ///

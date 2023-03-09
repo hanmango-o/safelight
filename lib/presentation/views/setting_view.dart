@@ -1,25 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:safelight/injection.dart';
-
-import '../../core/utils/themes.dart';
-import '../../core/utils/tts.dart';
-import '../../domain/usecases/permission_usecase.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
-import '../cubit/bluetooth_permission_cubit.dart';
-import '../cubit/location_permission_cubit.dart';
-import '../widgets/board.dart';
-import '../widgets/flat_card.dart';
-import '../widgets/single_child_rounded_card.dart';
-import 'dutorial_view.dart';
+part of ui;
 
 class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -57,7 +38,7 @@ class _SettingViewState extends State<SettingView> {
           ),
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (_, state) {
-              if (state is Error) {
+              if (state is AuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(state.message),
                 ));
@@ -90,7 +71,7 @@ class _SettingViewState extends State<SettingView> {
                       semanticsLabel: '',
                     ),
                   ),
-                  trailing: (state is Loading)
+                  trailing: (state is AuthLoading)
                       ? const CircularProgressIndicator()
                       : Icon(
                           Icons.logout,

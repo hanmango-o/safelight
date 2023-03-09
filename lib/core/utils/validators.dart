@@ -1,7 +1,4 @@
-import 'package:dartz/dartz.dart';
-
-import '../../domain/entities/weather.dart';
-import '../errors/failures.dart';
+part of core;
 
 abstract class Validator {}
 

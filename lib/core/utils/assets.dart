@@ -1,4 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
+part of core;
 
 class Images {
   static String ROOT = 'lib/assets/images';

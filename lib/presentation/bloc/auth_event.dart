@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of controller;
 
 class AuthEvent extends Equatable {
   @override

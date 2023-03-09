@@ -1,7 +1,4 @@
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../../core/errors/exceptions.dart';
+part of data_source;
 
 abstract class NavigateRemoteDataSource {
   Future<LatLng> getCurrentLatLng();

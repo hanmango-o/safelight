@@ -1,3 +1,5 @@
+part of core;
+
 class ServerException implements Exception {}
 
 class CacheException implements Exception {}

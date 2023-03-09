@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of object;
 
 /// [Weather]는 날씨 객체이다.
 ///

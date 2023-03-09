@@ -1,44 +1,76 @@
-import 'package:dartz/dartz.dart';
+part of repository;
 
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
-
-/// [AuthRepository]는 사용자 인증(로그인/로그아웃)과 관련된 Repository이다.
+/// 사용자 인증(Auth)과 관련된 Repository의 Interface이다.
 ///
-/// `AuthUseCase`의 비즈니스 로직들의 요청을 처리하고 요청에 따른 결과를 반환한다.
+/// 로그인/로그아웃 또는 그 외의 모든 인증과 관련된 Usecase의 요청을 처리한다.
 ///
-/// [AuthRepository]는 Repository의 interface로서 캡슐화의 역할을 수행한다.
-/// 이에 따라 [AuthRepository]는 `lib/data/repositories/auth_repository_impl.dart`의
-/// `AuthRepositoryImpl` 클래스를 통해 구현된다.
+/// 인증(Authentication)이란, 시스템을 사용하는 사용자의 상태를 확인하고 제어하는 모든 행위를 의미한다.
+/// 로그인/로그아웃과 같이 사용자의 상태를 확인하거나 제어해야 하는 모든 요청이 인증(Auth)에 해당한다.
 ///
-/// 이후, 객체 생성 시 [AuthRepository] 타입으로 객체를 생성하여 Domain Layer 와 Data Layer를 연결한다.
+/// 해당 Interface의 구현부는 Data Layer의 [AuthRepositoryImpl]이다.
 ///
-/// ---
-/// ## Functions
-/// [AuthRepository]는 요청에 따라 아래의 메소드를 호출하여 기능을 수행할 수 있다.
+/// **Summary :**
 ///
-/// |기능||설명|
-/// |:-------|-|:--------|
-/// |[signInAnonymously]||FirebaseAuth를 통한 익명 로그인|
-/// |[signOutAnonymously]||FirebaseAuth를 통한 익명 로그아웃|
+///   - **DO**
+///   사용자 인증(로그인/로그아웃)과 관련된 요청은 AuthRepository를 통해 처리해야 한다.
+///   또한, 실제 구현부([AuthRepositoryImpl])는 Data Layer에 위치해야 한다.
+///
+///   {@template repository_part2}
+///   - **PREFER**
+///   외부 DI를 통해 객체를 생성하는 것을 권장한다.
+///   {@endtemplate}
+///
+///     ```dart
+///     AuthRepository repository = DI.get<AuthRepository>();
+///     ```
+///
+/// {@macro usecase_part2}
 abstract class AuthRepository {
-  /// [signInAnonymously]는 익명 로그인을 수행한다.
+  /// 익명 로그인 요청을 처리하는 메소드이다.
   ///
-  /// [Either]로서 ([Failure], [Void])의 형태로 반환되며, 경우에 따라 아래와 같이 결과가 반환된다.
+  /// 해당 메소드를 수행하면 [AuthRemoteDataSource.signInAnonymously]를 호출하여 익명 로그인을 시도한다.
   ///
-  /// |return||case|
-  /// |:-------|-|:--------|
-  /// |`Right(Void())`||익명 로그인 성공|
-  /// |`Left(ServerFailure())`||인터넷 연결 불안정으로 인한 로그인 실패|
+  /// {@template repository_part1}
+  /// [Either]로서 `<Left, Right>`의 형태로 반환되며,
+  /// 경우에 따라 아래와 같이 결과가 반환된다.
+  /// {@endtemplate}
+  ///
+  ///   - **`Left(ServerFailure())` :**
+  ///   인터넷 연결 불안정 및 로그인 로직 수행 중 오류 발생
+  ///
+  ///   - **`Right(Void())` :**
+  ///   익명 로그인 성공
+  ///
+  /// **Summary :**
+  ///
+  ///   - **DO**
+  ///   익명 로그인 요청을 처리해야 한다면 signInAnonymously를 사용해야 한다.
+  ///
+  /// {@template repository_part3}
+  /// **See also :**
+  ///
+  ///   - [Blog | Either란 무엇일까?](https://velog.io/@tygerhwang/Flutter-Dartz)에서
+  ///     [Flutter : 함수형 프로그래밍 Dartz](https://pub.dev/packages/dartz)에 대한 자세한 설명을 확인할 수 있다.
+  /// {@endtemplate}
   Future<Either<Failure, Void>> signInAnonymously();
 
-  /// [signOutAnonymously]는 익명 로그아웃을 수행한다.
+  /// 익명 로그아웃 요청을 처리하는 메소드이다.
   ///
-  /// [Either]로서 ([Failure], [Void])의 형태로 반환되며, 아래와 같이 결과가 반환된다.
+  /// 해당 메소드를 수행하면 [AuthRemoteDataSource.signOutAnonymously]를 호출하여 익명 로그아웃을 시도한다.
   ///
-  /// |return||case|
-  /// |:-------|-|:--------|
-  /// |`Right(Void())`||익명 로그아웃 성공|
-  /// |`Left(ServerFailure())`||인터넷 연결 불안정으로 인한 로그아웃 실패|
+  /// {@macro repository_part1}
+  ///
+  ///   - **`Right(Void())` :**
+  ///   익명 로그아웃 성공
+  ///
+  ///   - **`Left(ServerFailure())` :**
+  ///   인터넷 연결 불안정 및 로그아웃 로직 수행 중 오류 발생
+  ///
+  /// **Summary :**
+  ///
+  ///   - **DO**
+  ///   익명 로그아웃 요청을 처리해야 한다면 signOutAnonymously를 사용해야 한다.
+  ///
+  /// {@macro repository_part3}
   Future<Either<Failure, Void>> signOutAnonymously();
 }

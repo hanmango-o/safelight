@@ -1,4 +1,4 @@
-import '../../domain/entities/crosswalk.dart';
+part of object;
 
 class CrosswalkModel extends Crosswalk {
   const CrosswalkModel({

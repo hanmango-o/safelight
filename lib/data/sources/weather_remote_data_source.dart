@@ -1,11 +1,4 @@
-import 'dart:convert';
-
-import 'package:latlong2/latlong.dart';
-import 'package:http/http.dart' as http;
-
-import '../../core/errors/exceptions.dart';
-import '../../core/utils/apis.dart';
-import '../models/weather_model.dart';
+part of data_source;
 
 abstract class WeatherRemoteDataSource {
   Future<WeatherModel> getCurrentWeather(LatLng position);

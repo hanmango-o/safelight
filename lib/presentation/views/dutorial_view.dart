@@ -1,15 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:safelight/injection.dart';
-import 'dart:io' show Platform;
-
-import '../../core/utils/themes.dart';
-import '../../core/utils/tts.dart';
-import '../widgets/board.dart';
-import '../widgets/compass.dart';
-import '../widgets/single_child_rounded_card.dart';
+part of ui;
 
 class DutorialView extends StatefulWidget {
   const DutorialView({super.key});

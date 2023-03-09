@@ -1,3 +1,5 @@
+part of core;
+
 abstract class APIS {}
 
 class WeatherAPI implements APIS {

@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+part of controller;
 
 @immutable
 abstract class AuthState extends Equatable {
@@ -7,14 +6,14 @@ abstract class AuthState extends Equatable {
   List<Object?> get props => [];
 }
 
-class Done extends AuthState {}
+class AuthDone extends AuthState {}
 
-class Loading extends AuthState {}
+class AuthLoading extends AuthState {}
 
-class Error extends AuthState {
+class AuthError extends AuthState {
   final String message;
 
-  Error({required this.message});
+  AuthError({required this.message});
 
   @override
   List<Object?> get props => [message];

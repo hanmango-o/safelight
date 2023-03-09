@@ -1,10 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
-import '../../domain/usecases/auth_usecase.dart';
-import 'auth_event.dart';
-import 'auth_state.dart';
+part of controller;
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignIn signInAnonymously;
@@ -13,7 +7,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required this.signInAnonymously,
     required this.signOutAnonymously,
-  }) : super(Done()) {
+  }) : super(AuthDone()) {
     on<SignInAnonymouslyEvent>(_signInAnonymouslyEvent);
     on<SignOutAnonymouslyEvent>(_signOutAnonymouslyEvent);
   }
@@ -23,21 +17,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(Loading());
+      emit(AuthLoading());
 
       final result = await signInAnonymously(null);
       result.fold(
         (failure) {
           if (failure is ServerFailure) {
-            emit(Error(message: '인터넷 연결 안됨'));
+            emit(AuthError(message: '인터넷 연결 안됨'));
           }
         },
         (success) {
-          emit(Done());
+          emit(AuthDone());
         },
       );
     } catch (e) {
-      emit(Error(message: '로그인 실패, 다시 시도해주세요.'));
+      emit(AuthError(message: '로그인 실패, 다시 시도해주세요.'));
     }
   }
 
@@ -46,21 +40,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(Loading());
+      emit(AuthLoading());
 
       final result = await signOutAnonymously(NoParams());
       result.fold(
         (failure) {
           if (failure is ServerFailure) {
-            emit(Error(message: '인터넷 연결 안됨'));
+            emit(AuthError(message: '인터넷 연결 안됨'));
           }
         },
         (success) {
-          emit(Done());
+          emit(AuthDone());
         },
       );
     } catch (e) {
-      emit(Error(message: '로그아웃 실패, 다시 시도해주세요.'));
+      emit(AuthError(message: '로그아웃 실패, 다시 시도해주세요.'));
     }
   }
 }

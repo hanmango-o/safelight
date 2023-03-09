@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
-import '../../core/errors/exceptions.dart';
+part of data_source;
 
 abstract class BlueNativeDataSource {
   Future<List<DiscoveredDevice>> scan();
@@ -24,11 +21,10 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
   @override
   Future<List<DiscoveredDevice>> scan() async {
     List<DiscoveredDevice> results = [];
-    // final _devices = <DiscoveredDevice>[];
     try {
-      subscription = bluetooth.scanForDevices(withServices: [
-        Uuid.parse('0003cdd0-0000-1000-8000-00805f9b0131')
-      ]).listen((device) {
+      subscription = bluetooth.scanForDevices(
+        withServices: [Uuid.parse(Bluetooth.SERVICE_UUID)],
+      ).listen((device) {
         final knownDeviceIndex = results.indexWhere((d) => d.id == device.id);
         if (knownDeviceIndex >= 0) {
           results[knownDeviceIndex] = device;
@@ -51,7 +47,7 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
   @override
   Future<void> send(
     DiscoveredDevice post, {
-    List<int> command = const [0x31, 0x00, 0x01],
+    List<int> command = Bluetooth.CMD_VOICE,
   }) async {
     try {
       connection = bluetooth.connectToDevice(id: post.id).listen(
@@ -63,13 +59,14 @@ class BlueNativeDataSourceImpl implements BlueNativeDataSource {
             final characteristic = services
                 .firstWhere(
                   (service) =>
-                      service.serviceId ==
-                      Uuid.parse('0003cdd0-0000-1000-8000-00805f9b0131'),
+                      service.serviceId == Uuid.parse(Bluetooth.SERVICE_UUID),
                 )
                 .characteristics
-                .firstWhere((characteristic) =>
-                    characteristic.characteristicId ==
-                    Uuid.parse('0003cdd2-0000-1000-8000-00805f9b0131'));
+                .firstWhere(
+                  (characteristic) =>
+                      characteristic.characteristicId ==
+                      Uuid.parse(Bluetooth.CHAR_UUID),
+                );
 
             final qualifiedCharacteristic = QualifiedCharacteristic(
               characteristicId: characteristic.characteristicId,

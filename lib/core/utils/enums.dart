@@ -1,3 +1,5 @@
+part of core;
+
 // 앱 내에서 사용하는 Enum 모음
 // 모든 Enum 형 변수는 naming 시 E를 처음 글자로 갖도록 해야한다.
 // ignore_for_file: constant_identifier_names
@@ -91,9 +93,4 @@ enum EBlueState {
   /// 블루투스 연결 로직이 시작될 때 상태를 [CONNECT]로 변경해주어야 하며, [CONNECT] 상태일 경우 [ON] 상태로의 직접적인 전환이 불가능하다.
   /// 즉, [CONNECT] > [OFF] 로의 전환만 가능하다.
   CONNECT,
-}
-
-enum EPermission {
-  BLUETOOTH,
-  LOCATION,
 }

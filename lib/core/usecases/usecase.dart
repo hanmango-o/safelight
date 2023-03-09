@@ -1,10 +1,6 @@
-import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
-
-import '../errors/failures.dart';
+part of core;
 
 abstract class UseCase<Type, Params> {
-  /// ㅇㅇㅇㅇ
   Future<Either<Failure, Type>> call(Params params);
 }
 

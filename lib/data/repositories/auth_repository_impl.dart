@@ -1,77 +1,44 @@
-import 'package:dartz/dartz.dart';
+part of repository;
 
-import '../../core/errors/exceptions.dart';
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../sources/auth_remote_data_source.dart';
-
-/// [AuthRepositoryImpl]는 [AuthRepository]의 구현부이다.
-///
-/// `sources` 폴더의 [AuthRemoteDataSource]를 사용하여 익명 로그인을 수행한다.
-///
-/// ---
-/// ## Members
-/// [AuthRepositoryImpl]의 member는 아래와 같다.
-///
-/// ### field
-/// * [authDataSource]
-///
-/// ### method
-/// * [signInAnonymously]
-///   * [AuthRemoteDataSource.signInAnonymously]를 호출하여 익명 로그인을 수행한다.
-///
-/// * [signOutAnonymously]
-///   * [AuthRemoteDataSource.signOutAnonymously]를 호출하여 익명 로그인을 수행한다.
-/// ---
-/// ## Example
-/// [AuthRepositoryImpl]는 아래와 같이 [AuthRepository] 타입으로 객체를 생성해야 한다.
-///
-/// ```dart
-/// AuthRepository repository = AuthRepositoryImpl(datasource);
-/// ```
-///
-/// 또한 외부에서 의존성을 주입하여 객체를 생성하는 것을 권장한다.
-///
-/// ```dart
-/// // 외부 의존성 주입이 완료된 경우
-/// AuthRepository repository = DI.get<AuthRepository>();
-/// ```
-///
-/// 객체의 생성이 끝난 경우 아래와 같이 메소드를 호출한다.
-///
-/// ```dart
-/// repository.signInAnonymously(); // 익명 로그인
-/// repository.signOutAnonymously(); // 익명 로그아웃
-/// ```
-///
-/// 아래는 위 과정에 대한 전문이다.
-///
-/// ```dart
-/// AuthRepository repository = AuthRepositoryImpl(datasource); // 권장
-/// // 외부 의존성 주입이 완료된 경우
-/// AuthRepository repository = DI.get<AuthRepository>(); // Best Practice
-///
-/// repository.signInAnonymously(); // 익명 로그인
-/// repository.signOutAnonymously(); // 익명 로그아웃
-/// ```
+/// 사용자 인증(Auth)과 관련된 [AuthRepository]의 구현부이다.
 class AuthRepositoryImpl implements AuthRepository {
-  /// [AuthRemoteDataSource] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+  /// 사용자 인증 제어(Auth)를 위한 DataSource를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// 변수형을 선언([AuthRemoteDataSource])하고 실제 DI하는 값은 [AuthRemoteDataSourceImpl] 객체로 주입한다.
-  ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@macro usecase_part2}
   AuthRemoteDataSource authDataSource;
 
-  /// Default constructor로서 의존성 주입을 위해 [authDataSource]를 Argument로 반드시 받아야 한다.
+  /// 사용자 인증(Auth) 제어를 위한 Repository를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 [AuthRepository] 타입으로 객체를 생성해야 한다.
   ///
   /// ```dart
-  /// AuthRepository repository = AuthRepositoryImpl(datasource); // 권장
-  /// // 외부 의존성 주입이 완료된 경우
-  /// AuthRepository repository = DI.get<AuthRepository>(); // Best Practice
+  /// AuthRepository repository = AuthRepositoryImpl(datasource); // Create Repository.
+  /// ```
+  ///
+  /// 또한 외부에서 의존성을 주입하여 객체를 생성하는 것을 권장한다.
+  ///
+  /// ```dart
+  /// // Use DI.
+  /// AuthRepository repository = DI.get<AuthRepository>(); // Best Practice.
+  /// ```
+  ///
+  /// 객체의 생성이 끝난 다음 아래와 같이 메소드를 호출한다.
+  ///
+  /// ```dart
+  /// repository.signInAnonymously();
+  /// repository.signOutAnonymously();
+  /// ```
+  ///
+  /// **Example :**
+  ///
+  /// ```dart
+  /// AuthRepository repository = AuthRepositoryImpl(datasource); // Create Repository.
+  ///
+  /// // Use DI.
+  /// AuthRepository repository = DI.get<AuthRepository>(); // Best Practice.
+  ///
+  /// repository.signInAnonymously();
+  /// repository.signOutAnonymously();
   /// ```
   AuthRepositoryImpl({required this.authDataSource});
 

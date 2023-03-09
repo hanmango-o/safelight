@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import '../../domain/entities/crosswalk.dart';
+part of controller;
 
 abstract class CrosswalkEvent extends Equatable {
   @override

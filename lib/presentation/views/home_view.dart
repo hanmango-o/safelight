@@ -1,27 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:safelight/injection.dart';
-import 'package:shimmer/shimmer.dart';
-import 'dart:io' show Platform;
-
-import '../../core/usecases/usecase.dart';
-import '../../core/utils/assets.dart';
-import '../../core/utils/enums.dart';
-import '../../core/utils/message.dart';
-import '../../core/utils/themes.dart';
-import '../../domain/entities/crosswalk.dart';
-import '../../domain/usecases/service_usecase.dart';
-import '../bloc/crosswalk_bloc.dart';
-import '../bloc/crosswalk_event.dart';
-import '../bloc/crosswalk_state.dart';
-import '../widgets/board.dart';
-import '../widgets/compass.dart';
-import '../widgets/flat_card.dart';
-import '../widgets/single_child_rounded_card.dart';
-import 'flashlight_view.dart';
+part of ui;
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -101,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
               body: Expanded(
                 child: BlocConsumer<CrosswalkBloc, CrosswalkState>(
                   listener: (context, state) {
-                    if (state is On) {
+                    if (state is SearchOn) {
                       if (state.infinite) {
                         message.snackbar(
                           context,
@@ -111,7 +88,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         );
                       }
-                    } else if (state is Off) {
+                    } else if (state is SearchOff) {
                       if (state.results.isEmpty) {
                         message.snackbar(
                           context,
@@ -129,7 +106,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         );
                       }
-                    } else if (state is Error) {
+                    } else if (state is CrosswalkError) {
                       message.snackbar(
                         context,
                         text: state.message,
@@ -140,7 +117,7 @@ class _HomeViewState extends State<HomeView> {
                     }
                   },
                   builder: (context, state) {
-                    if (state is On) {
+                    if (state is SearchOn) {
                       if (state.infinite) {
                         return resultBody(
                           context: context,
@@ -250,7 +227,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         );
                       }
-                    } else if (state is Off) {
+                    } else if (state is SearchOff) {
                       if (state.results.isEmpty) {
                         return resultBody(
                           context: context,
@@ -424,7 +401,7 @@ class _HomeViewState extends State<HomeView> {
                           },
                         );
                       }
-                    } else if (state is Error) {
+                    } else if (state is CrosswalkError) {
                       return resultBody(
                         context: context,
                         title: state.message,
@@ -456,9 +433,9 @@ class _HomeViewState extends State<HomeView> {
             },
             icon: BlocBuilder<CrosswalkBloc, CrosswalkState>(
               builder: (_, state) {
-                if (state is On) {
+                if (state is SearchOn) {
                   return const Icon(Icons.stop_circle_outlined);
-                } else if (state is Off) {
+                } else if (state is SearchOff) {
                   return const Icon(Icons.search);
                 } else {
                   return const Icon(Icons.pause_circle_outline);
@@ -546,13 +523,13 @@ class _HomeViewState extends State<HomeView> {
       ),
       child: BlocConsumer<CrosswalkBloc, CrosswalkState>(
         listener: (context, state) {
-          if (state is Error) {
+          if (state is CrosswalkError) {
             message.snackbar(
               context,
               text: state.message,
               duration: const Duration(seconds: 4),
             );
-          } else if (state is Done) {
+          } else if (state is ConnectOff) {
             if (state.enableCompass && state.latLng != null) {
               message.snackbar(
                 context,
@@ -569,7 +546,7 @@ class _HomeViewState extends State<HomeView> {
           }
         },
         builder: (context, state) {
-          if (state is Connect) {
+          if (state is ConnectOn) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is Error) {
             return Column(
@@ -606,7 +583,7 @@ class _HomeViewState extends State<HomeView> {
                 )
               ],
             );
-          } else if (state is Done) {
+          } else if (state is ConnectOff) {
             if (state.enableCompass && state.latLng != null) {
               return Compass(
                 pos: crosswalk.pos!,

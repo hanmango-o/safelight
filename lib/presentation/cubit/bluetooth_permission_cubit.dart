@@ -1,7 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../core/utils/enums.dart';
-import '../../domain/usecases/permission_usecase.dart';
+part of controller;
 
 class BluetoothPermissionCubit extends Cubit<bool> {
   final GetPermission getPermission;
@@ -14,7 +11,7 @@ class BluetoothPermissionCubit extends Cubit<bool> {
 
   Future<void> getPermissionStatus() async {
     try {
-      final results = await getPermission(EPermission.BLUETOOTH);
+      final results = await getPermission(NoParams());
       results.fold(
         (failure) {
           emit(false);
@@ -33,6 +30,6 @@ class BluetoothPermissionCubit extends Cubit<bool> {
   }
 
   Future<void> setPermissionStatus() async {
-    await setPermission(EPermission.BLUETOOTH);
+    await setPermission(NoParams());
   }
 }

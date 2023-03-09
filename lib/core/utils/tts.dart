@@ -1,4 +1,4 @@
-import 'package:flutter_tts/flutter_tts.dart';
+part of core;
 
 class TTS {
   static bool enable = false;

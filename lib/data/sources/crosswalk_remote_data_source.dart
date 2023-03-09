@@ -1,11 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../../core/errors/exceptions.dart';
-import '../../core/utils/apis.dart';
-import '../../core/utils/enums.dart';
-import '../models/crosswalk_model.dart';
+part of data_source;
 
 abstract class CrosswalkRemoteDataSource {
   Future<List<CrosswalkModel>> getCrosswalks(

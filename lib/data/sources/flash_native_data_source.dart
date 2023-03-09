@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:torch_light/torch_light.dart';
-
-import '../../core/errors/exceptions.dart';
+part of data_source;
 
 abstract class FlashNativeDataSource {
   Future on({bool infinite = false, int count = 10});

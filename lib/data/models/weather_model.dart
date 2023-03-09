@@ -1,4 +1,4 @@
-import '../../domain/entities/weather.dart';
+part of object;
 
 class WeatherModel extends Weather {
   const WeatherModel({

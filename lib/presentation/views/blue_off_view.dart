@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:lottie/lottie.dart';
-import 'package:safelight/core/utils/tts.dart';
-import 'package:safelight/injection.dart';
-
-import '../../core/utils/assets.dart';
-import '../../core/utils/themes.dart';
+part of ui;
 
 class BlueOffView extends StatefulWidget {
   final BleStatus state;

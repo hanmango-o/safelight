@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+part of core;
 
 class Message {
   void snackbar(

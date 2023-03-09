@@ -1,19 +1,29 @@
-import 'dart:math' as math;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_compass/flutter_compass.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
+part of ui;
 
-import '../../core/utils/assets.dart';
-import '../../core/utils/themes.dart';
-
+/// [Compass]는 동적 위젯인 [StatefulWidget]을 상속받는 클래스이다.
+///
+/// * 위도 : Lat
+/// * 경도 : Lng
+///
+/// 가질 수 있는 파라미터는 아래와 같다.
+///
+/// ## Parameter
+/// * [latLng] : [Compass]의 위경도를 나타낸다.
+/// * [pos] : [Compass]의 위치를 나타낸다.
+/// * [end] : [Compass]가 가지는 위젯이다.
+///
+/// 생성시 pos, end는 반드시 지정해야한다.
 class Compass extends StatefulWidget {
+  /// [latLng] : [Compass]의 위경도를 나타낸다.
   final LatLng? latLng;
+
+  /// [pos] : [Compass]의 위치를 나타낸다.
   final LatLng pos;
+
+  /// [end] : [Compass]가 가지는 위젯이다.
   final Widget end;
 
+  /// 각 인스턴스에 값을 할당하는 [Compass]의 생성자이다.
   const Compass({
     super.key,
     required this.latLng,

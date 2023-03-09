@@ -1,8 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../../domain/entities/crosswalk.dart';
+part of controller;
 
 @immutable
 abstract class CrosswalkState extends Equatable {
@@ -10,40 +6,40 @@ abstract class CrosswalkState extends Equatable {
   List<Object?> get props => [];
 }
 
-class On extends CrosswalkState {
+class SearchOn extends CrosswalkState {
   final bool infinite;
 
-  On({this.infinite = false});
+  SearchOn({this.infinite = false});
 
   @override
   List<Object?> get props => [infinite];
 }
 
-class Off extends CrosswalkState {
+class SearchOff extends CrosswalkState {
   final List<Crosswalk> results;
 
-  Off({required this.results});
+  SearchOff({required this.results});
 
   @override
   List<Object?> get props => results;
 }
 
-class Error extends CrosswalkState {
+class CrosswalkError extends CrosswalkState {
   final String message;
 
-  Error({required this.message});
+  CrosswalkError({required this.message});
 
   @override
   List<Object?> get props => [message];
 }
 
-class Connect extends CrosswalkState {}
+class ConnectOn extends CrosswalkState {}
 
-class Done extends CrosswalkState {
+class ConnectOff extends CrosswalkState {
   final bool enableCompass;
   final LatLng? latLng;
 
-  Done({required this.enableCompass, this.latLng});
+  ConnectOff({required this.enableCompass, this.latLng});
 
   @override
   List<Object?> get props => [enableCompass];

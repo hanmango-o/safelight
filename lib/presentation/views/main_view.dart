@@ -1,12 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:safelight/injection.dart';
-
-import 'blue_off_view.dart';
-import 'home_view.dart';
-import 'setting_view.dart';
+part of ui;
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);

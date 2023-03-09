@@ -1,249 +1,204 @@
-import 'package:dartz/dartz.dart';
+part of usecase;
 
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
-import '../repositories/flash_repository.dart';
-
-/// [ServiceUseCase]는 횡단보도 검색/연결(`lib/domain/usecases/crosswalk_usecase.dart`)를 제외한 앱 내 모든 추가 기능(편의 기능)의 [UseCase] 로직들의 super class이다.
+/// 핵심 기능을 제외한 앱 내 모든 추가 기능(편의 기능)에 대한 비즈니스 로직의 상위 개념이다.
 ///
-/// 앱 내 편의 기능과 관련된 서비스는 [ServiceUseCase]에 정의되어야 한다.
-/// 즉, 안전 경광등 또는 그 외의 모든 기타 서비스와 관련된 비즈니스 로직은 [ServiceUseCase]의 자식 형태로 구현되어야 하며
-/// [ServiceUseCase]는 모든 편의 기능의 super class로서 위치해야 한다.
+/// 앱 내 추가 기능과 관련된 비즈니스 로직은 ServiceUseCase의 자식 형태로 상속(Extends)되어야 하며
+/// ServiceUseCase는 모든 인증(Auth) 시스템의 상위 클래스(Super class)로서 위치해야 한다.
 ///
-/// ---
-/// ## 추가 기능이란?
-/// 시스템 내 블루투스를 통한 횡단보도 스캔 및 연결을 제외한 모든 편의 기능을 의미한다.
-/// 즉, 메인이 되는 기능(횡단보도 관련 기능)을 제외한 추가적인 기타 서비스를 의미한다.
+/// 추가 기능이란, 시스템의 메인이 되는 기능을 제외한 서비스를 의미한다.
+/// 로그인/로그아웃([AuthUseCase]), 네비게이션([NavUseCase])과 같이 독립적인 기능으로 구분된 비즈니스 로직은 ServiceUseCase에 속하지 않는다.
+/// 제공하는 서비스가 시스템의 핵심 기능(또는 핵심 기능에 준하는 규모)이라 판단된다면 추가적인 [UseCase]로 분리하여야 한다.
+/// 만약 추가적인 Usecase 분리가 필요하지 않는 서비스라면 ServiceUseCase에 위치하여야 한다.
 ///
-/// * *[ServiceUseCase]는 메인 기능과 기타 서비스의 구분을 위해 존재하며, 이는 추후 개발 시 필요에 따라 변경될 수 있다.*
-/// * *안전 나침반의 경우 횡단보도 연결(`lib/domain/usecases/crosswalk_usecase.dart`)에 의해 실행되기 때문에 [ServiceUseCase]의 비즈니스 로직으로는 구현하지 않았다.*
+/// **Summary :**
 ///
-/// ---
-/// ## Service
-/// [ServiceUseCase]는 아래의 기타 서비스를 가지고 있다.
+/// {@macro usecase_warning1}
 ///
-/// * *안전 경광등 외에 다른 추가 기능이 필요한 경우 [ServiceUseCase]를 상속받는 구조로 추가할 수 있다.*
+///     ```dart
+///     ServiceUseCase usecase = SubUsecase(); // Do not use this.
+///     ```
 ///
-/// |service||설명|
-/// |:-------|-|:--------|
-/// |[ControlFlash]||안전 경광등 관련 비즈니스 로직의 super class|
+///   - **CONSIDER**
+///   ServiceUseCase는 메인 기능과 기타 서비스의 구분을 위해 존재하며, 이는 추후 개발 시 필요에 따라 변경할 수 있다.
+///   제공하려는 서비스의 규모에 따라 서비스의 확장 시 ServiceUseCase를 상속받는 구조로 추가할 수 있다.
 ///
-/// ---
-/// ## 주의할 점
-/// [ServiceUseCase]는 실질적인 비즈니스 로직으로서 사용되지 않는다.
 ///
-/// 안전 경광등 켜기/끄기 와 같은 실질적인(details) 비즈니스 로직들의 최상단 클래스로서
-/// 이러한 비즈니스 로직들이 추가 기능([ServiceUseCase])과 관련되어 있다는 것을 알려주는 역할만을 수행한다.
+/// **See also :**
 ///
-/// 이후 구현이 필요한 비즈니스 로직이 추가 기능이라면, [ServiceUseCase]의 sub class로 배치되어야 한다.
+///   - 현재 ServiceUseCase를 상속받은 Interface는 안전 경광등 제어([ControlFlash])가 있다.
 abstract class ServiceUseCase {}
 
-/// [ControlFlash]은 [UseCase]로서, 안전 경광등 기능의 super class이다.
+/// 모든 안전 경광등 Usecase 로직들의 Interface이다.
 ///
-/// 안전 경광등 관련 모든 비즈니스 로직은 [ControlFlash]의 sub class로 구현되어야 한다.
-/// [ControlFlash]이 포함하고 있는 비즈니스 로직은 아래와 같다.
+/// 안전 경광등과 관련된 [UseCase]는 ControlFlash를 구현(implements)하여야 한다.
+/// 해당 Interface를 구현한 하위 클래스는 [UseCase]로서 실질적인 비즈니스 로직으로 사용된다.
 ///
-/// |sub class||설명|
-/// |:-------|-|:--------|
-/// |[ControlFlashOn]||안전 경광등 켜기 비즈니스 로직|
-/// |[ControlFlashOnWithWeather]||날씨에 따른 안전 경광등 켜기 비즈니스 로직|
-/// |[ControlFlashOff]||안전 경광등 끄기 비즈니스 로직|
+/// 안전 경광등이란 디바이스의 카메라 후래쉬를 켜고 끔으로서 사용자의 위치를 운전자에게 알려주는 기능을 의미한다.
 ///
-/// ---
-/// ## 주의할 점
-/// [ControlFlash]은 실질적인 비즈니스 로직으로서 사용되지 않는다.
+/// {@macro usecase_part1}
 ///
-/// 안전 경광등 관련 비즈니스 로직들의 super class로서 이러한 비즈니스 로직들이
-/// 안전 경광등과 관련되어 있는 것을 알려주는 역할만을 수행한다.
+/// **Summary :**
 ///
-/// 이후 구현이 필요한 안전 경광등 관련 비즈니스 로직은 [ControlFlash]의 sub class로 배치되어야 한다.
+/// {@macro usecase_warning2}
 ///
-/// 또한, [ControlFlash]은 디바이스의 카메라 후래쉬가 있는 경우 동작된다.
-/// 만약 카메라 후래쉬가 없는 경우 동작에 실패([Failure])하게 된다.
-///
-/// ---
-/// ## UseCase
-/// [ControlFlash]의 sub class들은 [UseCase]의 [call] 메소드를 구현(implements)해야 한다.
-/// 이때, [call] 메소드의 Parameter와 Return Type은 아래와 같다.
-///
-/// ### Parameter
-/// [NoParams]로서 할당 받는 값이 없다.
-///
-/// ### Return Type
-/// [Either]로서 ([Failure], [Void])의 형태로 반환된다.
-///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||경광등 관련 로직 수행이 성공하는 경우|
-/// |[Failure]||경광등 관련 로직 수행이 실패하는 경우|
+///   - **DO**
+///   구현이 필요한 클래스([UseCase])가 안전 경광등과 관련되어 있다면, ControlFlash를 구현(Implements)하여야 한다.
+///   구현(Implements)을 통해 하위 클래스를 실질적인 비즈니스 로직으로 사용할 수 있다.
 abstract class ControlFlash extends ServiceUseCase
     implements UseCase<Void, NoParams> {}
 
-/// [ControlFlashOn]는 안전 경광등 켜기 비즈니스 로직이다.
+/// 안전 경광등 끄기 비즈니스 로직이다.
 ///
-/// 안전 경광등을 무한하게 켜야하는 경우 사용되며, [call] 메소드를 통해 [FlashRepository.turnOn]를 호출하여 안전 경광등 켜기를 시도한다.
+/// ControlFlashOff는 안전 경광등을 꺼야하는 경우 사용된다. 카메라의 후래쉬를 끔으로서 안전 경광등을 종료한다.
 ///
-/// 사용 시 [call]의 parameter에 [NoParams] 객체를 Argument로 넘겨주어야 한다.
+/// {@macro usecase_part1}
 ///
-/// [ControlFlashOn]의 로직이 수행될 경우, 아래와 같이 결과가 반환된다.
+/// [call] 메소드를 통해 [FlashRepository.turnOff]를 호출하여 안전 경광등 끄기를 시도한다.
+/// 해당 메소드를 수행하면 아래와 같은 경우에 따라 결과가 반환된다.
 ///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||안전 경광등 켜기 성공|
-/// |[FlashFailure]||안전 경광등 켜기 실패|
+///   - **[Void] :**
+///   안전 경광등 끄기 성공, 카메라 후래쉬가 꺼짐
 ///
-/// ---
-/// ## 주의할 점
-/// [ControlFlashOn]은 안전 경광등을 켜는 기능만을 수행하기 때문에 안전 경광등을 끄고 싶다면 [ControlFlashOff]를 활용하여 안전 경광등을 종료해야 한다.
+///   - **[FlashFailure] :**
+///   안전 경광등 끄기 실패
 ///
-/// ---
-/// ## Members
-/// [ControlFlashOn]의 member는 아래와 같다.
+/// **Summary :**
 ///
-/// ### field
-/// * [repository]
+/// {@macro usecase_part3}
 ///
-/// ### method
-/// * [call]
-///
-/// ---
-/// ## Example
-/// [ControlFlashOn]는 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
-///
-/// ```dart
-/// ControlFlashOn controlFlashOn = ControlFlashOn(repository);
-/// ```
-///
-/// 단, 아래와 같이 [ControlFlashOn]의 super class인 [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
-///
-/// ```dart
-/// // 변수형 ControlFlash 사용
-/// ControlFlash controlFlashOn = ControlFlashOn(repository);
-///
-/// // 외부 의존성 주입이 완료된 경우
-/// ControlFlash controlFlashOn = DI.get<ControlFlash>();
-/// ```
-///
-/// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
-/// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
-///
-/// ```dart
-/// controlFlashOn(NoParams());
-/// ```
-///
-/// 아래는 위 과정에 대한 전문이다.
-/// ```dart
-/// ControlFlashOn controlFlashOn = ControlFlashOn(repository); // 비권장
-/// ControlFlash controlFlashOn = ControlFlashOn(repository); // 권장
-/// ControlFlash controlFlashOn = DI.get<ControlFlash>(); // Best Practice
-///
-/// controlFlashOn(NoParams()); // call 메소드 호출
-/// ```
-class ControlFlashOn implements ControlFlash {
-  /// [FlashRepository] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+///   - **DO**
+///   안전 경광등을 꺼야 한다면, ControlFlashOff를 사용해야 한다.
+class ControlFlashOff implements ControlFlash {
+  /// 안전 경광등 끄기를 위한 Repository를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// domain layer의 repository interface로 변수형을 선언([FlashRepository])하고 실제 DI하는 값은
-  /// data layer의 repository implements로 주입하여, 캡슐화한다.
+  /// [call] 메소드 내에서 [FlashRepository.turnOff]를 사용되며 안전 경광등 끄기를 시도하게 된다.
   ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@macro usecase_part2}
   final FlashRepository repository;
 
-  /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
+  /// 안전 경광등 끄기 Usecase를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+  ///
   /// ```dart
-  /// ControlFlashOn controlFlashOn = ControlFlashOn(repository); // 비권장
-  /// ControlFlash controlFlashOn = ControlFlashOn(repository); // 권장
-  /// ControlFlash controlFlashOn = DI.get<ControlFlash>(); // Best Practice
+  /// ControlFlashOff controlFlashOff = ControlFlashOff(repository);
   /// ```
-  ControlFlashOn({required this.repository});
+  ///
+  /// 단, [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+  ///
+  /// ```dart
+  /// // Use ControlFlash Type.
+  /// ControlFlash controlFlashOff = ControlFlashOff(repository);
+  ///
+  /// // Use DI.
+  /// ControlFlash controlFlashOff = DI.get<ControlFlash>();
+  /// ```
+  ///
+  /// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
+  /// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
+  ///
+  /// ```dart
+  /// controlFlashOff(NoParams()); // Use call method.
+  /// ```
+  ///
+  /// **Example :**
+  ///
+  /// ```dart
+  /// ControlFlashOff controlFlashOff = ControlFlashOff(repository); // Do not use this.
+  /// ControlFlash controlFlashOff = ControlFlashOff(repository);
+  /// ControlFlash controlFlashOff = DI.get<ControlFlash>(); // Best Practice.
+  ///
+  /// controlFlashOff(NoParams()); // Use call method.
+  /// ```
+  ControlFlashOff({required this.repository});
 
   @override
   Future<Either<Failure, Void>> call(NoParams params) async {
-    return await repository.turnOn();
+    return await repository.turnOff();
   }
 }
 
-/// [ControlFlashOnWithWeather]는 날씨에 따른 안전 경광등 켜기 비즈니스 로직이다.
+/// 날씨에 따른 안전 경광등 켜기 비즈니스 로직이다.
 ///
-/// 사용자의 위치를 기반으로 현재 날씨에 따라 안전 경광등을 켜야하는 경우 사용되며, [call] 메소드를 통해 [FlashRepository.turnOnWithWeather]를 호출하여 안전 경광등 켜기를 시도한다.
+/// ControlFlashOnWithWeather는 사용자의 위치를 기반으로 현재 날씨에 따라 안전 경광등을 켜야하는 경우 사용된다.
+/// 사용자의 위치를 기반으로 Open Weather API를 호출하여 날씨 정보를 받는다.
+/// 날씨 정보를 기반으로 운전자의 시야가 확보되지 않는 상황이라 판단된다면 카메라 후래쉬를 켜 안전 경광등 기능을 수행한다.
+/// 따라서, 사용자의 위치 권한 허가 및 인터넷 연결이 되어 있어야 정상적으로 동작하게 된다.
 ///
-/// 사용 시 [call]의 parameter에 [NoParams] 객체를 Argument로 넘겨주어야 한다.
+/// 안전 경광등이 켜지게 되면 주기적으로 ON-OFF 를 반복하여 카메라 후래쉬가 깜빡이게 된다.
 ///
-/// [ControlFlashOnWithWeather]의 로직이 수행될 경우, 아래와 같이 결과가 반환된다.
+/// {@macro usecase_part1}
 ///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||안전 경광등 켜기 성공|
-/// |[ValidateFailure]||현재 날씨 상태가 안전 경광등을 켜지 않아도 되는 상태(안전 경광등 켜지지 않음)|
-/// |[FlashFailure]||안전 경광등 켜기 실패|
-/// |[ServerFailure]||인터넷 연결 불안정으로 인한 현재 사용자 위치 파악 불가(안전 경광등 켜지지 않음)|
+/// [call] 메소드를 통해 [FlashRepository.turnOnWithWeather]를 호출하여 날씨에 따른 안전경광등 켜기를 시도한다.
+/// 해당 메소드를 수행하면 아래와 같은 경우에 따라 결과가 반환된다.
 ///
-/// ---
-/// ## 주의할 점
-/// [ControlFlashOnWithWeather]은 안전 경광등을 켜는 기능만을 수행하기 때문에 안전 경광등을 끄고 싶다면 [ControlFlashOff]를 활용하여 안전 경광등을 종료해야 한다.
+///   - **[Void] :**
+///   날씨에 따른 안전 경광등 켜기 성공, 카메라 후래쉬가 켜짐
 ///
-/// ---
-/// ## Members
-/// [ControlFlashOnWithWeather]의 member는 아래와 같다.
+///   - **[ValidateFailure] :**
+///   현재 날씨 상태가 안전 경광등을 켜지 않아도 되는 상태, 안전 경광등이 켜지지 않음
 ///
-/// ### field
-/// * [repository]
+///   - **[FlashFailure] :**
+///   안전 경광등 켜기 실패
 ///
-/// ### method
-/// * [call]
+///   - **[ServerFailure] :**
+///   날씨 정보 요청 및 사용자 위치 정보 확인 불가로 인한 안전 경광등 켜기 실패
 ///
-/// ---
-/// ## Example
-/// [ControlFlashOnWithWeather]는 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+/// **Summary :**
 ///
-/// ```dart
-/// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository);
-/// ```
+/// {@macro usecase_part3}
 ///
-/// 단, 아래와 같이 [ControlFlashOnWithWeather]의 super class인 [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+///   - **DO**
+///   날씨에 따라 안전 경광등을 꺼야 한다면, ControlFlashOnWithWeather를 사용해야 한다.
 ///
-/// ```dart
-/// // 변수형 ControlFlash 사용
-/// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository);
+///   - **DON'T**
+///   `사용자 위치 권한 허가`가 선행되어 있지 않다면 ControlFlashOnWithWeather를 사용할 수 없다. 또한 인터넷 연결이 되어 있어야 한다.
 ///
-/// // 외부 의존성 주입이 완료된 경우
-/// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>();
-/// ```
+/// **See also :**
 ///
-/// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
-/// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
-///
-/// ```dart
-/// controlFlashOnWithWeather(NoParams());
-/// ```
-///
-/// 아래는 위 과정에 대한 전문이다.
-/// ```dart
-/// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 비권장
-/// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 권장
-/// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>(); // Best Practice
-///
-/// controlFlashOnWithWeather(NoParams()); // call 메소드 호출
-/// ```
+///   - [Open Weather API](https://openweathermap.org/api)를 사용하여 날씨 정보를 요청한다.
+///   - [SetLocationPermission]을 사용하여 사용자 위치 권한 설정을 할 수 있다.
 class ControlFlashOnWithWeather implements ControlFlash {
-  /// [FlashRepository] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+  /// 날씨에 따른 안전 경광등 켜기를 위한 Repository를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// domain layer의 repository interface로 변수형을 선언([FlashRepository])하고 실제 DI하는 값은
-  /// data layer의 repository implements로 주입하여, 캡슐화한다.
+  /// [call] 메소드 내에서 [FlashRepository.turnOnWithWeather]를 사용되며 날씨에 따른 안전 경광등 켜기를 시도하게 된다.
   ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@macro usecase_part2}
   final FlashRepository repository;
 
-  /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
+  /// 날씨에 따른 안전 경광등 켜기 Usecase를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+  ///
   /// ```dart
-  /// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 비권장
-  /// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 권장
-  /// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>(); // Best Practice
+  /// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository);
+  /// ```
+  ///
+  /// 단, [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+  ///
+  /// ```dart
+  /// // Use ControlFlash Type.
+  /// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository);
+  ///
+  /// // Use DI.
+  /// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>();
+  /// ```
+  ///
+  /// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
+  /// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
+  ///
+  /// ```dart
+  /// controlFlashOnWithWeather(NoParams()); // Use call method.
+  /// ```
+  ///
+  /// **Example :**
+  ///
+  /// ```dart
+  /// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // Do not use this.
+  /// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository);
+  /// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>(); // Best Practice.
+  ///
+  /// controlFlashOnWithWeather(NoParams()); // Use call method.
   /// ```
   ControlFlashOnWithWeather({required this.repository});
 
@@ -253,84 +208,73 @@ class ControlFlashOnWithWeather implements ControlFlash {
   }
 }
 
-/// [ControlFlashOff]는 안전 경광등 끄기 비즈니스 로직이다.
+/// 안전 경광등 켜기 비즈니스 로직이다.
 ///
-/// 안전 경광등을 꺼야하는 경우 사용되며, [call] 메소드를 통해 [FlashRepository.turnOff]를 호출하여 안전 경광등 끄기를 시도한다.
+/// ControlFlashOn는 안전 경광등을 켜야하는 경우 사용된다.
+/// 안전 경광등이 켜지게 되면 주기적으로 ON-OFF 를 반복하여 카메라 후래쉬가 깜빡이게 된다.
 ///
-/// 사용 시 [call]의 parameter에 [NoParams] 객체를 Argument로 넘겨주어야 한다.
+/// {@macro usecase_part1}
 ///
-/// [ControlFlashOff]의 로직이 수행될 경우, 아래와 같이 결과가 반환된다.
+/// [call] 메소드를 통해 [FlashRepository.turnOn]를 호출하여 날씨에 따른 안전경광등 켜기를 시도한다.
+/// 해당 메소드를 수행하면 아래와 같은 경우에 따라 결과가 반환된다.
 ///
-/// |return||case|
-/// |:-------|-|:--------|
-/// |[Void]||안전 경광등 끄기 성공|
-/// |[FlashFailure]||안전 경광등 끄기 실패|
+///   - **[Void] :**
+///   안전 경광등 켜기 성공, 카메라 후래쉬가 켜짐
 ///
-/// ---
-/// ## Members
-/// [ControlFlashOff]의 member는 아래와 같다.
+///   - **[FlashFailure] :**
+///   안전 경광등 켜기 실패
 ///
-/// ### field
-/// * [repository]
+/// **Summary :**
 ///
-/// ### method
-/// * [call]
+/// {@macro usecase_part3}
 ///
-/// ---
-/// ## Example
-/// [ControlFlashOff]는 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
-///
-/// ```dart
-/// ControlFlashOff controlFlashOff = ControlFlashOff(repository);
-/// ```
-///
-/// 단, 아래와 같이 [ControlFlashOff]의 super class인 [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
-///
-/// ```dart
-/// // 변수형 ControlFlash 사용
-/// ControlFlash controlFlashOff = ControlFlashOff(repository);
-///
-/// // 외부 의존성 주입이 완료된 경우
-/// ControlFlash controlFlashOff = DI.get<ControlFlash>();
-/// ```
-///
-/// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
-/// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
-///
-/// ```dart
-/// controlFlashOff(NoParams());
-/// ```
-///
-/// 아래는 위 과정에 대한 전문이다.
-/// ```dart
-/// ControlFlashOff controlFlashOff = ControlFlashOff(repository); // 비권장
-/// ControlFlash controlFlashOff = ControlFlashOff(repository); // 권장
-/// ControlFlash controlFlashOff = DI.get<ControlFlash>(); // Best Practice
-///
-/// controlFlashOff(NoParams()); // call 메소드 호출
-/// ```
-class ControlFlashOff implements ControlFlash {
-  /// [FlashRepository] 객체를 담는 변수로서 외부에서 DI되어 사용된다.
+///   - **DO**
+///   안전 경광등을 꺼야 한다면, ControlFlashOn을 사용해야 한다.
+class ControlFlashOn implements ControlFlash {
+  /// 안전 경광등 켜기를 위한 Repository를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
-  /// domain layer의 repository interface로 변수형을 선언([FlashRepository])하고 실제 DI하는 값은
-  /// data layer의 repository implements로 주입하여, 캡슐화한다.
+  /// [call] 메소드 내에서 [FlashRepository.turnOn]를 사용되며 안전 경광등 켜기를 시도하게 된다.
   ///
-  /// See also:
-  ///  * DI에 대한 자세한 설명은 `injection.dart` 파일에서 확인할 수 있다.
+  /// {@macro usecase_part2}
   final FlashRepository repository;
 
-  /// Default constructor로서 의존성 주입을 위해 [repository]를 Argument로 반드시 받아야 한다.
+  /// 안전 경광등 켜기 Usecase를 생성한다.
   ///
-  /// 아래와 같이 사용할 수 있다.
+  /// 아래와 같이 직접 클래스를 생성하고 의존성을 주입하여 객체를 생성할 수 있다.
+  ///
   /// ```dart
-  /// ControlFlashOnWithWeather controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 비권장
-  /// ControlFlash controlFlashOnWithWeather = ControlFlashOnWithWeather(repository); // 권장
-  /// ControlFlash controlFlashOnWithWeather = DI.get<ControlFlash>(); // Best Practice
+  /// ControlFlashOn controlFlashOn = ControlFlashOn(repository);
   /// ```
-  ControlFlashOff({required this.repository});
+  ///
+  /// 단, [ControlFlash]을 변수형으로 선언하고, 되도록 외부에서 의존성을 주입하는 방식을 권장한다.
+  ///
+  /// ```dart
+  /// // Use ControlFlash Type.
+  /// ControlFlash controlFlashOn = ControlFlashOn(repository);
+  ///
+  /// // Use DI.
+  /// ControlFlash controlFlashOn = DI.get<ControlFlash>();
+  /// ```
+  ///
+  /// 객체의 생성이 끝난 경우 아래의 방법으로 [call] 메소드를 호출한다.
+  /// 이때 argument는 [NoParams]이므로 아래와 같이 사용한다.
+  ///
+  /// ```dart
+  /// controlFlashOn(NoParams()); // Use call method.
+  /// ```
+  ///
+  /// 아래는 위 과정에 대한 전문이다.
+  /// ```dart
+  /// ControlFlashOn controlFlashOn = ControlFlashOn(repository); // Do not use this.
+  /// ControlFlash controlFlashOn = ControlFlashOn(repository);
+  /// ControlFlash controlFlashOn = DI.get<ControlFlash>(); // Best Practice.
+  ///
+  /// controlFlashOn(NoParams()); // Use call method.
+  /// ```
+  ControlFlashOn({required this.repository});
 
   @override
   Future<Either<Failure, Void>> call(NoParams params) async {
-    return await repository.turnOff();
+    return await repository.turnOn();
   }
 }

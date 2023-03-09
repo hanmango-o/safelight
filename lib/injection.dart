@@ -1,4 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names
+library injection;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,36 +8,11 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:safelight/core/utils/message.dart';
-
-import 'core/utils/tts.dart';
-import 'core/utils/validators.dart';
-import 'data/repositories/auth_repository_impl.dart';
-import 'data/repositories/crosswalk_repository_impl.dart';
-import 'data/repositories/flash_repository_impl.dart';
-import 'data/repositories/navigator_repository_impl.dart';
-import 'data/repositories/permission_repository_impl.dart';
-import 'data/sources/auth_remote_data_source.dart';
-import 'data/sources/blue_native_data_source.dart';
-import 'data/sources/crosswalk_remote_data_source.dart';
-import 'data/sources/flash_native_data_source.dart';
-import 'data/sources/navigate_remote_data_source.dart';
-import 'data/sources/permission_native_data_source.dart';
-import 'data/sources/weather_remote_data_source.dart';
-import 'domain/repositories/auth_repository.dart';
-import 'domain/repositories/crosswalk_repository.dart';
-import 'domain/repositories/flash_repository.dart';
-import 'domain/repositories/navigator_repository.dart';
-import 'domain/repositories/permission_repository.dart';
-import 'domain/usecases/auth_usecase.dart';
-import 'domain/usecases/crosswalk_usecase.dart';
-import 'domain/usecases/nav_usecase.dart';
-import 'domain/usecases/permission_usecase.dart';
-import 'domain/usecases/service_usecase.dart';
-import 'presentation/bloc/auth_bloc.dart';
-import 'presentation/bloc/crosswalk_bloc.dart';
-import 'presentation/cubit/bluetooth_permission_cubit.dart';
-import 'presentation/cubit/location_permission_cubit.dart';
+import 'package:safelight/framework/core.dart';
+import 'package:safelight/framework/data_source.dart';
+import 'package:safelight/framework/repository.dart';
+import 'package:safelight/framework/usecase.dart';
+import 'package:safelight/framework/controller.dart';
 
 final DI = GetIt.instance;
 
@@ -54,20 +30,28 @@ const String USECASE_SIGN_IN_ANONYMOUSLY = 'USECASE_SIGN_IN_ANONYMOUSLY';
 const String USECASE_SIGN_OUT_ANONYMOUSLY = 'USECASE_SIGN_OUT_ANONYMOUSLY';
 const String USECASE_CONTROL_FLASH_ON_WITH_WEATHER =
     'USECASE_CONTROL_FLASH_ON_WITH_WEATHER';
+const String USECASE_SET_BLUETOOTH_PERMISSION =
+    'USECASE_SET_BLUETOOTH_PERMISSION';
+const String USECASE_SET_LOCATION_PERMISSION =
+    'USECASE_SET_LOCATION_PERMISSION';
+const String USECASE_GET_BLUETOOTH_PERMISSION =
+    'USECASE_GET_BLUETOOTH_PERMISSION';
+const String USECASE_GET_LOCATION_PERMISSION =
+    'USECASE_GET_LOCATION_PERMISSION';
 
 Future<void> init() async {
   // bloc injection area
   DI.registerLazySingleton(
-    () => LocationPermissionCubit(
-      getPermission: DI(),
-      setPermission: DI(),
+    () => BluetoothPermissionCubit(
+      getPermission: DI(instanceName: USECASE_GET_BLUETOOTH_PERMISSION),
+      setPermission: DI(instanceName: USECASE_SET_BLUETOOTH_PERMISSION),
     ),
   );
 
   DI.registerLazySingleton(
-    () => BluetoothPermissionCubit(
-      getPermission: DI(),
-      setPermission: DI(),
+    () => LocationPermissionCubit(
+      getPermission: DI(instanceName: USECASE_GET_LOCATION_PERMISSION),
+      setPermission: DI(instanceName: USECASE_SET_LOCATION_PERMISSION),
     ),
   );
 
@@ -94,9 +78,23 @@ Future<void> init() async {
   // usecase injection area
 
   DI.registerLazySingleton<SetPermission>(
-    () => SetPermission(
-      repository: DI(),
-    ),
+    () => SetBluetoothPermission(repository: DI()),
+    instanceName: USECASE_SET_BLUETOOTH_PERMISSION,
+  );
+
+  DI.registerLazySingleton<SetPermission>(
+    () => SetLocationPermission(repository: DI()),
+    instanceName: USECASE_SET_LOCATION_PERMISSION,
+  );
+
+  DI.registerLazySingleton<GetPermission>(
+    () => GetBluetoothPermission(repository: DI()),
+    instanceName: USECASE_GET_BLUETOOTH_PERMISSION,
+  );
+
+  DI.registerLazySingleton<GetPermission>(
+    () => GetLocationPermission(repository: DI()),
+    instanceName: USECASE_GET_LOCATION_PERMISSION,
   );
 
   DI.registerLazySingleton<SignIn>(
@@ -138,10 +136,8 @@ Future<void> init() async {
     () => Search2InfiniteTimes(repository: DI()),
     instanceName: USECASE_SEARCH_CROSSWALK_INFINITE,
   );
-  DI.registerLazySingleton<GetPermission>(
-    () => GetPermission(repository: DI()),
-  );
-  DI.registerLazySingleton<GetCurrentPosition>(
+
+  DI.registerLazySingleton<GetPosition>(
     () => GetCurrentPosition(repository: DI()),
   );
 
