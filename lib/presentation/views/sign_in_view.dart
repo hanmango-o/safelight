@@ -2,6 +2,7 @@
 
 part of ui;
 
+/// 로그인 화면
 class SignInView extends StatefulWidget {
   const SignInView({Key? key}) : super(key: key);
 

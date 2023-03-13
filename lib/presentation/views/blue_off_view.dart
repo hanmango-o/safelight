@@ -1,5 +1,6 @@
 part of ui;
 
+/// 블루투스 꺼짐 화면
 class BlueOffView extends StatefulWidget {
   final BleStatus state;
 

@@ -7,7 +7,7 @@ class CrosswalkBloc extends Bloc<CrosswalkEvent, CrosswalkState> {
   final SearchCrosswalk search2InfiniteTimes;
   final ConnectCrosswalk sendAcousticSignal;
   final ConnectCrosswalk sendVoiceInductor;
-  final GetCurrentPosition getCurrentPosition;
+  final GetPosition getCurrentPosition;
   final ControlFlash controlFlashOnWithWeather;
 
   CrosswalkBloc({

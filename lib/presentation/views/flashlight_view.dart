@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 part of ui;
 
+/// 안전 경광등 화면
 class FlashlightView extends StatefulWidget {
   final ControlFlash flashOn;
   final ControlFlash flashOff;

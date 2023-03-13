@@ -2,6 +2,7 @@
 
 part of ui;
 
+/// 설정화면
 class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
 

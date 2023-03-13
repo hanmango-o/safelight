@@ -1,5 +1,6 @@
 part of ui;
 
+/// 홈화면
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 

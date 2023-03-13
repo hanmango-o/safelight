@@ -1,5 +1,6 @@
 part of ui;
 
+/// 도움말 화면
 class DutorialView extends StatefulWidget {
   const DutorialView({super.key});
 

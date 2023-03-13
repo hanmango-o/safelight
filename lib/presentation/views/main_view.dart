@@ -1,5 +1,6 @@
 part of ui;
 
+/// 네비게이션 프레임
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
 
