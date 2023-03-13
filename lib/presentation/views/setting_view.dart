@@ -14,8 +14,6 @@ class _SettingViewState extends State<SettingView> {
   late String? mode;
   late Box box;
 
-  SetPermission setPermission = DI.get<SetPermission>();
-
   @override
   void initState() {
     super.initState();
