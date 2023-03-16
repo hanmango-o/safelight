@@ -1,5 +1,39 @@
 part of data_source;
 
+/// 블루투스 통신을 위한 Interface이다.
+///
+/// 블루투스 통신과 관련된 직접적인 처리를 수행한다.
+/// [FlutterReactiveBle]를 통해 블루투스 scan, connect, send, disconnect를 수행한다.
+///
+/// FlutterReactiveBle를 사용하기 위해서는
+/// 각 OS에 맞는 블루투스 권한 설정([aos](https://pub.dev/packages/flutter_reactive_ble#android), [ios](https://pub.dev/packages/flutter_reactive_ble#ios))이 필요하다.
+///
+/// 스마트 IOT 음향 신호기에 관한 경찰청 제공 프로토콜(2021 개정판)을 기준으로 블루투스 통신을 수행한다.
+///
+/// 해당 Interface의 구현부는 [AuthRemoteDataSourceImpl]이다.
+///
+/// **Summary :**
+///
+///   - **DO**
+///   [FirebaseAuth]에 사용자 인증(로그인/로그아웃)과 관련된 요청을 처리한다.
+///
+///   {@template data_part1}
+///   - **PREFER**
+///   외부 DI를 통해 객체를 생성하는 것을 권장한다.
+///   {@endtemplate}
+///
+///     ```dart
+///     AuthRemoteDataSource datasource = DI.get<AuthRemoteDataSource>();
+///     ```
+///
+///   - **DON'T**
+///   Firebased SDK 설정과 FirebaseAuth 설정이 선행되지 않으면 사용할 수 없다.
+///
+/// {@macro usecase_part2}
+///
+/// **See also :**
+///
+///   - FlutterReact
 abstract class BlueNativeDataSource {
   Future<List<DiscoveredDevice>> scan();
   Future<void> send(
