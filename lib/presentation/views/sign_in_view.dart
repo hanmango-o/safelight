@@ -49,29 +49,60 @@ class _SignInViewState extends State<SignInView> {
                         content: Text(state.message),
                       ));
                     }
-                    return Padding(
-                      padding: EdgeInsets.only(right: SizeTheme.w_md),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context
-                              .read<AuthBloc>()
-                              .add(SignInAnonymouslyEvent());
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.horizontal(
-                              right: Radius.circular(50),
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: SizeTheme.w_md),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<AuthBloc>()
+                                  .add(SignInWithGoogleEvent());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.horizontal(
+                                  right: Radius.circular(50),
+                                ),
+                              ),
+                              minimumSize: Size(double.maxFinite, 80.h),
                             ),
+                            child: (state is AuthLoading)
+                                ? CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  )
+                                : const Text('구글 로그인'),
                           ),
-                          minimumSize: Size(double.maxFinite, 80.h),
                         ),
-                        child: (state is AuthLoading)
-                            ? CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )
-                            : const Text('로그인 없이 이용하기'),
-                      ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: EdgeInsets.only(right: SizeTheme.w_md),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<AuthBloc>()
+                                  .add(SignInAnonymouslyEvent());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.horizontal(
+                                  right: Radius.circular(50),
+                                ),
+                              ),
+                              minimumSize: Size(double.maxFinite, 80.h),
+                            ),
+                            child: (state is AuthLoading)
+                                ? CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  )
+                                : const Text('로그인 없이 이용하기'),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
