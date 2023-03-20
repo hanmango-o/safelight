@@ -83,6 +83,9 @@ abstract class AuthRemoteDataSource {
   ///   - Google이 제안하는 로그아웃에 대한 예시가 궁금하다면,
   ///     [FirebaseAuth를 통한 로그아웃 Best practice](https://firebase.google.com/docs/auth/flutter/anonymous-auth?hl=ko#next_steps)를 확인할 수 있다.
   Future<void> signOutAnonymously();
+
+  Future<void> signInWithGoogle();
+  Future<void> signOutWithGoogle();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -124,7 +127,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// datasource.signInAnonymously();
   /// datasource.signOutAnonymously();
   /// ```
-  AuthRemoteDataSourceImpl({required this.auth});
+  AuthRemoteDataSourceImpl({
+    required this.auth,
+  });
 
   @override
   Future<void> signInAnonymously() async {
@@ -137,6 +142,31 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> signOutAnonymously() async {
+    try {
+      await auth.signOut();
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      return await auth.signInWithCredential(credential);
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> signOutWithGoogle() async {
     try {
       await auth.signOut();
     } catch (e) {

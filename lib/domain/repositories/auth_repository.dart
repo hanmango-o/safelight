@@ -53,6 +53,7 @@ abstract class AuthRepository {
   ///     [Flutter : 함수형 프로그래밍 Dartz](https://pub.dev/packages/dartz)에 대한 자세한 설명을 확인할 수 있다.
   /// {@endtemplate}
   Future<Either<Failure, Void>> signInAnonymously();
+  Future<Either<Failure, Void>> signInWithGoogle();
 
   /// 익명 로그아웃 요청을 처리하는 메소드이다.
   ///
@@ -73,4 +74,5 @@ abstract class AuthRepository {
   ///
   /// {@macro repository_part3}
   Future<Either<Failure, Void>> signOutAnonymously();
+  Future<Either<Failure, Void>> signOutWithGoogle();
 }

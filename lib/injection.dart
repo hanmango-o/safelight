@@ -28,6 +28,10 @@ const String USECASE_SEND_ACOUSTIC_SIGNAL = 'USECASE_SEND_ACOUSTIC_SIGNAL';
 const String USECASE_SEND_VOICE_INDUCTOR = 'USECASE_SEND_VOICE_INDUCTOR';
 const String USECASE_SIGN_IN_ANONYMOUSLY = 'USECASE_SIGN_IN_ANONYMOUSLY';
 const String USECASE_SIGN_OUT_ANONYMOUSLY = 'USECASE_SIGN_OUT_ANONYMOUSLY';
+
+const String USECASE_SIGN_IN_WITH_GOOGLE = 'USECASE_SIGN_IN_WITH_GOOGLE';
+const String USECASE_SIGN_OUT_WITH_GOOGLE = 'USECASE_SIGN_OUT_WITH_GOOGLE';
+
 const String USECASE_CONTROL_FLASH_ON_WITH_WEATHER =
     'USECASE_CONTROL_FLASH_ON_WITH_WEATHER';
 const String USECASE_SET_BLUETOOTH_PERMISSION =
@@ -59,6 +63,8 @@ Future<void> init() async {
     () => AuthBloc(
       signInAnonymously: DI(instanceName: USECASE_SIGN_IN_ANONYMOUSLY),
       signOutAnonymously: DI(instanceName: USECASE_SIGN_OUT_ANONYMOUSLY),
+      signInWithGoogle: DI(instanceName: USECASE_SIGN_IN_WITH_GOOGLE),
+      signOutWithGoogle: DI(instanceName: USECASE_SIGN_OUT_WITH_GOOGLE),
     ),
   );
 
@@ -102,9 +108,19 @@ Future<void> init() async {
     instanceName: USECASE_SIGN_IN_ANONYMOUSLY,
   );
 
+  DI.registerLazySingleton<SignIn>(
+    () => SignInWithGoogle(repository: DI()),
+    instanceName: USECASE_SIGN_IN_WITH_GOOGLE,
+  );
+
   DI.registerLazySingleton<SignOut>(
     () => SignOutAnonymously(repository: DI()),
     instanceName: USECASE_SIGN_OUT_ANONYMOUSLY,
+  );
+
+  DI.registerLazySingleton<SignOut>(
+    () => SignOutWithGoogle(repository: DI()),
+    instanceName: USECASE_SIGN_OUT_WITH_GOOGLE,
   );
 
   DI.registerLazySingleton<ConnectCrosswalk>(
@@ -170,7 +186,9 @@ Future<void> init() async {
 
   // datasource injection area
   DI.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(auth: DI()),
+    () => AuthRemoteDataSourceImpl(
+      auth: DI(),
+    ),
   );
   DI.registerLazySingleton<FlashNativeDataSource>(
     () => FlashNativeDataSourceImpl(),

@@ -61,4 +61,26 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Void>> signInWithGoogle() async {
+    try {
+      await authDataSource.signInWithGoogle();
+      authDataSource.signInWithGoogle().then((value) {});
+
+      return Right(Void());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Void>> signOutWithGoogle() async {
+    try {
+      await authDataSource.signOutWithGoogle();
+      return Right(Void());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

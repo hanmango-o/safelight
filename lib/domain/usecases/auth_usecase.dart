@@ -266,3 +266,23 @@ class SignOutAnonymously implements SignOut {
     return await repository.signOutAnonymously();
   }
 }
+
+class SignInWithGoogle implements SignIn {
+  AuthRepository repository;
+  SignInWithGoogle({required this.repository});
+
+  @override
+  Future<Either<Failure, Void>> call(Map<String, dynamic>? user) async {
+    return await repository.signInWithGoogle();
+  }
+}
+
+class SignOutWithGoogle implements SignOut {
+  AuthRepository repository;
+  SignOutWithGoogle({required this.repository});
+
+  @override
+  Future<Either<Failure, Void>> call(NoParams params) async {
+    return await repository.signInWithGoogle();
+  }
+}

@@ -13,14 +13,16 @@ part of object;
 /// |[id]||사용자 아이디|
 /// |[pw]||사용자 비밀번호|
 class User extends Equatable {
-  final String? id;
-  final String? pw;
+  // final String? id;
+  // final String? pw;
+  final UserCredential? credential;
 
   const User({
-    this.id,
-    this.pw,
+    // this.id,
+    // this.pw,
+    this.credential,
   });
 
   @override
-  List<Object?> get props => [id, pw];
+  List<Object?> get props => [credential];
 }

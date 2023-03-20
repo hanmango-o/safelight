@@ -8,3 +8,7 @@ class AuthEvent extends Equatable {
 class SignInAnonymouslyEvent extends AuthEvent {}
 
 class SignOutAnonymouslyEvent extends AuthEvent {}
+
+class SignInWithGoogleEvent extends AuthEvent {}
+
+class SignOutWithGoogleEvent extends AuthEvent {}
