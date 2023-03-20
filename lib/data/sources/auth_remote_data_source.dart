@@ -13,7 +13,7 @@ part of data_source;
 /// **Summary :**
 ///
 ///   - **DO**
-///   [FirebaseAuth]에 사용자 인증(로그인/로그아웃)과 관련된 요청을 처리한다.
+///   [FirebaseAuth]를 활용하여 사용자 인증(로그인/로그아웃)과 관련된 로직을 수행한다.
 ///
 ///   {@template data_part1}
 ///   - **PREFER**
@@ -25,7 +25,7 @@ part of data_source;
 ///     ```
 ///
 ///   - **DON'T**
-///   Firebased SDK 설정과 FirebaseAuth 설정이 선행되지 않으면 사용할 수 없다.
+///   Firebased SDK 설정과 [FirebaseAuth] 설정이 선행되지 않으면 사용할 수 없다.
 ///
 /// {@macro usecase_part2}
 ///
@@ -47,10 +47,10 @@ abstract class AuthRemoteDataSource {
   /// **Summary :**
   ///
   ///   - **DO**
-  ///   FirebaseAuth를 통한 익명 로그인을 수행한다.
+  ///   [FirebaseAuth]를 통한 익명 로그인을 수행한다.
   ///
   ///   - **DON'T**
-  ///   익명 로그인 사용을 위한 FirebaseAuth 초기 설정 없이 사용할 수 없다.
+  ///   익명 로그인 사용을 위한 [FirebaseAuth] 초기 설정 없이 사용할 수 없다.
   ///
   /// **See also :**
   ///
@@ -73,10 +73,10 @@ abstract class AuthRemoteDataSource {
   /// **Summary :**
   ///
   ///   - **DO**
-  ///   FirebaseAuth를 통한 익명 로그아웃을 수행한다.
+  ///   [FirebaseAuth]를 통한 익명 로그아웃을 수행한다.
   ///
   ///   - **DON'T**
-  ///   FirebaseAuth 초기 설정 없이 사용할 수 없다.
+  ///   [FirebaseAuth] 초기 설정 없이 사용할 수 없다.
   ///
   /// **See also :**
   ///
