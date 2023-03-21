@@ -150,6 +150,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  // if (googleUser == null) {}
   Future<UserCredential> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

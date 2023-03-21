@@ -66,8 +66,6 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, Void>> signInWithGoogle() async {
     try {
       await authDataSource.signInWithGoogle();
-      authDataSource.signInWithGoogle().then((value) {});
-
       return Right(Void());
     } on ServerException {
       return Left(ServerFailure());
