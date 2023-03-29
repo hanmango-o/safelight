@@ -53,6 +53,7 @@ class _SettingViewState extends State<SettingView> {
                 child: ListTile(
                   onTap: () {
                     context.read<AuthBloc>().add(SignOutAnonymouslyEvent());
+                    context.read<AuthBloc>().add(SignOutWithGoogleEvent());
                   },
                   leading: SingleChildRoundedCard(
                     child: Icon(

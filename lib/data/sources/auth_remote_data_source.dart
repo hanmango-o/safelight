@@ -143,6 +143,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOutAnonymously() async {
     try {
+      await auth.currentUser?.delete();
       await auth.signOut();
     } catch (e) {
       throw ServerException();

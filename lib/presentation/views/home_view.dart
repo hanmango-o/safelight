@@ -47,6 +47,16 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.refresh),
             ),
           ),
+          // 지도아이콘 추가
+          Semantics(
+            child: IconButton(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        // 설정화면으로 이동 (지도화면으로 변경하기)
+                        builder: (context) => const SettingView())),
+                icon: const Icon(Icons.map_outlined)),
+          ),
           Visibility(
             visible: !Platform.isAndroid,
             child: Semantics(
@@ -68,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
                 icon: const Icon(Icons.flashlight_on_outlined),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Column(
