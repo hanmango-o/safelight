@@ -283,6 +283,6 @@ class SignOutWithGoogle implements SignOut {
 
   @override
   Future<Either<Failure, Void>> call(NoParams params) async {
-    return await repository.signInWithGoogle();
+    return await repository.signOutWithGoogle();
   }
 }

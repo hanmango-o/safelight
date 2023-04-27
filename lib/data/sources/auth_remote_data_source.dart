@@ -144,6 +144,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOutAnonymously() async {
     try {
+      await auth.currentUser?.delete();
       await auth.signOut();
     } catch (e) {
       throw ServerException();
@@ -151,6 +152,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  // if (googleUser == null) {}
   Future<UserCredential> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

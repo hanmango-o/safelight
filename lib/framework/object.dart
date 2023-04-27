@@ -9,7 +9,9 @@ import 'package:safelight/framework/core.dart';
 part '../domain/entities/crosswalk.dart';
 part '../domain/entities/user.dart';
 part '../domain/entities/weather.dart';
+part '../domain/entities/tmap.dart';
 
 part '../data/models/crosswalk_model.dart';
 part '../data/models/weather_model.dart';
 part '../data/models/user_model.dart';
+part '../data/models/tmap_model.dart';

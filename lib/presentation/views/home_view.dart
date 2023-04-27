@@ -16,6 +16,17 @@ class _HomeViewState extends State<HomeView> {
     instanceName: USECASE_CONTROL_FLASH_OFF,
   );
 
+  void _callAPI() async {
+    var url = Uri.parse(
+        'https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&startX=126.92365493654832&startY=37.556770374096615&endX=126.92432158129688&endY=37.55279861528311&startName="홍대입구"&endName="홍대앞"&type=FeatureCollection');
+
+    var response = await http.post(url, body: {
+      'appkey': 'MgEywRxoHF2lbtY92eQcB2F66A70xKyJ22Au6dzE',
+    });
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +58,17 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.refresh),
             ),
           ),
+          // 지도아이콘 추가
+          Semantics(
+            child: IconButton(
+                onPressed: _callAPI,
+                // onPressed: () => Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         // 설정화면으로 이동 (지도화면으로 변경하기)
+                //         builder: (context) => const SettingView())),
+                icon: const Icon(Icons.map_outlined)),
+          ),
           Visibility(
             visible: !Platform.isAndroid,
             child: Semantics(
@@ -68,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
                 icon: const Icon(Icons.flashlight_on_outlined),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Column(

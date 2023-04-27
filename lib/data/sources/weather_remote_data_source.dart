@@ -20,3 +20,25 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
     }
   }
 }
+
+abstract class TmapDataSource {
+  Future<TmapModel> getTmap(LatLng position);
+}
+
+class TmapDataSourceImpl implements TmapDataSource {
+  @override
+  Future<TmapModel> getTmap(LatLng position) async {
+    try {
+      final url = Uri.parse(
+        TmapAPI.postionURL(position.latitude, position.longitude),
+      );
+      var response = await http
+          .post(url, body: {'key': 'MgEywRxoHF2lbtY92eQcB2F66A70xKyJ22Au6dzE'});
+      Map<String, dynamic> json =
+          jsonDecode(response.body) as Map<String, dynamic>;
+      return TmapModel.fromJson(json);
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+}
