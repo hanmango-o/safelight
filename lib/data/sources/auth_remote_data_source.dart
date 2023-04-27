@@ -34,7 +34,7 @@ abstract class AuthRemoteDataSource {
   /// 익명 로그인을 처리하는 메소드이다.
   ///
   /// 해당 메소드를 수행하면 [FirebaseAuth.signInAnonymously]를 호출하여 익명 로그인을 요청한다.
-  /// [익명 로그인 사용을 위한 FirebaseAuth의 초기 설정](https://firebase.google.com/docs/auth/flutter/anonymous-auth?hl=ko#before_you_begin)이 필요하다.
+  /// 익명 로그인 사용을 위한 FirebaseAuth의 초기 설정](https://firebase.google.com/docs/auth/flutter/anonymous-auth?hl=ko#before_you_begin)이 필요하다.
   ///
   /// 익명 로그인에 성공할 경우 FirebaseAuth Console에 해당 익명 계정이 등록된다.
   /// 이후 별다른 호출이 없더라도 [signOutAnonymously]를 호출하기 전까지 자동 로그인이 수행되게 된다.
@@ -88,6 +88,7 @@ abstract class AuthRemoteDataSource {
   Future<void> signOutWithGoogle();
 }
 
+/// Auth 데이터 처리를 위한 [AuthRemoteDataSource]의 구현부이다.
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// 사용자 인증 제어(Auth)를 위한 FirebaseAuth 객체를 담는 변수로서 외부에서 DI되어 사용된다.
   ///
