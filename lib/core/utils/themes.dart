@@ -176,6 +176,7 @@ class ColorTheme implements Themes {
   static const Color highlight4 = Color(0xffD81159);
   static const Color highlight5 = Color.fromARGB(255, 31, 50, 147);
   static const Color highlight6 = Color(0xff2A2C41);
+  static const Color highlight7 = Color.fromRGBO(209, 84, 66, 1);
 
   static const ColorScheme light = ColorScheme.light(
     primary: Color(0xff758BFD),

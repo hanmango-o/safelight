@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
 part of ui;
 
@@ -53,48 +53,24 @@ class _SignInViewState extends State<SignInView> {
                     }
                     return Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: SizeTheme.w_md),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context
-                                  .read<AuthBloc>()
-                                  .add(SignInWithGoogleEvent());
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(50),
-                                ),
-                              ),
-                              minimumSize: Size(double.maxFinite, 80.h),
-                            ),
-                            child: (state is AuthLoading)
-                                ? CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  )
-                                : const Text('구글 로그인'),
-                          ),
-                        ),
                         const SizedBox(height: 10),
                         Padding(
-                          padding: EdgeInsets.only(right: SizeTheme.w_md),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: SizeTheme.h_lg),
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 60.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(6.r),
+                                ),
+                              ),
+                            ),
                             onPressed: () {
                               context
                                   .read<AuthBloc>()
                                   .add(SignInAnonymouslyEvent());
                             },
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(50),
-                                ),
-                              ),
-                              minimumSize: Size(double.maxFinite, 80.h),
-                            ),
                             child: (state is AuthLoading)
                                 ? CircularProgressIndicator(
                                     strokeWidth: 2,
@@ -108,7 +84,6 @@ class _SignInViewState extends State<SignInView> {
                     );
                   },
                 ),
-                SizedBox(height: SizeTheme.h_lg),
                 TextButton(
                   onPressed: () => Navigator.push(
                     context,
@@ -122,6 +97,39 @@ class _SignInViewState extends State<SignInView> {
                         .textTheme
                         .labelLarge!
                         .apply(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+                Divider(),
+                SizedBox(height: SizeTheme.h_lg),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SizeTheme.h_lg),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 52.h),
+                      backgroundColor: ColorTheme.highlight7,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(6.r),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      context.read<AuthBloc>().add(SignInWithGoogleEvent());
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image(
+                          width: 26.w,
+                          height: 26.w,
+                          image: AssetImage(
+                            Images.GoogleLogo,
+                          ),
+                        ),
+                        Text('구글 아이디 로그인'),
+                        SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
               ],

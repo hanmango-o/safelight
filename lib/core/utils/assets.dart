@@ -11,6 +11,7 @@ class Images {
   static String AppTitle = '$ROOT/ic/ic_app_title.png';
   static String CompassArrow = '$ROOT/compass_arrow.png';
   static String TrafficSingle = '$ROOT/traffic_single.jpg';
+  static String GoogleLogo = '$ROOT/google_logo.png';
 }
 
 class Gif {
