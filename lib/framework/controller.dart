@@ -1,6 +1,7 @@
 library controller;
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io' show Platform;
 
 import 'package:equatable/equatable.dart';

@@ -72,6 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
 
       final result = await signInWithGoogle(null);
+      log(result.toString());
       result.fold(
         (failure) {
           if (failure is ServerFailure) {

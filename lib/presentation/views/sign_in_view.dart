@@ -11,6 +11,8 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
+  final message = DI.get<Message>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +47,9 @@ class _SignInViewState extends State<SignInView> {
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     if (state is AuthError) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(state.message),
-                      ));
+                      Future.delayed(Duration.zero, () {
+                        message.snackbar(context, text: state.message);
+                      });
                     }
                     return Column(
                       children: [
